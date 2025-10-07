@@ -81,32 +81,35 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-card border-b border-border backdrop-blur-sm shadow-sm">
+      <header className="sticky top-0 z-50 bg-gradient-to-r from-blue-900 to-black border-b border-blue-800 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-primary">{t('app.name')}</h1>
-            <p className="text-sm text-muted-foreground">{t('app.subtitle')}</p>
+            <h1 className="text-2xl font-bold text-white">{t('app.name')}</h1>
+            <p className="text-sm text-blue-200">{t('app.subtitle')}</p>
           </div>
           <div className="flex items-center gap-3">
             <Button 
               variant="ghost" 
-              size="icon"
+              size="icon" 
+              className="text-white hover:bg-blue-800"
               onClick={() => navigate('/notifications')}
             >
               <Bell className="h-5 w-5" />
             </Button>
             <Button 
               variant="ghost" 
-              size="icon"
+              size="icon" 
+              className="text-white hover:bg-blue-800"
               onClick={() => navigate('/settings')}
             >
               <Settings className="h-5 w-5" />
             </Button>
             <Button 
               variant="ghost" 
-              size="icon"
+              size="icon" 
+              className="text-white hover:bg-blue-800"
               onClick={() => navigate('/')}
             >
               <LogOut className="h-5 w-5" />
@@ -119,42 +122,43 @@ const Dashboard = () => {
       <div className="container mx-auto px-4 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-2">Welcome back! 👋</h2>
-          <p className="text-muted-foreground">Here's what's happening with your business today</p>
+          <h2 className="text-3xl font-bold mb-2 text-white">Welcome back! 👋</h2>
+          <p className="text-blue-200">Here's what's happening with your business today</p>
         </div>
 
         {/* Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {metrics.map((metric, index) => (
-            <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
+            <Card key={index} className="bg-white/5 border-blue-700 p-6 backdrop-blur-sm hover:bg-white/10 transition-all">
               <div className="flex justify-between items-start mb-2">
-                <p className="text-sm text-muted-foreground">{metric.label}</p>
+                <p className="text-sm text-gray-400">{metric.label}</p>
                 <Badge 
                   variant={metric.trend === 'up' ? 'default' : metric.trend === 'down' ? 'secondary' : 'outline'}
+                  className={metric.trend === 'up' ? 'bg-green-600' : metric.trend === 'down' ? 'bg-red-600' : 'bg-blue-600'}
                 >
                   {metric.change}
                 </Badge>
               </div>
-              <p className="text-2xl font-bold">{metric.value}</p>
+              <p className="text-2xl font-bold text-white">{metric.value}</p>
             </Card>
           ))}
         </div>
 
         {/* Quick Actions */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold mb-4">Quick Actions</h3>
+          <h3 className="text-2xl font-bold mb-4 text-white">Quick Actions</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {quickActions.map((action, index) => (
               <Card
                 key={index}
-                className="p-6 cursor-pointer hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                className="bg-white/5 border-blue-700 p-6 cursor-pointer hover:bg-white/10 hover:scale-105 transition-all duration-300 backdrop-blur-sm"
                 onClick={() => navigate(action.route)}
               >
                 <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${action.color} flex items-center justify-center mb-4`}>
                   <action.icon className="h-6 w-6 text-white" />
                 </div>
-                <h4 className="text-xl font-bold mb-2">{action.title}</h4>
-                <p className="text-muted-foreground text-sm">{action.desc}</p>
+                <h4 className="text-xl font-bold mb-2 text-white">{action.title}</h4>
+                <p className="text-gray-300 text-sm">{action.desc}</p>
               </Card>
             ))}
           </div>
@@ -162,12 +166,12 @@ const Dashboard = () => {
 
         {/* Insights Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="p-6 border-cyan-200 dark:border-cyan-800 bg-gradient-to-br from-cyan-50 to-white dark:from-cyan-950/20 dark:to-card">
+          <Card className="bg-white/5 border-cyan-700 p-6 backdrop-blur-sm">
             <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
-              <h4 className="text-xl font-bold text-cyan-700 dark:text-cyan-400">Today's Trends</h4>
+              <TrendingUp className="h-5 w-5 text-cyan-400" />
+              <h4 className="text-xl font-bold text-white">Today's Trends</h4>
             </div>
-            <ul className="space-y-3 text-foreground/80">
+            <ul className="space-y-3 text-gray-300">
               <li>✨ Peak hours: 12PM-2PM & 7PM-9PM</li>
               <li>🔥 Hot item: Paneer Roll (+45% orders)</li>
               <li>📍 High footfall near Gateway of India</li>
@@ -175,12 +179,12 @@ const Dashboard = () => {
             </ul>
           </Card>
 
-          <Card className="p-6 border-emerald-200 dark:border-emerald-800 bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-950/20 dark:to-card">
+          <Card className="bg-white/5 border-emerald-700 p-6 backdrop-blur-sm">
             <div className="flex items-center gap-2 mb-4">
-              <BarChart3 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-              <h4 className="text-xl font-bold text-emerald-700 dark:text-emerald-400">Smart Recommendations</h4>
+              <BarChart3 className="h-5 w-5 text-emerald-400" />
+              <h4 className="text-xl font-bold text-white">Smart Recommendations</h4>
             </div>
-            <ul className="space-y-3 text-foreground/80">
+            <ul className="space-y-3 text-gray-300">
               <li>💡 Consider combo offers for slow items</li>
               <li>🎯 Reduce paneer quantity by 15%</li>
               <li>📢 Launch festival special menu</li>
