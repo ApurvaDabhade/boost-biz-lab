@@ -31,10 +31,17 @@ const Dashboard = () => {
   const quickActions = [
     {
       icon: Bot,
-      title: t('dashboard.aiAssistant'),
-      desc: t('dashboard.aiDesc'),
+      title: 'Startup Mitra',
+      desc: 'Business guidance & advice',
       color: 'from-purple-600 to-purple-800',
       route: '/startup-mitra',
+    },
+    {
+      icon: Bot,
+      title: 'ChefGuru',
+      desc: 'Kitchen intelligence assistant',
+      color: 'from-indigo-600 to-indigo-800',
+      route: '/chef-guru',
     },
     {
       icon: Package,
@@ -83,10 +90,20 @@ const Dashboard = () => {
             <p className="text-sm text-blue-200">{t('app.subtitle')}</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" className="text-white hover:bg-blue-800">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-white hover:bg-blue-800"
+              onClick={() => navigate('/notifications')}
+            >
               <Bell className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="text-white hover:bg-blue-800">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-white hover:bg-blue-800"
+              onClick={() => navigate('/settings')}
+            >
               <Settings className="h-5 w-5" />
             </Button>
             <Button 
@@ -149,10 +166,10 @@ const Dashboard = () => {
 
         {/* Insights Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="bg-gradient-to-br from-gray-900 to-black border-blue-700 p-6">
+          <Card className="bg-gradient-to-br from-cyan-900/30 to-black border-cyan-700 p-6">
             <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="h-5 w-5 text-blue-400" />
-              <h4 className="text-xl font-bold">Today's Trends</h4>
+              <TrendingUp className="h-5 w-5 text-cyan-400" />
+              <h4 className="text-xl font-bold text-cyan-400">Today's Trends</h4>
             </div>
             <ul className="space-y-3 text-gray-300">
               <li>✨ Peak hours: 12PM-2PM & 7PM-9PM</li>
@@ -162,10 +179,10 @@ const Dashboard = () => {
             </ul>
           </Card>
 
-          <Card className="bg-gradient-to-br from-gray-900 to-black border-blue-700 p-6">
+          <Card className="bg-gradient-to-br from-emerald-900/30 to-black border-emerald-700 p-6">
             <div className="flex items-center gap-2 mb-4">
-              <BarChart3 className="h-5 w-5 text-green-400" />
-              <h4 className="text-xl font-bold">AI Recommendations</h4>
+              <BarChart3 className="h-5 w-5 text-emerald-400" />
+              <h4 className="text-xl font-bold text-emerald-400">Smart Recommendations</h4>
             </div>
             <ul className="space-y-3 text-gray-300">
               <li>💡 Consider combo offers for slow items</li>

@@ -7,6 +7,8 @@ import { TrendingUp, PieChart, MessageSquare, MapPin, Languages } from 'lucide-r
 import heroImage from '@/assets/hero-food-vendor.jpg';
 import festivalImage from '@/assets/festival-food.jpg';
 import analyticsImage from '@/assets/analytics-dashboard.jpg';
+import communityImage from '@/assets/community-hub.jpg';
+import startupImage from '@/assets/startup-journey.jpg';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -29,13 +31,13 @@ const Index = () => {
       icon: MessageSquare,
       title: t('landing.feature3.title'),
       description: t('landing.feature3.desc'),
-      image: heroImage,
+      image: communityImage,
     },
     {
       icon: MapPin,
       title: t('landing.feature4.title'),
       description: t('landing.feature4.desc'),
-      image: festivalImage,
+      image: startupImage,
     },
   ];
 

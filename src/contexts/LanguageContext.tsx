@@ -85,6 +85,21 @@ const translations = {
     'common.delete': 'Delete',
     'common.view': 'View',
     'common.loading': 'Loading...',
+    
+    // ChefGuru
+    'chefguru.title': 'ChefGuru - Your Kitchen Intelligence',
+    'chefguru.subtitle': 'Smart insights for business growth',
+    'chefguru.upselling': 'Upselling Suggestions',
+    'chefguru.festival': 'Festival Mode',
+    'chefguru.stock': 'Stock Alerts',
+    'chefguru.trends': 'Trend Analysis',
+    
+    // Pages
+    'inventory.title': 'Inventory Management',
+    'reviews.title': 'Customer Reviews',
+    'offers.title': 'Dynamic Offers',
+    'settings.title': 'Settings',
+    'notifications.title': 'Notifications',
   },
   hi: {
     // Header
@@ -162,6 +177,21 @@ const translations = {
     'common.delete': 'हटाएं',
     'common.view': 'देखें',
     'common.loading': 'लोड हो रहा है...',
+    
+    // ChefGuru
+    'chefguru.title': 'ChefGuru - आपकी रसोई बुद्धिमत्ता',
+    'chefguru.subtitle': 'व्यवसाय विकास के लिए स्मार्ट अंतर्दृष्टि',
+    'chefguru.upselling': 'अपसेलिंग सुझाव',
+    'chefguru.festival': 'त्योहार मोड',
+    'chefguru.stock': 'स्टॉक अलर्ट',
+    'chefguru.trends': 'ट्रेंड विश्लेषण',
+    
+    // Pages
+    'inventory.title': 'इन्वेंटरी प्रबंधन',
+    'reviews.title': 'ग्राहक समीक्षाएं',
+    'offers.title': 'गतिशील ऑफ़र',
+    'settings.title': 'सेटिंग्स',
+    'notifications.title': 'सूचनाएं',
   },
 };
 
