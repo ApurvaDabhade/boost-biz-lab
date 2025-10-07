@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import StartupMitra from "./pages/StartupMitra";
 import CommunityHub from "./pages/CommunityHub";
 import Dashboard from "./pages/Dashboard";
+import Tourism from "./pages/Tourism";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/registration" element={<Registration />} />
             <Route path="/startup-mitra" element={<StartupMitra />} />
             <Route path="/community-hub" element={<CommunityHub />} />
+            <Route path="/tourism" element={<Tourism />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

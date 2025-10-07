@@ -117,7 +117,7 @@ const Index = () => {
             {t('landing.features.title')}
           </h2>
           <p className="text-center text-blue-200 mb-16 max-w-2xl mx-auto animate-fade-in-up animation-delay-200">
-            Everything you need to grow your food business smarter
+            Intelligent tools to grow your food business
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -157,12 +157,12 @@ const Index = () => {
               className="bg-gradient-to-br from-purple-900/30 to-black border-purple-700 p-8 card-hover cursor-pointer animate-slide-in-right"
               onClick={() => navigate('/startup-mitra')}
             >
-              <Badge className="mb-4 bg-purple-600">✨ AI-Powered</Badge>
+              <Badge className="mb-4 bg-purple-600 text-white">✨ Smart Advisor</Badge>
               <h3 className="text-3xl font-bold mb-4 text-white">
                 {t('startup.title')}
               </h3>
               <p className="text-gray-300 mb-6">
-                Your 24x7 AI business mentor. Get expert guidance on menu planning, location selection, pricing strategies, and supplier connections. Perfect for new entrepreneurs!
+                Your 24x7 business mentor. Get expert guidance on menu planning, location selection, pricing strategies, and supplier connections. Perfect for new entrepreneurs!
               </p>
               <Button className="w-full bg-purple-600 hover:bg-purple-700">
                 Launch Startup Mitra →
@@ -174,7 +174,7 @@ const Index = () => {
               className="bg-gradient-to-br from-green-900/30 to-black border-green-700 p-8 card-hover cursor-pointer animate-slide-in-right animation-delay-200"
               onClick={() => navigate('/community-hub')}
             >
-              <Badge className="mb-4 bg-green-600">🤝 Community</Badge>
+              <Badge className="mb-4 bg-green-600 text-white">🤝 Community</Badge>
               <h3 className="text-3xl font-bold mb-4 text-white">
                 {t('community.title')}
               </h3>
@@ -214,7 +214,7 @@ const Index = () => {
           <p className="mb-2">
             <span className="text-blue-400 font-bold">{t('app.name')}</span> - {t('app.subtitle')}
           </p>
-          <p className="text-sm">© 2025 RasoiMitra. Empowering Small Businesses with AI.</p>
+          <p className="text-sm">© 2025 RasoiMitra. Empowering Small Businesses with Intelligence.</p>
           <div className="flex justify-center gap-6 mt-4 text-sm">
             <a href="#" className="hover:text-blue-400 transition-colors">About</a>
             <a href="#" className="hover:text-blue-400 transition-colors">Contact</a>
