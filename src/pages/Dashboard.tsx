@@ -86,7 +86,7 @@ const Dashboard = () => {
       <header className="sticky top-0 z-50 bg-gradient-to-r from-blue-900 to-black border-b border-blue-800 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-white">{t('app.name')}</h1>
+            <h1 className="text-2xl font-bold text-blue-400">{t('app.name')}</h1>
             <p className="text-sm text-blue-200">{t('app.subtitle')}</p>
           </div>
           <div className="flex items-center gap-3">
@@ -122,14 +122,14 @@ const Dashboard = () => {
       <div className="container mx-auto px-4 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-2 text-white">Welcome back! 👋</h2>
+          <h2 className="text-3xl font-bold mb-2">Welcome back! 👋</h2>
           <p className="text-blue-200">Here's what's happening with your business today</p>
         </div>
 
         {/* Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {metrics.map((metric, index) => (
-            <Card key={index} className="bg-white/5 border-blue-700 p-6 backdrop-blur-sm hover:bg-white/10 transition-all">
+            <Card key={index} className="bg-gradient-to-br from-gray-900 to-black border-blue-700 p-6">
               <div className="flex justify-between items-start mb-2">
                 <p className="text-sm text-gray-400">{metric.label}</p>
                 <Badge 
@@ -146,12 +146,12 @@ const Dashboard = () => {
 
         {/* Quick Actions */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold mb-4 text-white">Quick Actions</h3>
+          <h3 className="text-2xl font-bold mb-4">Quick Actions</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {quickActions.map((action, index) => (
               <Card
                 key={index}
-                className="bg-white/5 border-blue-700 p-6 cursor-pointer hover:bg-white/10 hover:scale-105 transition-all duration-300 backdrop-blur-sm"
+                className="bg-gradient-to-br from-gray-900 to-black border-blue-700 p-6 cursor-pointer hover:scale-105 transition-transform duration-300"
                 onClick={() => navigate(action.route)}
               >
                 <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${action.color} flex items-center justify-center mb-4`}>
@@ -166,10 +166,10 @@ const Dashboard = () => {
 
         {/* Insights Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="bg-white/5 border-cyan-700 p-6 backdrop-blur-sm">
+          <Card className="bg-gradient-to-br from-cyan-900/30 to-black border-cyan-700 p-6">
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="h-5 w-5 text-cyan-400" />
-              <h4 className="text-xl font-bold text-white">Today's Trends</h4>
+              <h4 className="text-xl font-bold text-cyan-400">Today's Trends</h4>
             </div>
             <ul className="space-y-3 text-gray-300">
               <li>✨ Peak hours: 12PM-2PM & 7PM-9PM</li>
@@ -179,10 +179,10 @@ const Dashboard = () => {
             </ul>
           </Card>
 
-          <Card className="bg-white/5 border-emerald-700 p-6 backdrop-blur-sm">
+          <Card className="bg-gradient-to-br from-emerald-900/30 to-black border-emerald-700 p-6">
             <div className="flex items-center gap-2 mb-4">
               <BarChart3 className="h-5 w-5 text-emerald-400" />
-              <h4 className="text-xl font-bold text-white">Smart Recommendations</h4>
+              <h4 className="text-xl font-bold text-emerald-400">Smart Recommendations</h4>
             </div>
             <ul className="space-y-3 text-gray-300">
               <li>💡 Consider combo offers for slow items</li>
