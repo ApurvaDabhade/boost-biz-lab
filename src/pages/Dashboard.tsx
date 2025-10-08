@@ -166,7 +166,7 @@ const Dashboard = () => {
 
         {/* Insights Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="bg-gradient-to-br from-cyan-900/30 to-black border-cyan-700 p-6">
+          <Card className="bg-gradient-to-br from-cyan-950/50 to-black/80 border-cyan-800/50 shadow-[0_0_30px_-5px_rgba(34,211,238,0.3)] p-6">
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="h-5 w-5 text-cyan-400" />
               <h4 className="text-xl font-bold text-cyan-400">Today's Trends</h4>
@@ -179,7 +179,7 @@ const Dashboard = () => {
             </ul>
           </Card>
 
-          <Card className="bg-gradient-to-br from-emerald-900/30 to-black border-emerald-700 p-6">
+          <Card className="bg-gradient-to-br from-emerald-950/50 to-black/80 border-emerald-800/50 shadow-[0_0_30px_-5px_rgba(16,185,129,0.3)] p-6">
             <div className="flex items-center gap-2 mb-4">
               <BarChart3 className="h-5 w-5 text-emerald-400" />
               <h4 className="text-xl font-bold text-emerald-400">Smart Recommendations</h4>
