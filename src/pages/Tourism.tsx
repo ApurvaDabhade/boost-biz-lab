@@ -61,7 +61,7 @@ const Tourism = () => {
             {touristHotspots.map((spot, index) => (
               <Card
                 key={index}
-                className="bg-gradient-to-br from-blue-900/30 to-black border-blue-700 p-6 card-hover"
+                className="bg-gradient-to-br from-blue-950/50 to-black/80 border-blue-800/50 shadow-[0_0_30px_-5px_rgba(59,130,246,0.3)] p-6 card-hover"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div>
@@ -99,7 +99,7 @@ const Tourism = () => {
             {upcomingEvents.map((event, index) => (
               <Card
                 key={index}
-                className="bg-gradient-to-br from-purple-900/30 to-black border-purple-700 p-6 card-hover"
+                className="bg-gradient-to-br from-purple-950/50 to-black/80 border-purple-800/50 shadow-[0_0_30px_-5px_rgba(168,85,247,0.3)] p-6 card-hover"
               >
                 <div className="flex items-center gap-2 mb-3">
                   <Bell className="h-5 w-5 text-purple-400" />
@@ -138,7 +138,7 @@ const Tourism = () => {
             {trendingItems.map((item, index) => (
               <Card
                 key={index}
-                className="bg-gradient-to-br from-green-900/30 to-black border-green-700 p-6 card-hover"
+                className="bg-gradient-to-br from-green-950/50 to-black/80 border-green-800/50 shadow-[0_0_30px_-5px_rgba(34,197,94,0.3)] p-6 card-hover"
               >
                 <h3 className="text-lg font-bold text-white mb-2">{item.item}</h3>
                 <div className="flex items-center gap-2 mb-3">
@@ -159,7 +159,7 @@ const Tourism = () => {
 
         {/* Smart Recommendations */}
         <section className="animate-fade-in-up animation-delay-600">
-          <Card className="bg-gradient-to-br from-cyan-900/30 to-black border-cyan-700 p-8">
+          <Card className="bg-gradient-to-br from-cyan-950/50 to-black/80 border-cyan-800/50 shadow-[0_0_30px_-5px_rgba(34,211,238,0.3)] p-8">
             <div className="flex items-start gap-4">
               <div className="bg-cyan-600 p-3 rounded-lg">
                 <TrendingUp className="h-6 w-6 text-white" />
