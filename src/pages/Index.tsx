@@ -50,15 +50,25 @@ const Index = () => {
             <h1 className="text-2xl font-bold text-blue-400">{t('app.name')}</h1>
             <p className="text-sm text-blue-200">{t('app.subtitle')}</p>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
-            className="border-blue-600 text-blue-400 hover:bg-blue-900"
-          >
-            <Languages className="h-4 w-4 mr-2" />
-            {language === 'en' ? 'हिंदी' : 'English'}
-          </Button>
+          <div className="flex gap-3 items-center">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/auth')}
+              className="border-blue-600 text-blue-400 hover:bg-blue-900"
+            >
+              Login
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
+              className="border-blue-600 text-blue-400 hover:bg-blue-900"
+            >
+              <Languages className="h-4 w-4 mr-2" />
+              {language === 'en' ? 'हिंदी' : 'English'}
+            </Button>
+          </div>
         </div>
       </header>
 

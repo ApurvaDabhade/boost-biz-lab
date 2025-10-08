@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import Index from "./pages/Index";
+import Auth from "./pages/Auth";
 import Registration from "./pages/Registration";
 import NotFound from "./pages/NotFound";
 import StartupMitra from "./pages/StartupMitra";
@@ -29,6 +30,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/registration" element={<Registration />} />
             <Route path="/startup-mitra" element={<StartupMitra />} />
