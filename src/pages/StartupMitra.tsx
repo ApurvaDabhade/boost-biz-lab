@@ -214,7 +214,7 @@ const StartupMitra = () => {
               <Button
                 key={index}
                 variant="outline"
-                className="w-full text-left justify-start border-blue-700 text-white hover:bg-blue-900"
+                className="w-full text-left justify-start bg-blue-900/30 border-blue-600 text-blue-100 hover:bg-blue-800 hover:text-white hover:border-blue-500 transition-all"
                 onClick={() => setInputValue(question)}
               >
                 {question}

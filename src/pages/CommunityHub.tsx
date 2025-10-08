@@ -13,7 +13,7 @@ import communityImage from '@/assets/community-hub.jpg';
 
 interface CommunityPost {
   id: string;
-  type: 'request' | 'offer';
+  type: 'request' | 'offer' | 'festival-help';
   userName: string;
   item: string;
   quantity: string;
@@ -23,13 +23,16 @@ interface CommunityPost {
   phone: string;
   timestamp: Date;
   description: string;
+  isFestivalHelp?: boolean;
+  totalOrders?: number;
+  profitShare?: string;
 }
 
 const CommunityHub = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState<'requests' | 'offers'>('requests');
+  const [activeTab, setActiveTab] = useState<'requests' | 'offers' | 'festival-help'>('requests');
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [postType, setPostType] = useState<'request' | 'offer'>('request');
   
@@ -38,6 +41,8 @@ const CommunityHub = () => {
     quantity: '',
     description: '',
     urgency: 'normal' as 'normal' | 'urgent',
+    totalOrders: '',
+    profitShare: '50',
   });
 
   const [posts, setPosts] = useState<CommunityPost[]>([
@@ -93,6 +98,22 @@ const CommunityHub = () => {
       timestamp: new Date(Date.now() - 14400000),
       description: 'Excess stock, must sell today. Best price!',
     },
+    {
+      id: '5',
+      type: 'festival-help',
+      userName: 'Ramesh Vendors',
+      item: 'Diwali Special Orders',
+      quantity: '50 orders',
+      urgency: 'urgent',
+      distance: 0.5,
+      isVerified: true,
+      phone: '+91 98765 43215',
+      timestamp: new Date(Date.now() - 1800000),
+      description: 'High demand during Diwali! Need nearby restaurants to help fulfill orders. Good profit opportunity!',
+      isFestivalHelp: true,
+      totalOrders: 50,
+      profitShare: '40% of revenue',
+    },
   ]);
 
   const handleSubmitPost = () => {
@@ -121,7 +142,7 @@ const CommunityHub = () => {
 
     setPosts([newPost, ...posts]);
     setIsPostModalOpen(false);
-    setFormData({ item: '', quantity: '', description: '', urgency: 'normal' });
+    setFormData({ item: '', quantity: '', description: '', urgency: 'normal', totalOrders: '', profitShare: '50' });
 
     toast({
       title: postType === 'request' ? 'Request posted!' : 'Offer posted!',
@@ -136,9 +157,17 @@ const CommunityHub = () => {
     });
   };
 
+  const handleAcceptHelp = (post: CommunityPost) => {
+    toast({
+      title: 'Help Request Accepted!',
+      description: `You've accepted to help with ${post.totalOrders} orders. Profit share: ${post.profitShare}`,
+    });
+  };
+
   const filteredPosts = posts.filter((post) => {
     if (activeTab === 'requests') return post.type === 'request';
     if (activeTab === 'offers') return post.type === 'offer';
+    if (activeTab === 'festival-help') return post.type === 'festival-help';
     return false;
   });
 
@@ -204,6 +233,17 @@ const CommunityHub = () => {
           >
             <CheckCircle className="h-5 w-5 mr-2" />
             {t('community.offers')} ({posts.filter((p) => p.type === 'offer').length})
+          </Button>
+          <Button
+            onClick={() => setActiveTab('festival-help')}
+            className={`flex-1 ${
+              activeTab === 'festival-help'
+                ? 'bg-orange-600 hover:bg-orange-700'
+                : 'bg-gray-800 hover:bg-gray-700'
+            }`}
+          >
+            🎉
+            <span className="ml-2">Festival Help ({posts.filter((p) => p.type === 'festival-help').length})</span>
           </Button>
         </div>
 
@@ -371,13 +411,42 @@ const CommunityHub = () => {
                 <span className="font-medium text-white">{post.userName}</span>
               </div>
 
-              <Button
-                onClick={() => handleContact(post)}
-                className="w-full bg-blue-600 hover:bg-blue-700"
-              >
-                <Phone className="h-4 w-4 mr-2" />
-                {t('community.contact')}
-              </Button>
+              {post.isFestivalHelp && (
+                <div className="mb-3 p-3 bg-orange-900/30 border border-orange-600 rounded">
+                  <p className="text-sm text-orange-200 mb-1">
+                    <strong>Total Orders:</strong> {post.totalOrders}
+                  </p>
+                  <p className="text-sm text-orange-200">
+                    <strong>Profit Share:</strong> {post.profitShare}
+                  </p>
+                </div>
+              )}
+
+              {post.isFestivalHelp ? (
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => handleAcceptHelp(post)}
+                    className="flex-1 bg-orange-600 hover:bg-orange-700"
+                  >
+                    Accept & Help
+                  </Button>
+                  <Button
+                    onClick={() => handleContact(post)}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700"
+                  >
+                    <Phone className="h-4 w-4 mr-2" />
+                    Contact
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  onClick={() => handleContact(post)}
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                >
+                  <Phone className="h-4 w-4 mr-2" />
+                  {t('community.contact')}
+                </Button>
+              )}
             </Card>
           ))}
         </div>

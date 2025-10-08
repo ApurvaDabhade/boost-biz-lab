@@ -5,7 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, Star, TrendingUp, MessageSquare, QrCode, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface Review {
   id: string;
@@ -20,6 +22,7 @@ interface Review {
 const Reviews = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { toast } = useToast();
   const [reviews] = useState<Review[]>([
     { id: '1', customer: 'Rahul S.', rating: 5, comment: 'Amazing paneer roll! Best in the area.', sentiment: 'positive', dish: 'Paneer Roll', date: '2 hours ago' },
     { id: '2', customer: 'Priya M.', rating: 4, comment: 'Good taste but took time to prepare.', sentiment: 'neutral', dish: 'Veg Biryani', date: '5 hours ago' },
@@ -29,6 +32,11 @@ const Reviews = () => {
   ]);
 
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+  const [replyModalOpen, setReplyModalOpen] = useState(false);
+  const [thanksModalOpen, setThanksModalOpen] = useState(false);
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+  const [replyText, setReplyText] = useState('');
+  const [thanksText, setThanksText] = useState('');
 
   const avgRating = (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1);
   const positiveCount = reviews.filter(r => r.sentiment === 'positive').length;
@@ -40,6 +48,35 @@ const Reviews = () => {
       case 'negative': return <ThumbsDown className="h-4 w-4 text-red-400" />;
       default: return <MessageSquare className="h-4 w-4 text-yellow-400" />;
     }
+  };
+
+  const handleReply = () => {
+    if (!replyText.trim()) {
+      toast({
+        title: 'Empty reply',
+        description: 'Please enter a reply message',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    toast({
+      title: 'Reply sent successfully!',
+      description: `Your reply to ${selectedReview?.customer} has been sent.`,
+    });
+    setReplyText('');
+    setReplyModalOpen(false);
+    setSelectedReview(null);
+  };
+
+  const handleThankCustomer = () => {
+    toast({
+      title: 'Thank you message sent!',
+      description: `${selectedReview?.customer} has been notified of your appreciation.`,
+    });
+    setThanksText('');
+    setThanksModalOpen(false);
+    setSelectedReview(null);
   };
 
   return (
@@ -162,12 +199,74 @@ const Reviews = () => {
               <p className="text-gray-300">{review.comment}</p>
               
               <div className="mt-4 flex gap-2">
-                <Button size="sm" variant="outline" className="border-green-600 text-green-400">
-                  Reply
-                </Button>
-                <Button size="sm" variant="outline" className="border-blue-600 text-blue-400">
-                  Thank Customer
-                </Button>
+                <Dialog open={replyModalOpen && selectedReview?.id === review.id} onOpenChange={(open) => {
+                  setReplyModalOpen(open);
+                  if (open) setSelectedReview(review);
+                  else { setSelectedReview(null); setReplyText(''); }
+                }}>
+                  <DialogTrigger asChild>
+                    <Button size="sm" variant="outline" className="border-green-600 text-green-400 hover:bg-green-900/20">
+                      Reply
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="bg-gray-900 text-white border-green-700">
+                    <DialogHeader>
+                      <DialogTitle>Reply to {review.customer}</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-sm text-gray-400 mb-2">Original Review:</p>
+                        <p className="text-white bg-gray-800 p-3 rounded">{review.comment}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm text-green-200">Your Reply</label>
+                        <Textarea
+                          value={replyText}
+                          onChange={(e) => setReplyText(e.target.value)}
+                          placeholder="Write your response..."
+                          className="bg-gray-800 border-green-700 text-white mt-2"
+                          rows={4}
+                        />
+                      </div>
+                      <Button onClick={handleReply} className="w-full bg-green-600 hover:bg-green-700">
+                        Send Reply
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+
+                <Dialog open={thanksModalOpen && selectedReview?.id === review.id} onOpenChange={(open) => {
+                  setThanksModalOpen(open);
+                  if (open) setSelectedReview(review);
+                  else { setSelectedReview(null); setThanksText(''); }
+                }}>
+                  <DialogTrigger asChild>
+                    <Button size="sm" variant="outline" className="border-blue-600 text-blue-400 hover:bg-blue-900/20">
+                      Thank Customer
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="bg-gray-900 text-white border-blue-700">
+                    <DialogHeader>
+                      <DialogTitle>Thank {review.customer}</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <p className="text-gray-300">Send a thank you message to show your appreciation for their feedback!</p>
+                      <div>
+                        <label className="text-sm text-blue-200">Optional Message (or use default)</label>
+                        <Textarea
+                          value={thanksText}
+                          onChange={(e) => setThanksText(e.target.value)}
+                          placeholder="Thank you for your wonderful review! We appreciate your support."
+                          className="bg-gray-800 border-blue-700 text-white mt-2"
+                          rows={3}
+                        />
+                      </div>
+                      <Button onClick={handleThankCustomer} className="w-full bg-blue-600 hover:bg-blue-700">
+                        Send Thank You
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
             </Card>
           ))}
