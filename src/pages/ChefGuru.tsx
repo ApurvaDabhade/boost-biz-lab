@@ -209,6 +209,8 @@ const ChefGuru = () => {
   };
 
   const handleButtonClick = (buttonValue: string) => {
+    console.log('Button clicked:', buttonValue); // Debug log
+    
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
@@ -358,8 +360,12 @@ const ChefGuru = () => {
                               key={index}
                               size="sm"
                               variant="outline"
-                              className="border-purple-600 text-purple-400 hover:bg-purple-800"
-                              onClick={() => handleButtonClick(button.value)}
+                              className="border-purple-600 text-purple-400 hover:bg-purple-800 cursor-pointer"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleButtonClick(button.value);
+                              }}
                             >
                               {button.icon && <span className="mr-1">{button.icon}</span>}
                               {button.label}
