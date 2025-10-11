@@ -30,32 +30,40 @@ const Dashboard = () => {
   const { t } = useLanguage();
   const [activeTrendTab, setActiveTrendTab] = useState('price-tracker');
 
-  // Mock data for trends features
+  // Mock data for trends features - Updated with Masala Karela recipe data
   const priceTrackerData = [
-    { ingredient: 'Onions', unit: 'per kg', currentPrice: 45, change: '+5%', trend: 'up', weeklyAvg: 42, monthlyAvg: 38 },
-    { ingredient: 'Tomatoes', unit: 'per kg', currentPrice: 60, change: '-12%', trend: 'down', weeklyAvg: 68, monthlyAvg: 72 },
-    { ingredient: 'Paneer', unit: 'per kg', currentPrice: 320, change: '0%', trend: 'neutral', weeklyAvg: 320, monthlyAvg: 315 },
-    { ingredient: 'Rice', unit: 'per kg', currentPrice: 55, change: '+8%', trend: 'up', weeklyAvg: 51, monthlyAvg: 48 },
-    { ingredient: 'Oil', unit: 'per liter', currentPrice: 180, change: '+3%', trend: 'up', weeklyAvg: 175, monthlyAvg: 170 },
-    { ingredient: 'Spices Mix', unit: 'per 100g', currentPrice: 25, change: '-5%', trend: 'down', weeklyAvg: 26, monthlyAvg: 28 },
+    { ingredient: 'Amchur', price: 182.27, adjustedPrice: 182.27, trend: 'neutral' },
+    { ingredient: 'Cumin Seeds', price: 170.61, adjustedPrice: 170.61, trend: 'neutral' },
+    { ingredient: 'Sunflower Oil', price: 138.70, adjustedPrice: 138.70, trend: 'neutral' },
+    { ingredient: 'Coriander Powder', price: 132.90, adjustedPrice: 132.90, trend: 'neutral' },
+    { ingredient: 'Salt', price: 95.50, adjustedPrice: 95.50, trend: 'neutral' },
+    { ingredient: 'Turmeric Powder', price: 87.79, adjustedPrice: 87.79, trend: 'neutral' },
+    { ingredient: 'Red Chilli Powder', price: 71.80, adjustedPrice: 71.80, trend: 'neutral' },
+    { ingredient: 'Karela', price: 20.18, adjustedPrice: 20.18, trend: 'neutral' },
+    { ingredient: 'Gram Flour', price: 17.71, adjustedPrice: 17.71, trend: 'neutral' },
+    { ingredient: 'Onion', price: 16.29, adjustedPrice: 16.29, trend: 'neutral' },
   ];
 
   const recipeBreakdownData = [
-    { dish: 'Palak Paneer', ingredient: 'Paneer', quantity: '200g', price: 64, predictedPrice: 66, trend: 'up' },
-    { dish: 'Palak Paneer', ingredient: 'Spinach', quantity: '500g', price: 25, predictedPrice: 22, trend: 'down' },
-    { dish: 'Palak Paneer', ingredient: 'Spices & Oil', quantity: '50g', price: 15, predictedPrice: 16, trend: 'up' },
-    { dish: 'Paneer Tikka', ingredient: 'Paneer', quantity: '300g', price: 96, predictedPrice: 99, trend: 'up' },
-    { dish: 'Paneer Tikka', ingredient: 'Yogurt', quantity: '100ml', price: 8, predictedPrice: 8, trend: 'neutral' },
-    { dish: 'Paneer Tikka', ingredient: 'Spices', quantity: '30g', price: 12, predictedPrice: 13, trend: 'up' },
+    { dish: 'Masala Karela', ingredient: 'Amchur', quantity: '10g', price: 18.23, predictedPrice: 18.23, trend: 'neutral' },
+    { dish: 'Masala Karela', ingredient: 'Cumin Seeds', quantity: '5g', price: 8.53, predictedPrice: 8.53, trend: 'neutral' },
+    { dish: 'Masala Karela', ingredient: 'Sunflower Oil', quantity: '30ml', price: 4.16, predictedPrice: 4.16, trend: 'neutral' },
+    { dish: 'Masala Karela', ingredient: 'Coriander Powder', quantity: '8g', price: 10.63, predictedPrice: 10.63, trend: 'neutral' },
+    { dish: 'Masala Karela', ingredient: 'Salt', quantity: '5g', price: 0.48, predictedPrice: 0.48, trend: 'neutral' },
+    { dish: 'Masala Karela', ingredient: 'Turmeric Powder', quantity: '3g', price: 2.63, predictedPrice: 2.63, trend: 'neutral' },
+    { dish: 'Masala Karela', ingredient: 'Red Chilli Powder', quantity: '5g', price: 3.59, predictedPrice: 3.59, trend: 'neutral' },
+    { dish: 'Masala Karela', ingredient: 'Karela', quantity: '500g', price: 10.09, predictedPrice: 10.09, trend: 'neutral' },
+    { dish: 'Masala Karela', ingredient: 'Gram Flour', quantity: '50g', price: 0.89, predictedPrice: 0.89, trend: 'neutral' },
+    { dish: 'Masala Karela', ingredient: 'Onion', quantity: '100g', price: 1.63, predictedPrice: 1.63, trend: 'neutral' },
   ];
 
   const dishRecommendations = [
-    { baseDish: 'Palak Paneer', recommendation: 'Paneer Tikka', category: 'Paneer Based', trending: false, costEstimate: 120, prepTime: '25 min' },
-    { baseDish: 'Palak Paneer', recommendation: 'Shahi Paneer', category: 'Paneer Based', trending: false, costEstimate: 135, prepTime: '30 min' },
-    { baseDish: 'Palak Paneer', recommendation: 'Chilli Paneer', category: 'Paneer Based', trending: false, costEstimate: 110, prepTime: '20 min' },
-    { baseDish: 'Palak Paneer', recommendation: 'Paneer Tikka Tacos', category: 'Fusion', trending: true, costEstimate: 95, prepTime: '15 min' },
-    { baseDish: 'Paneer Tikka', recommendation: 'Paneer Butter Masala', category: 'Paneer Based', trending: false, costEstimate: 140, prepTime: '35 min' },
-    { baseDish: 'Paneer Tikka', recommendation: 'Paneer Pakoda', category: 'Paneer Based', trending: false, costEstimate: 85, prepTime: '18 min' },
+    { baseDish: 'Masala Karela', recommendation: 'Stuffed Karela', category: 'Vegetable Based', trending: false, costEstimate: 65, prepTime: '30 min' },
+    { baseDish: 'Masala Karela', recommendation: 'Karela Chips', category: 'Snacks', trending: true, costEstimate: 45, prepTime: '20 min' },
+    { baseDish: 'Masala Karela', recommendation: 'Karela Raita', category: 'Side Dish', trending: false, costEstimate: 35, prepTime: '15 min' },
+    { baseDish: 'Masala Karela', recommendation: 'Karela Pickle', category: 'Preserved', trending: true, costEstimate: 55, prepTime: '45 min' },
+    { baseDish: 'Masala Karela', recommendation: 'Karela Curry', category: 'Main Course', trending: false, costEstimate: 75, prepTime: '25 min' },
+    { baseDish: 'Masala Karela', recommendation: 'Karela Paratha', category: 'Bread', trending: false, costEstimate: 40, prepTime: '35 min' },
   ];
 
   const metrics = [
@@ -252,19 +260,19 @@ const Dashboard = () => {
                 <div className="bg-gray-800/30 rounded-lg p-4">
                   <div className="flex items-center mb-2">
                     <span className="text-green-400 mr-2">📈</span>
-                    <span className="text-sm font-semibold text-white">Stock Up Early</span>
+                    <span className="text-sm font-semibold text-white">Price Stability</span>
                   </div>
                   <p className="text-gray-300 text-sm">
-                    Onions showing +5% increase trend - consider bulk purchase before prices rise further. Rice (+8%) and Oil (+3%) also trending upward.
+                    All Masala Karela ingredients showing stable pricing (0% change). Amchur (₹182.27) and Cumin Seeds (₹170.61) are premium spices - good time to stock up.
                   </p>
                 </div>
                 <div className="bg-gray-800/30 rounded-lg p-4">
                   <div className="flex items-center mb-2">
                     <span className="text-yellow-400 mr-2">💡</span>
-                    <span className="text-sm font-semibold text-white">Menu Optimization</span>
+                    <span className="text-sm font-semibold text-white">Menu Innovation</span>
                   </div>
                   <p className="text-gray-300 text-sm">
-                    Tomatoes down -12% - perfect time to feature tomato-based dishes. Paneer Tikka Tacos trending with 15min prep time and ₹95 cost.
+                    Karela Chips and Karela Pickle are trending! Low-cost ingredients (Karela ₹20.18/kg, Onion ₹16.29/kg) make these profitable additions to your menu.
                   </p>
                 </div>
               </div>
@@ -291,11 +299,8 @@ const Dashboard = () => {
                       <thead>
                         <tr className="border-b border-gray-700">
                           <th className="text-left py-3 px-4 text-gray-300">Ingredient</th>
-                          <th className="text-left py-3 px-4 text-gray-300">Unit</th>
-                          <th className="text-right py-3 px-4 text-gray-300">Current Price</th>
-                          <th className="text-right py-3 px-4 text-gray-300">Change</th>
-                          <th className="text-right py-3 px-4 text-gray-300">Weekly Avg</th>
-                          <th className="text-right py-3 px-4 text-gray-300">Monthly Avg</th>
+                          <th className="text-right py-3 px-4 text-gray-300">Price (INR)</th>
+                          <th className="text-right py-3 px-4 text-gray-300">Adjusted Price (INR)</th>
                           <th className="text-center py-3 px-4 text-gray-300">Trend</th>
                         </tr>
                       </thead>
@@ -303,13 +308,8 @@ const Dashboard = () => {
                         {priceTrackerData.map((item, index) => (
                           <tr key={index} className="border-b border-gray-800 hover:bg-gray-800/50">
                             <td className="py-3 px-4 text-white font-medium">{item.ingredient}</td>
-                            <td className="py-3 px-4 text-gray-400">{item.unit}</td>
-                            <td className="py-3 px-4 text-right text-white">₹{item.currentPrice}</td>
-                            <td className={`py-3 px-4 text-right ${item.change.startsWith('+') ? 'text-green-400' : item.change.startsWith('-') ? 'text-red-400' : 'text-gray-400'}`}>
-                              {item.change}
-                            </td>
-                            <td className="py-3 px-4 text-right text-gray-300">₹{item.weeklyAvg}</td>
-                            <td className="py-3 px-4 text-right text-gray-300">₹{item.monthlyAvg}</td>
+                            <td className="py-3 px-4 text-right text-white">₹{item.price}</td>
+                            <td className="py-3 px-4 text-right text-blue-400">₹{item.adjustedPrice}</td>
                             <td className="py-3 px-4 text-center">
                               {item.trend === 'up' && <ArrowUp className="h-4 w-4 text-green-400 mx-auto" />}
                               {item.trend === 'down' && <ArrowDown className="h-4 w-4 text-red-400 mx-auto" />}

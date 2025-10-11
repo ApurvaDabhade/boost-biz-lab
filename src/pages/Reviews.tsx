@@ -11,6 +11,8 @@ const Reviews = () => {
   const navigate = useNavigate();
   const [selectedPeriod, setSelectedPeriod] = useState('7d');
   const [showQRCode, setShowQRCode] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
+  const [showMobileLink, setShowMobileLink] = useState(false);
 
   // Mock data for sentiment analysis
   const sentimentData = {
@@ -32,6 +34,16 @@ const Reviews = () => {
       { name: 'Cleanliness', positive: 90, neutral: 8, negative: 2, trend: +5 },
       { name: 'Value for Money', positive: 68, neutral: 20, negative: 12, trend: -2 },
       { name: 'Staff Behavior', positive: 82, neutral: 12, negative: 6, trend: +10 }
+    ],
+    citywiseData: [
+      { city: 'Mumbai', positive: 82, neutral: 12, negative: 6, total: 450 },
+      { city: 'Delhi', positive: 75, neutral: 18, negative: 7, total: 380 },
+      { city: 'Bangalore', positive: 80, neutral: 15, negative: 5, total: 320 },
+      { city: 'Chennai', positive: 78, neutral: 16, negative: 6, total: 280 },
+      { city: 'Kolkata', positive: 85, neutral: 10, negative: 5, total: 250 },
+      { city: 'Pune', positive: 79, neutral: 14, negative: 7, total: 200 },
+      { city: 'Hyderabad', positive: 77, neutral: 17, negative: 6, total: 180 },
+      { city: 'Ahmedabad', positive: 83, neutral: 12, negative: 5, total: 150 }
     ],
     recentReviews: [
       {
@@ -104,6 +116,39 @@ const Reviews = () => {
     return <div className="h-4 w-4" />;
   };
 
+  const handleFilter = () => {
+    setShowFilter(!showFilter);
+    // You can add filter logic here
+  };
+
+  const handleExport = () => {
+    // Create CSV data
+    const csvData = [
+      ['Category', 'Positive %', 'Neutral %', 'Negative %', 'Trend %'],
+      ...sentimentData.categories.map(cat => [
+        cat.name,
+        cat.positive,
+        cat.neutral,
+        cat.negative,
+        cat.trend
+      ])
+    ];
+    
+    const csvContent = csvData.map(row => row.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sentiment-analysis-data.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const handleMobileLink = () => {
+    setShowMobileLink(!showMobileLink);
+    // You can add mobile link logic here
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Header */}
@@ -116,22 +161,32 @@ const Reviews = () => {
               onClick={() => navigate('/dashboard')}
               className="text-white hover:bg-blue-800"
             >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
             <div className="text-center">
               <h1 className="text-xl font-bold">Customer Reviews & Feedback</h1>
               <p className="text-xs text-blue-200">Sentiment Analysis Dashboard</p>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="border-blue-700 text-white">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="border-blue-700 text-white hover:bg-blue-800"
+                onClick={handleFilter}
+              >
                 <Filter className="h-4 w-4 mr-2" />
                 Filter
-              </Button>
-              <Button variant="outline" size="sm" className="border-blue-700 text-white">
+                </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="border-blue-700 text-white hover:bg-blue-800"
+                onClick={handleExport}
+              >
                 <Download className="h-4 w-4 mr-2" />
                 Export
-              </Button>
-            </div>
+                  </Button>
+                </div>
           </div>
         </div>
       </div>
@@ -142,8 +197,8 @@ const Reviews = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card className="bg-gradient-to-br from-emerald-900/20 to-black border-emerald-700">
             <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
+            <div className="flex items-center justify-between">
+              <div>
                   <p className="text-sm text-gray-400">Positive Reviews</p>
                   <p className="text-2xl font-bold text-emerald-400">{sentimentData.overall.positive}%</p>
                   <div className="flex items-center mt-1">
@@ -158,8 +213,8 @@ const Reviews = () => {
 
           <Card className="bg-gradient-to-br from-amber-900/20 to-black border-amber-700">
             <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
+            <div className="flex items-center justify-between">
+              <div>
                   <p className="text-sm text-gray-400">Neutral Reviews</p>
                   <p className="text-2xl font-bold text-amber-400">{sentimentData.overall.neutral}%</p>
                   <div className="flex items-center mt-1">
@@ -174,8 +229,8 @@ const Reviews = () => {
 
           <Card className="bg-gradient-to-br from-rose-900/20 to-black border-rose-700">
             <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
+            <div className="flex items-center justify-between">
+              <div>
                   <p className="text-sm text-gray-400">Negative Reviews</p>
                   <p className="text-2xl font-bold text-rose-400">{sentimentData.overall.negative}%</p>
                   <div className="flex items-center mt-1">
@@ -190,8 +245,8 @@ const Reviews = () => {
 
           <Card className="bg-gradient-to-br from-indigo-900/20 to-black border-indigo-700">
             <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
+            <div className="flex items-center justify-between">
+              <div>
                   <p className="text-sm text-gray-400">Average Rating</p>
                   <p className="text-2xl font-bold text-indigo-400">{sentimentData.overall.averageRating}/5</p>
                   <div className="flex items-center mt-1">
@@ -225,11 +280,11 @@ const Reviews = () => {
                   <div className="bg-gray-900/50 rounded-lg p-4">
                     <div className="text-sm text-gray-400">Scans This Week</div>
                     <div className="text-lg font-bold text-green-400">156</div>
-                  </div>
+          </div>
                   <div className="bg-gray-900/50 rounded-lg p-4">
                     <div className="text-sm text-gray-400">Response Rate</div>
                     <div className="text-lg font-bold text-blue-400">68%</div>
-                  </div>
+          </div>
                 </div>
                 <div className="flex gap-3">
                   <Button 
@@ -239,7 +294,11 @@ const Reviews = () => {
                     <QrCode className="h-4 w-4 mr-2" />
                     {showQRCode ? 'Hide QR Code' : 'Generate QR Code'}
                   </Button>
-                  <Button variant="outline" className="border-purple-600 text-purple-400 hover:bg-purple-900">
+                  <Button 
+                    variant="outline" 
+                    className="border-purple-600 text-purple-400 hover:bg-purple-900"
+                    onClick={handleMobileLink}
+                  >
                     <Smartphone className="h-4 w-4 mr-2" />
                     View Mobile Link
                   </Button>
@@ -247,7 +306,13 @@ const Reviews = () => {
               </div>
               <div className="ml-8 hidden lg:block">
                 {showQRCode ? (
-                  <div className="w-48 h-48 bg-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:scale-105 transition-transform">
+                  <div 
+                    className="w-48 h-48 bg-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
+                    onClick={() => {
+                      navigator.clipboard.writeText('https://rasoimitra.com/feedback');
+                      // You can add a toast notification here
+                    }}
+                  >
                     <div className="w-40 h-40 bg-gray-900 rounded-lg flex items-center justify-center">
                       <div className="text-white text-xs text-center">
                         <div className="mb-2">QR CODE</div>
@@ -264,10 +329,83 @@ const Reviews = () => {
                 <p className="text-center text-sm text-gray-400 mt-2">
                   {showQRCode ? 'Click QR Code to Copy Link' : 'Generate QR Code to Display'}
                 </p>
+                {showMobileLink && (
+                  <div className="mt-4 p-3 bg-gray-800 rounded-lg">
+                    <div className="text-xs text-gray-400 mb-2">Mobile Feedback Link:</div>
+                    <div className="text-sm text-blue-400 break-all">https://rasoimitra.com/feedback/mobile</div>
+                    <Button 
+                      size="sm" 
+                      className="mt-2 bg-blue-600 hover:bg-blue-700 text-xs"
+                      onClick={() => {
+                        navigator.clipboard.writeText('https://rasoimitra.com/feedback/mobile');
+                        // You can add a toast notification here
+                      }}
+                    >
+                      Copy Link
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </CardContent>
         </Card>
+
+        {/* Filter Panel */}
+        {showFilter && (
+          <Card className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700 mb-6">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white">Filter Options</h3>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-gray-400 hover:text-white"
+                  onClick={() => setShowFilter(false)}
+                >
+                  ✕
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="text-sm text-gray-400 mb-2 block">Time Period</label>
+                  <select className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white">
+                    <option value="7d">Last 7 days</option>
+                    <option value="30d">Last 30 days</option>
+                    <option value="90d">Last 90 days</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm text-gray-400 mb-2 block">Sentiment</label>
+                  <select className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white">
+                    <option value="all">All Sentiments</option>
+                    <option value="positive">Positive Only</option>
+                    <option value="neutral">Neutral Only</option>
+                    <option value="negative">Negative Only</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm text-gray-400 mb-2 block">Category</label>
+                  <select className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white">
+                    <option value="all">All Categories</option>
+                    <option value="food">Food Quality</option>
+                    <option value="service">Service Speed</option>
+                    <option value="cleanliness">Cleanliness</option>
+                    <option value="value">Value for Money</option>
+                    <option value="staff">Staff Behavior</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex gap-3 mt-4">
+                <Button className="bg-blue-600 hover:bg-blue-700">
+                  Apply Filters
+                </Button>
+                <Button variant="outline" className="border-gray-600 text-gray-300">
+                  Clear All
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="sentiment" className="space-y-6">
@@ -280,77 +418,125 @@ const Reviews = () => {
           {/* Sentiment Analysis Tab */}
           <TabsContent value="sentiment" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Sentiment Distribution Chart */}
+              {/* Pie Chart - Sentiment Distribution */}
               <Card className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
                 <CardHeader>
                   <CardTitle className="text-white">Sentiment Distribution</CardTitle>
                   <CardDescription className="text-gray-400">Overall customer sentiment breakdown</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm text-gray-400">Positive</span>
-                        <span className="text-sm text-green-400">{sentimentData.overall.positive}%</span>
+                  <div className="flex items-center justify-center mb-6">
+                    <div className="relative w-48 h-48">
+                      {/* Pie Chart SVG */}
+                      <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                        {/* Positive slice */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          fill="none"
+                          stroke="#10b981"
+                          strokeWidth="8"
+                          strokeDasharray={`${sentimentData.overall.positive * 2.51} 251`}
+                          className="drop-shadow-lg"
+                        />
+                        {/* Neutral slice */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          fill="none"
+                          stroke="#f59e0b"
+                          strokeWidth="8"
+                          strokeDasharray={`${sentimentData.overall.neutral * 2.51} 251`}
+                          strokeDashoffset={`-${sentimentData.overall.positive * 2.51}`}
+                          className="drop-shadow-lg"
+                        />
+                        {/* Negative slice */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          fill="none"
+                          stroke="#ef4444"
+                          strokeWidth="8"
+                          strokeDasharray={`${sentimentData.overall.negative * 2.51} 251`}
+                          strokeDashoffset={`-${(sentimentData.overall.positive + sentimentData.overall.neutral) * 2.51}`}
+                          className="drop-shadow-lg"
+                        />
+                      </svg>
+                      {/* Center text */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-white">{sentimentData.overall.total}</div>
+                          <div className="text-xs text-gray-400">Total Reviews</div>
+                        </div>
                       </div>
-                      <Progress value={sentimentData.overall.positive} className="h-2" />
                     </div>
-                    <div>
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm text-gray-400">Neutral</span>
-                        <span className="text-sm text-yellow-400">{sentimentData.overall.neutral}%</span>
+                  </div>
+                  {/* Legend */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <div className="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
+                        <span className="text-sm text-gray-300">Positive</span>
                       </div>
-                      <Progress value={sentimentData.overall.neutral} className="h-2" />
+                      <span className="text-sm font-semibold text-green-400">{sentimentData.overall.positive}%</span>
                     </div>
-                    <div>
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm text-gray-400">Negative</span>
-                        <span className="text-sm text-red-400">{sentimentData.overall.negative}%</span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <div className="w-4 h-4 bg-yellow-500 rounded-full mr-3"></div>
+                        <span className="text-sm text-gray-300">Neutral</span>
                       </div>
-                      <Progress value={sentimentData.overall.negative} className="h-2" />
+                      <span className="text-sm font-semibold text-yellow-400">{sentimentData.overall.neutral}%</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <div className="w-4 h-4 bg-red-500 rounded-full mr-3"></div>
+                        <span className="text-sm text-gray-300">Negative</span>
+                      </div>
+                      <span className="text-sm font-semibold text-red-400">{sentimentData.overall.negative}%</span>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Trend Analysis */}
+              {/* Bar Chart - City-wise Sentiment */}
               <Card className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
                 <CardHeader>
-                  <CardTitle className="text-white">Trend Analysis</CardTitle>
-                  <CardDescription className="text-gray-400">7-day sentiment trends</CardDescription>
+                  <CardTitle className="text-white">City-wise Sentiment Analysis</CardTitle>
+                  <CardDescription className="text-gray-400">Sentiment distribution across major cities</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
-                      <div className="flex items-center">
-                        <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
-                        <span className="text-white">Positive Trend</span>
+                    <div className="space-y-4">
+                    {sentimentData.citywiseData.slice(0, 6).map((city, index) => (
+                      <div key={index} className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-white">{city.city}</span>
+                          <span className="text-xs text-gray-400">{city.total} reviews</span>
+                        </div>
+                        <div className="flex h-6 bg-gray-800 rounded-lg overflow-hidden">
+                          <div 
+                            className="bg-green-500 flex items-center justify-center"
+                            style={{ width: `${city.positive}%` }}
+                          >
+                            <span className="text-xs font-bold text-white">{city.positive}%</span>
+                          </div>
+                          <div 
+                            className="bg-yellow-500 flex items-center justify-center"
+                            style={{ width: `${city.neutral}%` }}
+                          >
+                            <span className="text-xs font-bold text-white">{city.neutral}%</span>
+                          </div>
+                          <div 
+                            className="bg-red-500 flex items-center justify-center"
+                            style={{ width: `${city.negative}%` }}
+                          >
+                            <span className="text-xs font-bold text-white">{city.negative}%</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center">
-                        <TrendingUp className="h-4 w-4 text-green-400 mr-2" />
-                        <span className="text-green-400">+{sentimentData.trends.positive}%</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
-                      <div className="flex items-center">
-                        <div className="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
-                        <span className="text-white">Neutral Trend</span>
-                      </div>
-                      <div className="flex items-center">
-                        <TrendingDown className="h-4 w-4 text-yellow-400 mr-2" />
-                        <span className="text-yellow-400">{sentimentData.trends.neutral}%</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
-                      <div className="flex items-center">
-                        <div className="w-3 h-3 bg-red-500 rounded-full mr-3"></div>
-                        <span className="text-white">Negative Trend</span>
-                      </div>
-                      <div className="flex items-center">
-                        <TrendingDown className="h-4 w-4 text-red-400 mr-2" />
-                        <span className="text-red-400">{sentimentData.trends.negative}%</span>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
@@ -359,51 +545,119 @@ const Reviews = () => {
 
           {/* Category Breakdown Tab */}
           <TabsContent value="categories" className="space-y-6">
-            <div className="grid grid-cols-1 gap-6">
-              {sentimentData.categories.map((category, index) => (
-                <Card key={index} className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold text-white">{category.name}</h3>
-                      <div className="flex items-center">
-                        {getTrendIcon(category.trend)}
-                        <span className={`ml-2 text-sm ${category.trend > 0 ? 'text-green-400' : category.trend < 0 ? 'text-red-400' : 'text-gray-400'}`}>
-                          {category.trend > 0 ? '+' : ''}{category.trend}%
-                        </span>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Horizontal Bar Chart for Categories */}
+              <Card className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Category Performance</CardTitle>
+                  <CardDescription className="text-gray-400">Sentiment breakdown by category</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    {sentimentData.categories.map((category, index) => (
+                      <div key={index} className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-white">{category.name}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-gray-400">Trend:</span>
+                            {category.trend > 0 ? (
+                              <span className="text-xs text-green-400">+{category.trend}% ↗️</span>
+                            ) : (
+                              <span className="text-xs text-red-400">{category.trend}% ↘️</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="space-y-1">
+                          {/* Positive bar */}
+                          <div className="flex items-center">
+                            <div className="w-16 text-xs text-gray-400">Positive</div>
+                            <div className="flex-1 bg-gray-800 rounded-full h-3 overflow-hidden">
+                              <div 
+                                className="bg-green-500 h-full flex items-center justify-end pr-2"
+                                style={{ width: `${category.positive}%` }}
+                              >
+                                <span className="text-xs font-bold text-white">{category.positive}%</span>
+                              </div>
+                            </div>
+                          </div>
+                          {/* Neutral bar */}
+                          <div className="flex items-center">
+                            <div className="w-16 text-xs text-gray-400">Neutral</div>
+                            <div className="flex-1 bg-gray-800 rounded-full h-3 overflow-hidden">
+                              <div 
+                                className="bg-yellow-500 h-full flex items-center justify-end pr-2"
+                                style={{ width: `${category.neutral}%` }}
+                              >
+                                <span className="text-xs font-bold text-white">{category.neutral}%</span>
+                              </div>
+                            </div>
+                          </div>
+                          {/* Negative bar */}
+                          <div className="flex items-center">
+                            <div className="w-16 text-xs text-gray-400">Negative</div>
+                            <div className="flex-1 bg-gray-800 rounded-full h-3 overflow-hidden">
+                              <div 
+                                className="bg-red-500 h-full flex items-center justify-end pr-2"
+                                style={{ width: `${category.negative}%` }}
+                              >
+                                <span className="text-xs font-bold text-white">{category.negative}%</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Radar Chart for Category Comparison */}
+              <Card className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Category Comparison</CardTitle>
+                  <CardDescription className="text-gray-400">Positive sentiment across all categories</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {sentimentData.categories.map((category, index) => (
+                      <div key={index} className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-white">{category.name}</span>
+                          <span className="text-sm font-bold text-green-400">{category.positive}%</span>
+                        </div>
+                        <div className="w-full bg-gray-800 rounded-full h-4 overflow-hidden">
+                          <div 
+                            className="bg-gradient-to-r from-green-500 to-emerald-500 h-full flex items-center justify-end pr-3 transition-all duration-1000 ease-out"
+                            style={{ width: `${category.positive}%` }}
+                          >
+                            <span className="text-xs font-bold text-white">{category.positive}%</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-6 p-4 bg-gray-800/50 rounded-lg">
+                    <div className="text-sm text-gray-300 mb-2">Top Performing Categories:</div>
+                    <div className="space-y-1">
+                      {sentimentData.categories
+                        .sort((a, b) => b.positive - a.positive)
+                        .slice(0, 3)
+                        .map((category, index) => (
+                          <div key={index} className="flex justify-between items-center text-xs">
+                            <span className="text-gray-400">{index + 1}. {category.name}</span>
+                            <span className="text-green-400 font-semibold">{category.positive}%</span>
+                          </div>
+                        ))}
                     </div>
-                    <div className="space-y-3">
-                      <div>
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm text-gray-400">Positive</span>
-                          <span className="text-sm text-green-400">{category.positive}%</span>
-                        </div>
-                        <Progress value={category.positive} className="h-2" />
-                      </div>
-                      <div>
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm text-gray-400">Neutral</span>
-                          <span className="text-sm text-yellow-400">{category.neutral}%</span>
-                        </div>
-                        <Progress value={category.neutral} className="h-2" />
-                      </div>
-                      <div>
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm text-gray-400">Negative</span>
-                          <span className="text-sm text-red-400">{category.negative}%</span>
-                        </div>
-                        <Progress value={category.negative} className="h-2" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
 
           {/* Recent Reviews Tab */}
           <TabsContent value="reviews" className="space-y-6">
-            <div className="space-y-4">
+                    <div className="space-y-4">
               {sentimentData.recentReviews.map((review) => (
                 <Card key={review.id} className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
                   <CardContent className="p-6">
@@ -414,7 +668,7 @@ const Reviews = () => {
                             {review.customer.split(' ').map(n => n[0]).join('')}
                           </span>
                         </div>
-                        <div>
+                      <div>
                           <h4 className="text-white font-semibold">{review.customer}</h4>
                           <p className="text-sm text-gray-400">{review.date}</p>
                         </div>
@@ -441,9 +695,9 @@ const Reviews = () => {
                     </div>
                     <p className="text-gray-300">{review.comment}</p>
                   </CardContent>
-                </Card>
-              ))}
-            </div>
+            </Card>
+          ))}
+        </div>
           </TabsContent>
         </Tabs>
       </div>
