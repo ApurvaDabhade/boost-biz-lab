@@ -15,6 +15,15 @@ interface Message {
   type: 'user' | 'bot';
   content: string;
   timestamp: Date;
+  buttons?: Array<{ label: string; value: string; icon?: string }>;
+}
+
+interface ChatFlowData {
+  dishName?: string;
+  date?: string;
+  optionType?: 'topping' | 'addon';
+  language?: 'english' | 'marathi';
+  step: number;
 }
 
 const ChefGuru = () => {
@@ -24,13 +33,14 @@ const ChefGuru = () => {
     {
       id: '1',
       type: 'bot',
-      content: 'Hello! I\'m ChefGuru, your intelligent kitchen assistant. I can help you with upselling strategies, festival menu planning, inventory alerts, and sales trend analysis. What would you like to know?',
+      content: 'Hello! I can help you find the best toppings or add-ons for your dish 🍛',
       timestamp: new Date(),
     },
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [activeTab, setActiveTab] = useState('chat');
+  const [chatFlowData, setChatFlowData] = useState<ChatFlowData>({ step: 1 });
 
   // Popularity data based on the image
   const popularityData = [
@@ -90,57 +100,85 @@ const ChefGuru = () => {
     { icon: BarChart3, label: 'Trend Analysis', color: 'from-purple-600 to-purple-800' },
   ];
 
-  const generateResponse = (userMessage: string): string => {
-    const lowerMessage = userMessage.toLowerCase();
-    
-    if (lowerMessage.includes('upsell') || lowerMessage.includes('sell more')) {
-      return '💡 Upselling Tips:\n\n1. Combo Offers: Pair Paneer Roll + Cold Drink for ₹120 (save ₹30)\n2. Size Upgrade: "Would you like large size for just ₹20 more?"\n3. Add-ons: Suggest extra cheese or spicy level\n4. Festival Specials: Highlight limited-time items\n\n📈 This can increase sales by 25-40%!';
+  const handleChatFlow = (userInput: string, buttonValue?: string) => {
+    const currentStep = chatFlowData.step;
+    const input = buttonValue || userInput;
+
+    switch (currentStep) {
+      case 1: // Step 1 - Dish Name
+        setChatFlowData(prev => ({ ...prev, dishName: input, step: 2 }));
+        return {
+          content: 'Enter the date (YYYY-MM-DD).',
+          buttons: undefined
+        };
+
+      case 2: // Step 2 - Date Input
+        setChatFlowData(prev => ({ ...prev, date: input, step: 3 }));
+        return {
+          content: 'Choose option type:',
+          buttons: [
+            { label: 'Topping', value: 'topping', icon: '👨‍🍳' },
+            { label: 'Add-on', value: 'addon', icon: '📦' }
+          ]
+        };
+
+      case 3: // Step 3 - Choose Option Type
+        setChatFlowData(prev => ({ ...prev, optionType: input as 'topping' | 'addon', step: 4 }));
+        return {
+          content: 'Choose language:',
+          buttons: [
+            { label: 'GB English', value: 'english' },
+            { label: 'IN Marathi', value: 'marathi' }
+          ]
+        };
+
+      case 4: // Step 4 - Choose Language
+        setChatFlowData(prev => ({ ...prev, language: input as 'english' | 'marathi', step: 5 }));
+        return {
+          content: 'Ready to predict!',
+          buttons: [
+            { label: 'Predict', value: 'predict', icon: '🌐' }
+          ]
+        };
+
+      case 5: // Step 5 - Predict
+        if (input === 'predict') {
+          setChatFlowData(prev => ({ ...prev, step: 6 }));
+          return {
+            content: generatePrediction(),
+            buttons: undefined
+          };
+        }
+        break;
+
+      default:
+        return {
+          content: 'Hello! I can help you find the best toppings or add-ons for your dish 🍛\n\nPlease enter the name of your dish.',
+          buttons: undefined
+        };
     }
+  };
+
+  const generatePrediction = () => {
+    const { dishName, date, optionType, language } = chatFlowData;
     
-    if (lowerMessage.includes('festival') || lowerMessage.includes('diwali') || lowerMessage.includes('naraka')) {
-      const currentFestival = lowerMessage.includes('naraka') ? 'naraka chaturdasi' : 'diwali';
-      const addOns = festivalAddOns[currentFestival as keyof typeof festivalAddOns];
-      const toppings = toppingSuggestions[currentFestival as keyof typeof toppingSuggestions] || toppingSuggestions.default;
-      
-      return `🎉 Festival Menu Recommendations:\n\n🪔 ${currentFestival === 'naraka chaturdasi' ? 'Naraka Chaturdasi' : 'Diwali'} Special Items:\n• Sweet Paneer Roll\n• Festival Thali\n• Gulab Jamun Combo\n• Festival Discount Packages\n\n🍽️ Suggested Add-ons:\n${addOns.map(item => `• ${item}`).join('\n')}\n\n🎯 Premium Toppings:\n${toppings.map(item => `• ${item}`).join('\n')}\n\n💰 Pricing Strategy: Premium pricing (+15%) but with combo offers\n📣 Marketing: Social media posts + WhatsApp broadcast`;
+    // Mock prediction based on the data
+    const season = 'Monsoon';
+    const festival = 'Naraka Chaturdasi';
+    
+    let suggestions: string[] = [];
+    
+    if (optionType === 'topping') {
+      suggestions = language === 'marathi' 
+        ? ['कांद्याच्या भजीचा कुरकुरीत चुरा', 'तिखट पुदीना-कोथिंबीर चटणी आणि डाळिंबाचे दाणे', 'आले-लसूण-मिरची तेल आणि भाजलेले शेंगदाणे', 'धुरीदार पेपरिका दही आणि कुरकुरी कढीपत्ता']
+        : ['Crispy onion fritter crumbs', 'Spicy mint-coriander chutney and pomegranate seeds', 'Ginger-garlic-chilli oil and roasted peanuts', 'Smoky paprika yogurt and crispy curry leaves'];
+    } else {
+      suggestions = language === 'marathi'
+        ? ['आले-लसूण चटणी', 'तिखट हिरवी चटणी', 'बारीक चिरलेला कांदा', 'शेव', 'ताजी कोथिंबीर']
+        : ['Ginger-Garlic Chutney', 'Spicy Green Chutney', 'Finely chopped onion', 'Crispy Sev', 'Fresh coriander'];
     }
-    
-    if (lowerMessage.includes('add') && (lowerMessage.includes('on') || lowerMessage.includes('topping'))) {
-      const currentSeason = 'monsoon';
-      const addOns = festivalAddOns[currentSeason as keyof typeof festivalAddOns];
-      const toppings = toppingSuggestions[currentSeason as keyof typeof toppingSuggestions] || toppingSuggestions.default;
-      
-      return `🍽️ Add-on & Topping Suggestions:\n\n🌧️ Monsoon Special Add-ons:\n${addOns.map(item => `• ${item}`).join('\n')}\n\n🎯 Premium Toppings:\n${toppings.map(item => `• ${item}`).join('\n')}\n\n💡 Pro Tips:\n• Pair hot items with warm chutneys\n• Offer seasonal combos\n• Highlight health benefits of monsoon ingredients\n• Create limited-time monsoon specials`;
-    }
-    
-    if (lowerMessage.includes('chutney') || lowerMessage.includes('sauce')) {
-      return `🌶️ Chutney & Sauce Recommendations:\n\n🔥 Popular Options:\n• आले-लसूण चटणी (Ginger-Garlic Chutney)\n• तिखट हिरवी चटणी (Spicy Green Chutney)\n• बारीक चिरलेला कांदा (Finely chopped onion)\n• शेव (Crispy Sev)\n• ताजी कोथिंबीर (Fresh coriander)\n• Anar Dana Chutney (Festival favorite)\n• Mint Chutney (All-season)\n• Tamarind Chutney (Street food essential)\n\n💡 Pairing Tips:\n• Sweet chutneys with spicy dishes\n• Tangy chutneys with fried items\n• Creamy chutneys with grilled items`;
-    }
-    
-    if (lowerMessage.includes('topping') || lowerMessage.includes('कुरकुरीत') || lowerMessage.includes('चुरा')) {
-      const currentSeason = 'monsoon';
-      const toppings = toppingSuggestions[currentSeason as keyof typeof toppingSuggestions] || toppingSuggestions.default;
-      
-      return `🎯 Premium Topping Suggestions:\n\n🌧️ Monsoon Special Toppings:\n${toppings.map(item => `• ${item}`).join('\n')}\n\n💡 English Translations:\n• कांद्याच्या भजीचा कुरकुरीत चुरा = Crispy onion fritter crumbs\n• तिखट पुदीना-कोथिंबीर चटणी = Spicy mint-coriander chutney\n• आले-लसूण-मिरची तेल = Ginger-garlic-chilli oil\n• धुरीदार पेपरिका दही = Smoky paprika yogurt\n\n🔥 Pro Tips:\n• These toppings add texture and flavor\n• Perfect for monsoon season dishes\n• Can increase dish value by ₹15-25`;
-    }
-    
-    if (lowerMessage.includes('stock') || lowerMessage.includes('inventory')) {
-      return '📦 Current Stock Alerts:\n\n🔴 Critical:\n• Onions - Only 2kg left\n• आले (Ginger) - Only 500g left\n\n🟡 Low:\n• Paneer - 5kg remaining\n• Oil - 3L remaining\n• शेव - Only 2 packets left\n\n💡 Suggestion: Order Onions and Ginger today, Paneer by tomorrow\n\n🎯 Smart tip: Stock up on monsoon special ingredients!';
-    }
-    
-    if (lowerMessage.includes('trend') || lowerMessage.includes('analysis') || lowerMessage.includes('sales')) {
-      const topDish = popularityData[0];
-      return `📊 Sales Trend Analysis:\n\n🏆 Top Performing Dish: ${topDish.dish}\n• Views: ${topDish.views.toLocaleString()}\n• Likes: ${topDish.likes.toLocaleString()}\n• Popularity Score: ${topDish.popularity_score}\n\n📈 This Week:\n• Sales up 15%\n• Peak hours: 12PM-2PM, 7PM-9PM\n• Top seller: Paneer Roll (45% increase)\n\n🔥 Insights:\n• Tourist area sales doubled\n• Weekend demand higher\n• Combo offers working well\n• Monsoon specials performing well\n\n💡 Recommendation: Increase Paneer Roll production by 30%`;
-    }
-    
-    if (lowerMessage.includes('monsoon') || lowerMessage.includes('rainy')) {
-      const addOns = festivalAddOns.monsoon;
-      const toppings = toppingSuggestions.monsoon;
-      
-      return `🌧️ Monsoon Season Recommendations:\n\n🍽️ Perfect Add-ons:\n${addOns.map(item => `• ${item}`).join('\n')}\n\n🎯 Premium Toppings:\n${toppings.map(item => `• ${item}`).join('\n')}\n\n💡 Monsoon Tips:\n• Hot and spicy items sell more\n• Pakoras and samosas are trending\n• Tea and hot beverages are must-haves\n• Crispy toppings add extra appeal\n• Ginger-garlic chutney is very popular`;
-    }
-    
-    return 'I can help you with:\n\n🎯 Upselling strategies to boost revenue\n🎉 Festival menu planning and pricing\n📦 Inventory management and alerts\n📊 Sales trends and customer patterns\n🍽️ Add-on and topping suggestions\n🌶️ Chutney and sauce recommendations\n🌧️ Monsoon season specials\n🎯 Premium topping suggestions\n\nWhat would you like to explore?';
+
+    return `🍽️ **Prediction Results for ${dishName}**\n\n📅 **Date:** ${date}\n🌧️ **Season:** ${season}\n🎉 **Festival:** ${festival}\n\n🎯 **Predicted ${optionType === 'topping' ? 'toppings' : 'add-ons'}:**\n${suggestions.map(item => `• ${item}`).join('\n')}\n\n💡 *Based on seasonal trends and festival preferences*`;
   };
 
   const handleSendMessage = () => {
@@ -154,14 +192,40 @@ const ChefGuru = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = inputValue;
     setInputValue('');
 
     setTimeout(() => {
+      const response = handleChatFlow(currentInput);
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
         type: 'bot',
-        content: generateResponse(inputValue),
+        content: response.content,
         timestamp: new Date(),
+        buttons: response.buttons,
+      };
+      setMessages(prev => [...prev, botResponse]);
+    }, 1000);
+  };
+
+  const handleButtonClick = (buttonValue: string) => {
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      type: 'user',
+      content: buttonValue,
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+
+    setTimeout(() => {
+      const response = handleChatFlow('', buttonValue);
+      const botResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        type: 'bot',
+        content: response.content,
+        timestamp: new Date(),
+        buttons: response.buttons,
       };
       setMessages(prev => [...prev, botResponse]);
     }, 1000);
@@ -287,6 +351,22 @@ const ChefGuru = () => {
                       }`}
                     >
                       <p className="text-white whitespace-pre-line">{message.content}</p>
+                      {message.buttons && (
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          {message.buttons.map((button, index) => (
+                            <Button
+                              key={index}
+                              size="sm"
+                              variant="outline"
+                              className="border-purple-600 text-purple-400 hover:bg-purple-800"
+                              onClick={() => handleButtonClick(button.value)}
+                            >
+                              {button.icon && <span className="mr-1">{button.icon}</span>}
+                              {button.label}
+                            </Button>
+                          ))}
+                        </div>
+                      )}
                       <p className="text-xs text-gray-400 mt-2">
                         {message.timestamp.toLocaleTimeString('en-US', {
                           hour: '2-digit',
@@ -301,55 +381,39 @@ const ChefGuru = () => {
 
             {/* Example Questions */}
             <div className="border-t border-purple-800 pt-4">
-              <p className="text-sm text-gray-400 mb-2">Try asking:</p>
+              <p className="text-sm text-gray-400 mb-2">Start the flow by typing a dish name:</p>
               <div className="flex flex-wrap gap-2">
                 <Button
                   size="sm"
                   variant="outline"
                   className="border-purple-600 text-purple-400 text-xs"
-                  onClick={() => handleQuickAction('How can I upsell more?')}
+                  onClick={() => handleQuickAction('Masala Puri')}
                 >
-                  How can I upsell more?
+                  Masala Puri
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   className="border-purple-600 text-purple-400 text-xs"
-                  onClick={() => handleQuickAction('Festival menu ideas')}
+                  onClick={() => handleQuickAction('Pav Bhaji')}
                 >
-                  Festival menu ideas
+                  Pav Bhaji
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   className="border-purple-600 text-purple-400 text-xs"
-                  onClick={() => handleQuickAction('Add-on suggestions')}
+                  onClick={() => handleQuickAction('Paneer Tikka')}
                 >
-                  Add-on suggestions
+                  Paneer Tikka
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   className="border-purple-600 text-purple-400 text-xs"
-                  onClick={() => handleQuickAction('Chutney recommendations')}
+                  onClick={() => handleQuickAction('Masala Dosa')}
                 >
-                  Chutney recommendations
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-purple-600 text-purple-400 text-xs"
-                  onClick={() => handleQuickAction('Premium topping suggestions')}
-                >
-                  Premium toppings
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-purple-600 text-purple-400 text-xs"
-                  onClick={() => handleQuickAction('Monsoon season specials')}
-                >
-                  Monsoon specials
+                  Masala Dosa
                 </Button>
               </div>
             </div>
