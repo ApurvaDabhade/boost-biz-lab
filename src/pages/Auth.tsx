@@ -29,7 +29,7 @@ const Auth = () => {
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate('/');
+        navigate('/dashboard');
       }
     };
 
@@ -38,7 +38,7 @@ const Auth = () => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session && event === 'SIGNED_IN') {
-        navigate('/');
+        navigate('/dashboard');
       }
     });
 
@@ -98,6 +98,7 @@ const Auth = () => {
           title: "Welcome back!",
           description: "Successfully logged in.",
         });
+        navigate('/dashboard');
       } else {
         const { error } = await supabase.auth.signUp({
           email: email.trim(),
@@ -128,6 +129,7 @@ const Auth = () => {
           title: "Account Created!",
           description: "Your account has been created successfully.",
         });
+        navigate('/registration');
       }
     } catch (error) {
       toast({

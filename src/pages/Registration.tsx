@@ -29,6 +29,8 @@ const Registration = () => {
     name: '',
     email: '',
     phone: '',
+    password: '',
+    confirmPassword: '',
     
     // Business Details
     businessType: '',
@@ -64,13 +66,31 @@ const Registration = () => {
 
   const handleNext = () => {
     // Validation
-    if (currentStep === 'account' && (!formData.name || !formData.email || !formData.phone)) {
-      toast({
-        title: 'Missing Information',
-        description: 'Please fill in all account details',
-        variant: 'destructive',
-      });
-      return;
+    if (currentStep === 'account') {
+      if (!formData.name || !formData.email || !formData.phone || !formData.password || !formData.confirmPassword) {
+        toast({
+          title: 'Missing Information',
+          description: 'Please fill in all account details including password',
+          variant: 'destructive',
+        });
+        return;
+      }
+      if (formData.password.length < 6) {
+        toast({
+          title: 'Weak Password',
+          description: 'Password must be at least 6 characters long',
+          variant: 'destructive',
+        });
+        return;
+      }
+      if (formData.password !== formData.confirmPassword) {
+        toast({
+          title: 'Passwords Do Not Match',
+          description: 'Please ensure password and confirm password match',
+          variant: 'destructive',
+        });
+        return;
+      }
     }
 
     if (currentStep === 'business' && (!formData.businessType || !formData.businessName)) {
@@ -185,6 +205,31 @@ const Registration = () => {
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   placeholder="+91 98765 43210"
+                  className="bg-gray-900 border-blue-700 text-white"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="password" className="text-blue-200">Password *</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  placeholder="Enter a secure password"
+                  className="bg-gray-900 border-blue-700 text-white"
+                />
+                <p className="text-xs text-gray-400 mt-1">Minimum 6 characters.</p>
+              </div>
+
+              <div>
+                <Label htmlFor="confirmPassword" className="text-blue-200">Confirm Password *</Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  value={formData.confirmPassword}
+                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                  placeholder="Re-enter your password"
                   className="bg-gray-900 border-blue-700 text-white"
                 />
               </div>

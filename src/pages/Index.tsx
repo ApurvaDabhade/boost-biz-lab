@@ -166,7 +166,7 @@ const Index = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Startup Mitra Card */}
             <Card
-              className="bg-gradient-to-br from-purple-900/30 to-black border-purple-700 p-8 card-hover cursor-pointer animate-slide-in-right"
+              className="bg-gradient-to-br from-purple-900/20 to-black border-purple-700 p-8 card-hover cursor-pointer animate-slide-in-right"
               onClick={() => navigate('/startup-mitra')}
             >
               <Badge className="mb-4 bg-purple-600 text-white">✨ Smart Advisor</Badge>
@@ -183,7 +183,7 @@ const Index = () => {
 
             {/* Community Hub Card */}
             <Card
-              className="bg-gradient-to-br from-green-900/30 to-black border-green-700 p-8 card-hover cursor-pointer animate-slide-in-right animation-delay-200"
+              className="bg-gradient-to-br from-green-900/20 to-black border-green-700 p-8 card-hover cursor-pointer animate-slide-in-right animation-delay-200"
               onClick={() => navigate('/community-hub')}
             >
               <Badge className="mb-4 bg-green-600 text-white">🤝 Community</Badge>
@@ -198,8 +198,51 @@ const Index = () => {
               </Button>
             </Card>
           </div>
+
+          {/* Second Row - Trend Insight Hub */}
+          <div className="mt-8">
+            <Card
+              className="bg-gradient-to-br from-orange-900/20 to-black border-orange-700 p-8 card-hover cursor-pointer animate-slide-in-right animation-delay-400"
+              onClick={() => navigate('/trend-insights')}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <Badge className="mb-4 bg-orange-600 text-white">📊 Market Intelligence</Badge>
+                  <h3 className="text-3xl font-bold mb-4 text-white">
+                    Trend Insight Hub
+                  </h3>
+                  <p className="text-gray-300 mb-6">
+                    Get actionable, data-backed insights from real-time market trends. Identify missed opportunities, track competitor listings, and adapt your offerings to current demand.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div className="bg-gray-800 rounded-lg p-3">
+                      <div className="text-sm text-gray-400">Market Opportunities</div>
+                      <div className="text-lg font-bold text-orange-400">12 Found</div>
+                    </div>
+                    <div className="bg-gray-800 rounded-lg p-3">
+                      <div className="text-sm text-gray-400">Trending Categories</div>
+                      <div className="text-lg font-bold text-green-400">+23% Growth</div>
+                    </div>
+                    <div className="bg-gray-800 rounded-lg p-3">
+                      <div className="text-sm text-gray-400">Competitor Analysis</div>
+                      <div className="text-lg font-bold text-blue-400">Live Updates</div>
+                    </div>
+                  </div>
+                  <Button className="w-full bg-orange-600 hover:bg-orange-700">
+                    Launch Trend Insights →
+                  </Button>
+                </div>
+                <div className="ml-8 hidden lg:block">
+                  <div className="w-48 h-32 bg-gradient-to-br from-orange-600/20 to-orange-800/20 rounded-lg flex items-center justify-center">
+                    <div className="text-6xl">📈</div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
         </div>
       </section>
+
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-b from-gray-900 to-black">
