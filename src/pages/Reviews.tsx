@@ -1,98 +1,138 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
 import { ArrowLeft, Star, TrendingUp, TrendingDown, MessageSquare, ThumbsUp, ThumbsDown, Filter, Download, QrCode, Smartphone } from 'lucide-react';
 
 const Reviews = () => {
   const navigate = useNavigate();
-  const [selectedPeriod, setSelectedPeriod] = useState('7d');
+
   const [showQRCode, setShowQRCode] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [showMobileLink, setShowMobileLink] = useState(false);
-
-  // Mock data for sentiment analysis
-  const sentimentData = {
+  const [sentimentData, setSentimentData] = useState<{
     overall: {
-      positive: 78,
-      neutral: 15,
-      negative: 7,
-      total: 1247,
-      averageRating: 4.2
+      positive: number,
+      neutral: number,
+      negative: number,
+      total: number,
+      averageRating: number | null,
     },
     trends: {
-      positive: +12,
-      neutral: -3,
-      negative: -9
+      positive: number,
+      neutral: number,
+      negative: number,
     },
-    categories: [
-      { name: 'Food Quality', positive: 85, neutral: 10, negative: 5, trend: +8 },
-      { name: 'Service Speed', positive: 72, neutral: 18, negative: 10, trend: +15 },
-      { name: 'Cleanliness', positive: 90, neutral: 8, negative: 2, trend: +5 },
-      { name: 'Value for Money', positive: 68, neutral: 20, negative: 12, trend: -2 },
-      { name: 'Staff Behavior', positive: 82, neutral: 12, negative: 6, trend: +10 }
-    ],
-    citywiseData: [
-      { city: 'Mumbai', positive: 82, neutral: 12, negative: 6, total: 450 },
-      { city: 'Delhi', positive: 75, neutral: 18, negative: 7, total: 380 },
-      { city: 'Bangalore', positive: 80, neutral: 15, negative: 5, total: 320 },
-      { city: 'Chennai', positive: 78, neutral: 16, negative: 6, total: 280 },
-      { city: 'Kolkata', positive: 85, neutral: 10, negative: 5, total: 250 },
-      { city: 'Pune', positive: 79, neutral: 14, negative: 7, total: 200 },
-      { city: 'Hyderabad', positive: 77, neutral: 17, negative: 6, total: 180 },
-      { city: 'Ahmedabad', positive: 83, neutral: 12, negative: 5, total: 150 }
-    ],
-    recentReviews: [
-      {
-        id: 1,
-        customer: 'Rajesh Kumar',
-        rating: 5,
-        date: '2 hours ago',
-        comment: 'Amazing food! The paneer tikka was perfectly cooked and the service was super fast. Will definitely come back!',
-        sentiment: 'positive',
-        category: 'Food Quality'
-      },
-      {
-        id: 2,
-        customer: 'Priya Sharma',
-        rating: 4,
-        date: '5 hours ago',
-        comment: 'Good food but a bit expensive. The taste was great but portion size could be better.',
-        sentiment: 'neutral',
-        category: 'Value for Money'
-      },
-      {
-        id: 3,
-        customer: 'Amit Singh',
-        rating: 2,
-        date: '1 day ago',
-        comment: 'Very slow service today. Had to wait 45 minutes for my order. Food was cold when it arrived.',
-        sentiment: 'negative',
-        category: 'Service Speed'
-      },
-      {
-        id: 4,
-        customer: 'Sneha Patel',
-        rating: 5,
-        date: '1 day ago',
-        comment: 'Excellent hygiene and cleanliness. The staff was very polite and helpful. Food was delicious!',
-        sentiment: 'positive',
-        category: 'Staff Behavior'
-      },
-      {
-        id: 5,
-        customer: 'Vikram Joshi',
-        rating: 3,
-        date: '2 days ago',
-        comment: 'Average experience. Nothing special but nothing bad either. Decent food for the price.',
-        sentiment: 'neutral',
-        category: 'Food Quality'
+    categories: Array<{
+      name: string,
+      positive: number,
+      neutral: number,
+      negative: number,
+      trend: number,
+    }>,
+    citywideData: Array<{
+      city?: string,
+      positive: number,
+      neutral: number,
+      negative: number,
+      total: number,
+    }>,
+  } | null>(null);
+
+  // Mock recent reviews kept unchanged
+  const recentReviews = [
+    {
+      id: 1,
+      customer: 'Rajesh Kumar',
+      rating: 5,
+      date: '2 hours ago',
+      comment: 'Amazing food! The paneer tikka was perfectly cooked and the service was super fast. Will definitely come back!',
+      sentiment: 'positive',
+      category: 'Food Quality'
+    },
+    {
+      id: 2,
+      customer: 'Priya Sharma',
+      rating: 4,
+      date: '5 hours ago',
+      comment: 'Good food but a bit expensive. The taste was great but portion size could be better.',
+      sentiment: 'neutral',
+      category: 'Value for Money'
+    },
+    {
+      id: 3,
+      customer: 'Amit Singh',
+      rating: 2,
+      date: '1 day ago',
+      comment: 'Very slow service today. Had to wait 45 minutes for my order. Food was cold when it arrived.',
+      sentiment: 'negative',
+      category: 'Service Speed'
+    },
+    {
+      id: 4,
+      customer: 'Sneha Patel',
+      rating: 5,
+      date: '1 day ago',
+      comment: 'Excellent hygiene and cleanliness. The staff was very polite and helpful. Food was delicious!',
+      sentiment: 'positive',
+      category: 'Staff Behavior'
+    },
+    {
+      id: 5,
+      customer: 'Vikram Joshi',
+      rating: 3,
+      date: '2 days ago',
+      comment: 'Average experience. Nothing special but nothing bad either. Decent food for the price.',
+      sentiment: 'neutral',
+      category: 'Food Quality'
+    }
+  ];
+
+useEffect(() => {
+  const fetchSentimentData = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/gap_analysis');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    ]
+      const json = await response.json();
+
+      if (json.status !== 'success') {
+        throw new Error('API returned an error status');
+      }
+
+      const data = json.data ?? {};
+
+      // Normalize backend data and provide fallbacks
+      setSentimentData({
+        overall: {
+          positive: data.overall?.positive ?? 0,
+          neutral: data.overall?.neutral ?? 0,
+          negative: data.overall?.negative ?? 0,
+          total: data.overall?.total ?? 0,
+          averageRating: data.overall?.averageRating ?? null,
+        },
+        trends: {
+          positive: data.trends?.positive ?? 0,
+          neutral: data.trends?.neutral ?? 0,
+          negative: data.trends?.negative ?? 0,
+        },
+        categories: Array.isArray(data.categories) ? data.categories : [],
+        citywideData: Array.isArray(data.citywideData) ? data.citywideData : [],
+      });
+    } catch (error) {
+      console.error('Error fetching sentiment data:', error);
+      setSentimentData(null);
+    }
   };
+
+  fetchSentimentData();
+}, []);
+
+
+
 
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment) {
@@ -116,15 +156,13 @@ const Reviews = () => {
     return <div className="h-4 w-4" />;
   };
 
-  const handleFilter = () => {
-    setShowFilter(!showFilter);
-    // You can add filter logic here
-  };
+  const handleFilter = () => setShowFilter(!showFilter);
 
   const handleExport = () => {
-    // Create CSV data
+    if (!sentimentData) return;
+
     const csvData = [
-      ['Category', 'Positive %', 'Neutral %', 'Negative %', 'Trend %'],
+      ['Category', 'Positive %', 'Neutral %', 'Negative %', 'Trend'],
       ...sentimentData.categories.map(cat => [
         cat.name,
         cat.positive,
@@ -133,7 +171,7 @@ const Reviews = () => {
         cat.trend
       ])
     ];
-    
+
     const csvContent = csvData.map(row => row.join(',')).join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
@@ -144,10 +182,15 @@ const Reviews = () => {
     window.URL.revokeObjectURL(url);
   };
 
-  const handleMobileLink = () => {
-    setShowMobileLink(!showMobileLink);
-    // You can add mobile link logic here
-  };
+  const handleMobileLink = () => setShowMobileLink(!showMobileLink);
+
+  if (sentimentData === null) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+        Loading sentiment data...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -161,8 +204,8 @@ const Reviews = () => {
               onClick={() => navigate('/dashboard')}
               className="text-white hover:bg-blue-800"
             >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
             <div className="text-center">
               <h1 className="text-xl font-bold">Customer Reviews & Feedback</h1>
               <p className="text-xs text-blue-200">Sentiment Analysis Dashboard</p>
@@ -176,7 +219,7 @@ const Reviews = () => {
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Filter
-                </Button>
+              </Button>
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -185,8 +228,8 @@ const Reviews = () => {
               >
                 <Download className="h-4 w-4 mr-2" />
                 Export
-                  </Button>
-                </div>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -196,66 +239,60 @@ const Reviews = () => {
         {/* Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card className="bg-gradient-to-br from-emerald-900/20 to-black border-emerald-700">
-            <CardContent className="p-6">
-            <div className="flex items-center justify-between">
+            <CardContent className="p-6 flex justify-between items-center">
               <div>
-                  <p className="text-sm text-gray-400">Positive Reviews</p>
-                  <p className="text-2xl font-bold text-emerald-400">{sentimentData.overall.positive}%</p>
-                  <div className="flex items-center mt-1">
-                    {getTrendIcon(sentimentData.trends.positive)}
-                    <span className="text-xs text-emerald-400 ml-1">+{sentimentData.trends.positive}%</span>
-                  </div>
+                <p className="text-sm text-gray-400">Positive Reviews</p>
+                <p className="text-2xl font-bold text-emerald-400">{sentimentData.overall.positive}%</p>
+                <div className="flex items-center mt-1">
+                  {getTrendIcon(sentimentData.trends.positive)}
+                  <span className="text-xs text-emerald-400 ml-1">+{sentimentData.trends.positive}%</span>
                 </div>
-                <ThumbsUp className="h-8 w-8 text-emerald-400" />
               </div>
+              <ThumbsUp className="h-8 w-8 text-emerald-400" />
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-amber-900/20 to-black border-amber-700">
-            <CardContent className="p-6">
-            <div className="flex items-center justify-between">
+            <CardContent className="p-6 flex justify-between items-center">
               <div>
-                  <p className="text-sm text-gray-400">Neutral Reviews</p>
-                  <p className="text-2xl font-bold text-amber-400">{sentimentData.overall.neutral}%</p>
-                  <div className="flex items-center mt-1">
-                    {getTrendIcon(sentimentData.trends.neutral)}
-                    <span className="text-xs text-amber-400 ml-1">{sentimentData.trends.neutral}%</span>
-                  </div>
+                <p className="text-sm text-gray-400">Neutral Reviews</p>
+                <p className="text-2xl font-bold text-amber-400">{sentimentData.overall.neutral}%</p>
+                <div className="flex items-center mt-1">
+                  {getTrendIcon(sentimentData.trends.neutral)}
+                  <span className="text-xs text-amber-400 ml-1">{sentimentData.trends.neutral}%</span>
                 </div>
-                <MessageSquare className="h-8 w-8 text-amber-400" />
               </div>
+              <MessageSquare className="h-8 w-8 text-amber-400" />
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-rose-900/20 to-black border-rose-700">
-            <CardContent className="p-6">
-            <div className="flex items-center justify-between">
+            <CardContent className="p-6 flex justify-between items-center">
               <div>
-                  <p className="text-sm text-gray-400">Negative Reviews</p>
-                  <p className="text-2xl font-bold text-rose-400">{sentimentData.overall.negative}%</p>
-                  <div className="flex items-center mt-1">
-                    {getTrendIcon(sentimentData.trends.negative)}
-                    <span className="text-xs text-rose-400 ml-1">{sentimentData.trends.negative}%</span>
-                  </div>
+                <p className="text-sm text-gray-400">Negative Reviews</p>
+                <p className="text-2xl font-bold text-rose-400">{sentimentData.overall.negative}%</p>
+                <div className="flex items-center mt-1">
+                  {getTrendIcon(sentimentData.trends.negative)}
+                  <span className="text-xs text-rose-400 ml-1">{sentimentData.trends.negative}%</span>
                 </div>
-                <ThumbsDown className="h-8 w-8 text-rose-400" />
               </div>
+              <ThumbsDown className="h-8 w-8 text-rose-400" />
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-indigo-900/20 to-black border-indigo-700">
-            <CardContent className="p-6">
-            <div className="flex items-center justify-between">
+            <CardContent className="p-6 flex justify-between items-center">
               <div>
-                  <p className="text-sm text-gray-400">Average Rating</p>
-                  <p className="text-2xl font-bold text-indigo-400">{sentimentData.overall.averageRating}/5</p>
-                  <div className="flex items-center mt-1">
-                    <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                    <span className="text-xs text-gray-400 ml-1">{sentimentData.overall.total} reviews</span>
-                  </div>
+                <p className="text-sm text-gray-400">Average Rating</p>
+                <p className="text-2xl font-bold text-indigo-400">
+                  {sentimentData.overall.averageRating !== null ? sentimentData.overall.averageRating : '-'} / 5
+                </p>
+                <div className="flex items-center mt-1">
+                  <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                  <span className="text-xs text-gray-400 ml-1">{sentimentData.overall.total} reviews</span>
                 </div>
-                <Star className="h-8 w-8 text-yellow-400" />
               </div>
+              <Star className="h-8 w-8 text-yellow-400" />
             </CardContent>
           </Card>
         </div>
@@ -280,11 +317,11 @@ const Reviews = () => {
                   <div className="bg-gray-900/50 rounded-lg p-4">
                     <div className="text-sm text-gray-400">Scans This Week</div>
                     <div className="text-lg font-bold text-green-400">156</div>
-          </div>
+                  </div>
                   <div className="bg-gray-900/50 rounded-lg p-4">
                     <div className="text-sm text-gray-400">Response Rate</div>
                     <div className="text-lg font-bold text-blue-400">68%</div>
-          </div>
+                  </div>
                 </div>
                 <div className="flex gap-3">
                   <Button 
@@ -310,7 +347,7 @@ const Reviews = () => {
                     className="w-48 h-48 bg-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
                     onClick={() => {
                       navigator.clipboard.writeText('https://rasoimitra.com/feedback');
-                      // You can add a toast notification here
+                      // Optional toast notification here
                     }}
                   >
                     <div className="w-40 h-40 bg-gray-900 rounded-lg flex items-center justify-center">
@@ -338,7 +375,7 @@ const Reviews = () => {
                       className="mt-2 bg-blue-600 hover:bg-blue-700 text-xs"
                       onClick={() => {
                         navigator.clipboard.writeText('https://rasoimitra.com/feedback/mobile');
-                        // You can add a toast notification here
+                        // Optional toast notification
                       }}
                     >
                       Copy Link
@@ -411,7 +448,7 @@ const Reviews = () => {
         <Tabs defaultValue="sentiment" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3 bg-gray-800 border-blue-700">
             <TabsTrigger value="sentiment" className="data-[state=active]:bg-blue-600">Sentiment Analysis</TabsTrigger>
-            <TabsTrigger value="categories" className="data-[state=active]:bg-blue-600">Category Breakdown</TabsTrigger>
+            <TabsTrigger value="categories" className="data-[state=active]:bg-blue-600">City wide Category Breakdown</TabsTrigger>
             <TabsTrigger value="reviews" className="data-[state=active]:bg-blue-600">Recent Reviews</TabsTrigger>
           </TabsList>
 
@@ -501,19 +538,19 @@ const Reviews = () => {
                 </CardContent>
               </Card>
 
-              {/* Bar Chart - City-wise Sentiment */}
+              {/* Bar Chart - Citywise Sentiment */}
               <Card className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
                 <CardHeader>
-                  <CardTitle className="text-white">City-wise Sentiment Analysis</CardTitle>
-                  <CardDescription className="text-gray-400">Sentiment distribution across major cities</CardDescription>
+                  <CardTitle className="text-white">Citywise Sentiment Breakdown</CardTitle>
+                  <CardDescription className="text-gray-400">Sentiment distribution across cities</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="space-y-4">
-                    {sentimentData.citywiseData.slice(0, 6).map((city, index) => (
+                  <div className="space-y-4">
+                    {sentimentData.categories.slice(0, 6).map((city, index) => (
                       <div key={index} className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium text-white">{city.city}</span>
-                          <span className="text-xs text-gray-400">{city.total} reviews</span>
+                          <span className="text-sm font-medium text-white">{city.name || "Unknown"}</span>
+                          <span className="text-xs text-gray-400">{city.positive + city.negative} reviews</span>
                         </div>
                         <div className="flex h-6 bg-gray-800 rounded-lg overflow-hidden">
                           <div 
@@ -543,13 +580,13 @@ const Reviews = () => {
             </div>
           </TabsContent>
 
-          {/* Category Breakdown Tab */}
+          {/* Citywide Category Breakdown Tab */}
           <TabsContent value="categories" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Horizontal Bar Chart for Categories */}
               <Card className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
                 <CardHeader>
-                  <CardTitle className="text-white">Category Performance</CardTitle>
+                  <CardTitle className="text-white">City wide Category Performance</CardTitle>
                   <CardDescription className="text-gray-400">Sentiment breakdown by category</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -611,7 +648,7 @@ const Reviews = () => {
                 </CardContent>
               </Card>
 
-              {/* Radar Chart for Category Comparison */}
+              {/* Radar Chart for Category Comparison (simplified to bar here) */}
               <Card className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
                 <CardHeader>
                   <CardTitle className="text-white">Category Comparison</CardTitle>
@@ -657,8 +694,8 @@ const Reviews = () => {
 
           {/* Recent Reviews Tab */}
           <TabsContent value="reviews" className="space-y-6">
-                    <div className="space-y-4">
-              {sentimentData.recentReviews.map((review) => (
+            <div className="space-y-4">
+              {recentReviews.map((review) => (
                 <Card key={review.id} className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
@@ -668,7 +705,7 @@ const Reviews = () => {
                             {review.customer.split(' ').map(n => n[0]).join('')}
                           </span>
                         </div>
-                      <div>
+                        <div>
                           <h4 className="text-white font-semibold">{review.customer}</h4>
                           <p className="text-sm text-gray-400">{review.date}</p>
                         </div>
@@ -695,9 +732,9 @@ const Reviews = () => {
                     </div>
                     <p className="text-gray-300">{review.comment}</p>
                   </CardContent>
-            </Card>
-          ))}
-        </div>
+                </Card>
+              ))}
+            </div>
           </TabsContent>
         </Tabs>
       </div>

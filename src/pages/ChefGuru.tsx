@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -42,21 +42,49 @@ const ChefGuru = () => {
   const [activeTab, setActiveTab] = useState('chat');
   const [chatFlowData, setChatFlowData] = useState<ChatFlowData>({ step: 1 });
 
-  // Popularity data based on the image
-  const popularityData = [
-    { dish: 'Pav Bhaji', views: 8905106, likes: 308854, comments: 1926, popularity_score: 65.16 },
-    { dish: 'Egg Curry', views: 1234567, likes: 45678, comments: 1234, popularity_score: 58.23 },
-    { dish: 'Veg Burger', views: 2345678, likes: 78901, comments: 2345, popularity_score: 55.67 },
-    { dish: 'Dahi Vada', views: 3456789, likes: 123456, comments: 3456, popularity_score: 52.34 },
-    { dish: 'Paneer Butter Masala', views: 4567890, likes: 234567, comments: 4567, popularity_score: 59.61 },
-    { dish: 'Paneer Tikka', views: 5678901, likes: 345678, comments: 5678, popularity_score: 61.45 },
-    { dish: 'Chicken Curry', views: 6789012, likes: 456789, comments: 6789, popularity_score: 57.89 },
-    { dish: 'Papdi Chaat', views: 7890123, likes: 567890, comments: 7890, popularity_score: 54.12 },
-    { dish: 'Tandoori Chicken', views: 8901234, likes: 678901, comments: 8901, popularity_score: 56.78 },
-    { dish: 'Kachori', views: 9012345, likes: 789012, comments: 9012, popularity_score: 53.45 },
-    { dish: 'Masala Dosa', views: 29535446, likes: 406684, comments: 1278, popularity_score: 43.47 },
-    { dish: 'Veg Hakka Noodles', views: 12345678, likes: 345678, comments: 2345, popularity_score: 48.90 }
-  ];
+  // Popularity data state fetching from backend
+  const [popularityData, setPopularityData] = useState<
+    Array<{
+      dish_name: string;
+      views: number;
+      likes: number;
+      comments_count: number;
+      popularity_score: number;
+    }>
+  >([]);
+
+  useEffect(() => {
+    if (activeTab === 'trends') {
+      console.log('Fetching trend data...');
+      fetch('http://localhost:5000/api/food-trends')
+        .then(async (res) => {
+          if (!res.ok) {
+            const errorText = await res.text();
+            throw new Error(`HTTP error! status: ${res.status}, message: ${errorText}`);
+          }
+          return res.json();
+        })
+        .then((json) => {
+          if (json.status === 'success') {
+            console.log('Trend data received:', json.data);
+            // Map to exact keys expected in state and rendering
+            const mappedData = json.data.map((item: any) => ({
+              dish_name: item.dish_name,
+              views: item.views,
+              likes: item.likes,
+              comments_count: item.comments_count,
+              popularity_score: item.popularity_score,
+            }));
+            setPopularityData(mappedData);
+          } else {
+            console.error('Error fetching trend data:', json.message);
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to fetch trends:', err);
+        });
+    }
+  }, [activeTab]);
 
   // Festival and seasonal add-ons with Marathi options
   const festivalAddOns = {
@@ -67,7 +95,7 @@ const ChefGuru = () => {
     'naraka chaturdasi': ['आले-लसूण चटणी', 'तिखट हिरवी चटणी', 'बारीक चिरलेला कांदा', 'शेव', 'ताजी कोथिंबीर'],
     monsoon: ['Pakoras', 'Samosa', 'Tea', 'आले-लसूण चटणी', 'तिखट हिरवी चटणी', 'बारीक चिरलेला कांदा', 'शेव', 'ताजी कोथिंबीर'],
     summer: ['Lassi', 'Aam Panna', 'Cucumber Raita', 'Mint Chutney', 'Lemon Chutney', 'Coconut Chutney'],
-    winter: ['Gajar Halwa', 'Hot Chocolate', 'Ginger Tea', 'Garlic Chutney', 'Red Chutney', 'Onion Chutney']
+    winter: ['Gajar Halwa', 'Hot Chocolate', 'Ginger Tea', 'Garlic Chutney', 'Red Chutney', 'Onion Chutney'],
   };
 
   // Toppings suggestions based on season and festival
@@ -76,21 +104,15 @@ const ChefGuru = () => {
       'कांद्याच्या भजीचा कुरकुरीत चुरा',
       'तिखट पुदीना-कोथिंबीर चटणी आणि डाळिंबाचे दाणे',
       'आले-लसूण-मिरची तेल आणि भाजलेले शेंगदाणे',
-      'धुरीदार पेपरिका दही आणि कुरकुरी कढीपत्ता'
+      'धुरीदार पेपरिका दही आणि कुरकुरी कढीपत्ता',
     ],
     'naraka chaturdasi': [
       'कांद्याच्या भजीचा कुरकुरीत चुरा',
       'तिखट पुदीना-कोथिंबीर चटणी आणि डाळिंबाचे दाणे',
       'आले-लसूण-मिरची तेल आणि भाजलेले शेंगदाणे',
-      'धुरीदार पेपरिका दही आणि कुरकुरी कढीपत्ता'
+      'धुरीदार पेपरिका दही आणि कुरकुरी कढीपत्ता',
     ],
-    default: [
-      'Extra Cheese',
-      'Spicy Level',
-      'Extra Onions',
-      'Fresh Herbs',
-      'Crispy Toppings'
-    ]
+    default: ['Extra Cheese', 'Spicy Level', 'Extra Onions', 'Fresh Herbs', 'Crispy Toppings'],
   };
 
   const quickActions = [
@@ -106,47 +128,45 @@ const ChefGuru = () => {
 
     switch (currentStep) {
       case 1: // Step 1 - Dish Name
-        setChatFlowData(prev => ({ ...prev, dishName: input, step: 2 }));
+        setChatFlowData((prev) => ({ ...prev, dishName: input, step: 2 }));
         return {
           content: 'Enter the date (YYYY-MM-DD).',
-          buttons: undefined
+          buttons: undefined,
         };
 
       case 2: // Step 2 - Date Input
-        setChatFlowData(prev => ({ ...prev, date: input, step: 3 }));
+        setChatFlowData((prev) => ({ ...prev, date: input, step: 3 }));
         return {
           content: 'Choose option type:',
           buttons: [
             { label: 'Topping', value: 'topping', icon: '👨‍🍳' },
-            { label: 'Add-on', value: 'addon', icon: '📦' }
-          ]
+            { label: 'Add-on', value: 'addon', icon: '📦' },
+          ],
         };
 
       case 3: // Step 3 - Choose Option Type
-        setChatFlowData(prev => ({ ...prev, optionType: input as 'topping' | 'addon', step: 4 }));
+        setChatFlowData((prev) => ({ ...prev, optionType: input as 'topping' | 'addon', step: 4 }));
         return {
           content: 'Choose language:',
           buttons: [
             { label: 'GB English', value: 'english' },
-            { label: 'IN Marathi', value: 'marathi' }
-          ]
+            { label: 'IN Marathi', value: 'marathi' },
+          ],
         };
 
       case 4: // Step 4 - Choose Language
-        setChatFlowData(prev => ({ ...prev, language: input as 'english' | 'marathi', step: 5 }));
+        setChatFlowData((prev) => ({ ...prev, language: input as 'english' | 'marathi', step: 5 }));
         return {
           content: 'Ready to predict!',
-          buttons: [
-            { label: 'Predict', value: 'predict', icon: '🌐' }
-          ]
+          buttons: [{ label: 'Predict', value: 'predict', icon: '🌐' }],
         };
 
       case 5: // Step 5 - Predict
         if (input === 'predict') {
-          setChatFlowData(prev => ({ ...prev, step: 6 }));
+          setChatFlowData((prev) => ({ ...prev, step: 6 }));
           return {
             content: generatePrediction(),
-            buttons: undefined
+            buttons: undefined,
           };
         }
         break;
@@ -154,31 +174,45 @@ const ChefGuru = () => {
       default:
         return {
           content: 'Hello! I can help you find the best toppings or add-ons for your dish 🍛\n\nPlease enter the name of your dish.',
-          buttons: undefined
+          buttons: undefined,
         };
     }
   };
 
   const generatePrediction = () => {
     const { dishName, date, optionType, language } = chatFlowData;
-    
+
     // Mock prediction based on the data
     const season = 'Monsoon';
     const festival = 'Naraka Chaturdasi';
-    
+
     let suggestions: string[] = [];
-    
+
     if (optionType === 'topping') {
-      suggestions = language === 'marathi' 
-        ? ['कांद्याच्या भजीचा कुरकुरीत चुरा', 'तिखट पुदीना-कोथिंबीर चटणी आणि डाळिंबाचे दाणे', 'आले-लसूण-मिरची तेल आणि भाजलेले शेंगदाणे', 'धुरीदार पेपरिका दही आणि कुरकुरी कढीपत्ता']
-        : ['Crispy onion fritter crumbs', 'Spicy mint-coriander chutney and pomegranate seeds', 'Ginger-garlic-chilli oil and roasted peanuts', 'Smoky paprika yogurt and crispy curry leaves'];
+      suggestions =
+        language === 'marathi'
+          ? [
+              'कांद्याच्या भजीचा कुरकुरीत चुरा',
+              'तिखट पुदीना-कोथिंबीर चटणी आणि डाळिंबाचे दाणे',
+              'आले-लसूण-मिरची तेल आणि भाजलेले शेंगदाणे',
+              'धुरीदार पेपरिका दही आणि कुरकुरी कढीपत्ता',
+            ]
+          : [
+              'Crispy onion fritter crumbs',
+              'Spicy mint-coriander chutney and pomegranate seeds',
+              'Ginger-garlic-chilli oil and roasted peanuts',
+              'Smoky paprika yogurt and crispy curry leaves',
+            ];
     } else {
-      suggestions = language === 'marathi'
-        ? ['आले-लसूण चटणी', 'तिखट हिरवी चटणी', 'बारीक चिरलेला कांदा', 'शेव', 'ताजी कोथिंबीर']
-        : ['Ginger-Garlic Chutney', 'Spicy Green Chutney', 'Finely chopped onion', 'Crispy Sev', 'Fresh coriander'];
+      suggestions =
+        language === 'marathi'
+          ? ['आले-लसूण चटणी', 'तिखट हिरवी चटणी', 'बारीक चिरलेला कांदा', 'शेव', 'ताजी कोथिंबीर']
+          : ['Ginger-Garlic Chutney', 'Spicy Green Chutney', 'Finely chopped onion', 'Crispy Sev', 'Fresh coriander'];
     }
 
-    return `🍽️ **Prediction Results for ${dishName}**\n\n📅 **Date:** ${date}\n🌧️ **Season:** ${season}\n🎉 **Festival:** ${festival}\n\n🎯 **Predicted ${optionType === 'topping' ? 'toppings' : 'add-ons'}:**\n${suggestions.map(item => `• ${item}`).join('\n')}\n\n💡 *Based on seasonal trends and festival preferences*`;
+    return `🍽️ **Prediction Results for ${dishName}**\n\n📅 **Date:** ${date}\n🌧️ **Season:** ${season}\n🎉 **Festival:** ${festival}\n\n🎯 **Predicted ${
+      optionType === 'topping' ? 'toppings' : 'add-ons'
+    }:**\n${suggestions.map((item) => `• ${item}`).join('\n')}\n\n💡 *Based on seasonal trends and festival preferences*`;
   };
 
   const handleSendMessage = () => {
@@ -191,7 +225,7 @@ const ChefGuru = () => {
       timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     const currentInput = inputValue;
     setInputValue('');
 
@@ -204,13 +238,13 @@ const ChefGuru = () => {
         timestamp: new Date(),
         buttons: response.buttons,
       };
-      setMessages(prev => [...prev, botResponse]);
+      setMessages((prev) => [...prev, botResponse]);
     }, 1000);
   };
 
   const handleButtonClick = (buttonValue: string) => {
-    console.log('Button clicked:', buttonValue); // Debug log
-    
+    console.log('Button clicked:', buttonValue);
+
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
@@ -218,7 +252,7 @@ const ChefGuru = () => {
       timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
 
     setTimeout(() => {
       const response = handleChatFlow('', buttonValue);
@@ -229,7 +263,7 @@ const ChefGuru = () => {
         timestamp: new Date(),
         buttons: response.buttons,
       };
-      setMessages(prev => [...prev, botResponse]);
+      setMessages((prev) => [...prev, botResponse]);
     }, 1000);
   };
 
@@ -269,11 +303,7 @@ const ChefGuru = () => {
 
       {/* Hero Section with Image */}
       <div className="relative h-64 overflow-hidden">
-        <img
-          src={aiAssistantImage}
-          alt="ChefGuru Assistant"
-          className="w-full h-full object-cover opacity-40"
-        />
+        <img src={aiAssistantImage} alt="ChefGuru Assistant" className="w-full h-full object-cover opacity-40" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-3xl font-bold mb-2">💡 Smart Kitchen Intelligence</h2>
@@ -294,7 +324,7 @@ const ChefGuru = () => {
               <div className="text-xs font-medium text-white bg-black/50 rounded px-2 py-1 text-center">Pav Bhaji</div>
             </div>
           </div>
-          
+
           <div className="relative h-32 bg-gradient-to-br from-green-900/20 to-black border border-green-700 rounded-lg overflow-hidden group cursor-pointer">
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent"></div>
             <div className="absolute inset-0 flex items-center justify-center">
@@ -304,7 +334,7 @@ const ChefGuru = () => {
               <div className="text-xs font-medium text-white bg-black/50 rounded px-2 py-1 text-center">Paneer Tikka</div>
             </div>
           </div>
-          
+
           <div className="relative h-32 bg-gradient-to-br from-red-900/20 to-black border border-red-700 rounded-lg overflow-hidden group cursor-pointer">
             <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent"></div>
             <div className="absolute inset-0 flex items-center justify-center">
@@ -314,7 +344,7 @@ const ChefGuru = () => {
               <div className="text-xs font-medium text-white bg-black/50 rounded px-2 py-1 text-center">Chicken Curry</div>
             </div>
           </div>
-          
+
           <div className="relative h-32 bg-gradient-to-br from-yellow-900/20 to-black border border-yellow-700 rounded-lg overflow-hidden group cursor-pointer">
             <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent"></div>
             <div className="absolute inset-0 flex items-center justify-center">
@@ -331,8 +361,12 @@ const ChefGuru = () => {
       <div className="container mx-auto px-4 pb-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-2 bg-gray-800 border-purple-700">
-            <TabsTrigger value="chat" className="data-[state=active]:bg-purple-600">💬 Chat Assistant</TabsTrigger>
-            <TabsTrigger value="trends" className="data-[state=active]:bg-purple-600">📊 Trend Analysis</TabsTrigger>
+            <TabsTrigger value="chat" className="data-[state=active]:bg-purple-600">
+              💬 Chat Assistant
+            </TabsTrigger>
+            <TabsTrigger value="trends" className="data-[state=active]:bg-purple-600">
+              📊 Trend Analysis
+            </TabsTrigger>
           </TabsList>
 
           {/* Chat Tab */}
@@ -341,10 +375,7 @@ const ChefGuru = () => {
             <ScrollArea className="h-96">
               <div className="space-y-4">
                 {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
-                  >
+                  <div key={message.id} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <Card
                       className={`max-w-[80%] p-4 ${
                         message.type === 'user'
@@ -436,14 +467,14 @@ const ChefGuru = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {popularityData.slice(0, 5).map((dish, index) => (
+                    {popularityData.slice(0, 15).map((dish, index) => (
                       <div key={index} className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
                         <div className="flex items-center">
                           <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center mr-3">
                             <span className="text-white font-bold text-sm">{index + 1}</span>
                           </div>
                           <div>
-                            <div className="text-white font-medium">{dish.dish}</div>
+                            <div className="text-white font-medium">{dish.dish_name}</div>
                             <div className="text-xs text-gray-400">Score: {dish.popularity_score}</div>
                           </div>
                         </div>
@@ -467,15 +498,17 @@ const ChefGuru = () => {
                   <div className="space-y-6">
                     {/* Circular Chart for Top 4 Dishes */}
                     <div className="grid grid-cols-2 gap-4">
-                      {popularityData.slice(0, 4).map((dish, index) => {
-                        const totalEngagement = dish.views + dish.likes + dish.comments;
-                        const maxEngagement = Math.max(...popularityData.map(d => d.views + d.likes + d.comments));
-                        const percentage = (totalEngagement / maxEngagement) * 100;
+                      {popularityData.slice(0, 10).map((dish, index) => {
+                        const totalEngagement = dish.views + dish.likes + dish.comments_count;
+                        const maxEngagement = Math.max(
+                          ...popularityData.map((d) => d.views + d.likes + d.comments_count)
+                        );
+                        const percentage = maxEngagement ? (totalEngagement / maxEngagement) * 100 : 0;
                         const radius = 30;
                         const circumference = 2 * Math.PI * radius;
                         const strokeDasharray = circumference;
                         const strokeDashoffset = circumference - (percentage / 100) * circumference;
-                        
+
                         return (
                           <div key={index} className="flex flex-col items-center p-3 bg-gray-800/30 rounded-lg">
                             <div className="relative w-20 h-20 mb-2">
@@ -507,7 +540,7 @@ const ChefGuru = () => {
                               </div>
                             </div>
                             <div className="text-center">
-                              <div className="text-xs font-medium text-white truncate max-w-20">{dish.dish}</div>
+                              <div className="text-xs font-medium text-white truncate max-w-20">{dish.dish_name}</div>
                               <div className="text-xs text-gray-400">{dish.popularity_score}</div>
                             </div>
                           </div>
@@ -519,15 +552,15 @@ const ChefGuru = () => {
                     <div className="space-y-4">
                       <h4 className="text-sm font-semibold text-white">Engagement Metrics Comparison</h4>
                       <div className="space-y-3">
-                        {popularityData.slice(0, 5).map((dish, index) => {
-                          const maxViews = Math.max(...popularityData.map(d => d.views));
-                          const maxLikes = Math.max(...popularityData.map(d => d.likes));
-                          const maxComments = Math.max(...popularityData.map(d => d.comments));
-                          
+                        {popularityData.slice(0, 15).map((dish, index) => {
+                          const maxViews = popularityData.length ? Math.max(...popularityData.map((d) => d.views)) : 1;
+                          const maxLikes = popularityData.length ? Math.max(...popularityData.map((d) => d.likes)) : 1;
+                          const maxComments = popularityData.length ? Math.max(...popularityData.map((d) => d.comments_count)) : 1;
+
                           return (
                             <div key={index} className="space-y-2">
                               <div className="flex justify-between items-center">
-                                <span className="text-sm font-medium text-white">{dish.dish}</span>
+                                <span className="text-sm font-medium text-white">{dish.dish_name}</span>
                                 <span className="text-xs text-gray-400">{dish.popularity_score} score</span>
                               </div>
                               <div className="space-y-1">
@@ -535,34 +568,34 @@ const ChefGuru = () => {
                                 <div className="flex items-center">
                                   <Eye className="h-3 w-3 text-blue-400 mr-2" />
                                   <div className="flex-1 bg-gray-800 rounded-full h-3 overflow-hidden">
-                                    <div 
+                                    <div
                                       className="bg-gradient-to-r from-blue-500 to-blue-400 h-full transition-all duration-1000 ease-out"
                                       style={{ width: `${(dish.views / maxViews) * 100}%` }}
                                     ></div>
                                   </div>
-                                  <span className="text-xs text-gray-400 ml-2 w-12 text-right">{Math.round(dish.views/1000000)}M</span>
+                                  <span className="text-xs text-gray-400 ml-2 w-12 text-right">{Math.round(dish.views / 1000000)}M</span>
                                 </div>
                                 {/* Likes Bar */}
                                 <div className="flex items-center">
                                   <Heart className="h-3 w-3 text-red-400 mr-2" />
                                   <div className="flex-1 bg-gray-800 rounded-full h-3 overflow-hidden">
-                                    <div 
+                                    <div
                                       className="bg-gradient-to-r from-red-500 to-red-400 h-full transition-all duration-1000 ease-out"
                                       style={{ width: `${(dish.likes / maxLikes) * 100}%` }}
                                     ></div>
                                   </div>
-                                  <span className="text-xs text-gray-400 ml-2 w-12 text-right">{Math.round(dish.likes/1000)}K</span>
+                                  <span className="text-xs text-gray-400 ml-2 w-12 text-right">{Math.round(dish.likes / 1000)}K</span>
                                 </div>
                                 {/* Comments Bar */}
                                 <div className="flex items-center">
                                   <MessageCircle className="h-3 w-3 text-green-400 mr-2" />
                                   <div className="flex-1 bg-gray-800 rounded-full h-3 overflow-hidden">
-                                    <div 
+                                    <div
                                       className="bg-gradient-to-r from-green-500 to-green-400 h-full transition-all duration-1000 ease-out"
-                                      style={{ width: `${(dish.comments / maxComments) * 100}%` }}
+                                      style={{ width: `${(dish.comments_count / maxComments) * 100}%` }}
                                     ></div>
                                   </div>
-                                  <span className="text-xs text-gray-400 ml-2 w-12 text-right">{dish.comments}</span>
+                                  <span className="text-xs text-gray-400 ml-2 w-12 text-right">{dish.comments_count}</span>
                                 </div>
                               </div>
                             </div>
@@ -585,7 +618,13 @@ const ChefGuru = () => {
                               stroke="currentColor"
                               strokeWidth="8"
                               fill="none"
-                              strokeDasharray={`${(popularityData.reduce((sum, d) => sum + d.views, 0) / (popularityData.reduce((sum, d) => sum + d.views, 0) + popularityData.reduce((sum, d) => sum + d.likes, 0) + popularityData.reduce((sum, d) => sum + d.comments, 0))) * 251.2} 251.2`}
+                              strokeDasharray={`${
+                                (popularityData.reduce((sum, d) => sum + d.views, 0) /
+                                  (popularityData.reduce((sum, d) => sum + d.views, 0) +
+                                    popularityData.reduce((sum, d) => sum + d.likes, 0) +
+                                    popularityData.reduce((sum, d) => sum + d.comments_count, 0))) *
+                                251.2
+                              } 251.2`}
                               className="text-blue-500"
                             />
                             {/* Total Likes */}
@@ -596,8 +635,20 @@ const ChefGuru = () => {
                               stroke="currentColor"
                               strokeWidth="8"
                               fill="none"
-                              strokeDasharray={`${(popularityData.reduce((sum, d) => sum + d.likes, 0) / (popularityData.reduce((sum, d) => sum + d.views, 0) + popularityData.reduce((sum, d) => sum + d.likes, 0) + popularityData.reduce((sum, d) => sum + d.comments, 0))) * 251.2} 251.2`}
-                              strokeDashoffset={`-${(popularityData.reduce((sum, d) => sum + d.views, 0) / (popularityData.reduce((sum, d) => sum + d.views, 0) + popularityData.reduce((sum, d) => sum + d.likes, 0) + popularityData.reduce((sum, d) => sum + d.comments, 0))) * 251.2}`}
+                              strokeDasharray={`${
+                                (popularityData.reduce((sum, d) => sum + d.likes, 0) /
+                                  (popularityData.reduce((sum, d) => sum + d.views, 0) +
+                                    popularityData.reduce((sum, d) => sum + d.likes, 0) +
+                                    popularityData.reduce((sum, d) => sum + d.comments_count, 0))) *
+                                251.2
+                              } 251.2`}
+                              strokeDashoffset={`-${
+                                (popularityData.reduce((sum, d) => sum + d.views, 0) /
+                                  (popularityData.reduce((sum, d) => sum + d.views, 0) +
+                                    popularityData.reduce((sum, d) => sum + d.likes, 0) +
+                                    popularityData.reduce((sum, d) => sum + d.comments_count, 0))) *
+                                251.2
+                              }`}
                               className="text-red-500"
                             />
                             {/* Total Comments */}
@@ -608,8 +659,21 @@ const ChefGuru = () => {
                               stroke="currentColor"
                               strokeWidth="8"
                               fill="none"
-                              strokeDasharray={`${(popularityData.reduce((sum, d) => sum + d.comments, 0) / (popularityData.reduce((sum, d) => sum + d.views, 0) + popularityData.reduce((sum, d) => sum + d.likes, 0) + popularityData.reduce((sum, d) => sum + d.comments, 0))) * 251.2} 251.2`}
-                              strokeDashoffset={`-${((popularityData.reduce((sum, d) => sum + d.views, 0) + popularityData.reduce((sum, d) => sum + d.likes, 0)) / (popularityData.reduce((sum, d) => sum + d.views, 0) + popularityData.reduce((sum, d) => sum + d.likes, 0) + popularityData.reduce((sum, d) => sum + d.comments, 0))) * 251.2}`}
+                              strokeDasharray={`${
+                                (popularityData.reduce((sum, d) => sum + d.comments_count, 0) /
+                                  (popularityData.reduce((sum, d) => sum + d.views, 0) +
+                                    popularityData.reduce((sum, d) => sum + d.likes, 0) +
+                                    popularityData.reduce((sum, d) => sum + d.comments_count, 0))) *
+                                251.2
+                              } 251.2`}
+                              strokeDashoffset={`-${
+                                ((popularityData.reduce((sum, d) => sum + d.views, 0) +
+                                  popularityData.reduce((sum, d) => sum + d.likes, 0)) /
+                                  (popularityData.reduce((sum, d) => sum + d.views, 0) +
+                                    popularityData.reduce((sum, d) => sum + d.likes, 0) +
+                                    popularityData.reduce((sum, d) => sum + d.comments_count, 0))) *
+                                251.2
+                              }`}
                               className="text-green-500"
                             />
                           </svg>
@@ -690,7 +754,6 @@ const ChefGuru = () => {
         </Tabs>
       </div>
 
-
       {/* Input Area */}
       <div className="sticky bottom-0 bg-gradient-to-t from-black via-black to-transparent border-t border-purple-800 p-4">
         <div className="container mx-auto max-w-4xl flex gap-3">
@@ -709,11 +772,7 @@ const ChefGuru = () => {
             placeholder="Ask ChefGuru anything..."
             className="flex-1 bg-gray-900 border-purple-700 text-white"
           />
-          <Button
-            size="icon"
-            className="bg-purple-600 hover:bg-purple-700"
-            onClick={handleSendMessage}
-          >
+          <Button size="icon" className="bg-purple-600 hover:bg-purple-700" onClick={handleSendMessage}>
             <Send className="h-5 w-5" />
           </Button>
         </div>
