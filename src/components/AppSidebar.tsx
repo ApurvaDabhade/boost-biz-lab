@@ -4,6 +4,7 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -15,34 +16,37 @@ import {
   IndianRupee, 
   FileText, 
   Image as ImageIcon,
-  Menu
+  Menu,
+  Package,
+  MessageSquare,
+  Users,
+  Gift,
+  MapPin,
+  Bot,
+  Settings,
+  Bell
 } from 'lucide-react';
 
-const menuItems = [
-  { 
-    title: 'होम', 
-    titleEn: 'Home',
-    url: '/dashboard', 
-    icon: Home 
-  },
-  { 
-    title: 'बिक्री / खर्च', 
-    titleEn: 'Sales/Expense',
-    url: '/sales-tracker', 
-    icon: IndianRupee 
-  },
-  { 
-    title: 'लाइसेंस सहायता', 
-    titleEn: 'License Help',
-    url: '/license-help', 
-    icon: FileText 
-  },
-  { 
-    title: 'पोस्टर बनाएं', 
-    titleEn: 'Make Poster',
-    url: '/poster-maker', 
-    icon: ImageIcon 
-  },
+const mainMenuItems = [
+  { title: 'Dashboard', url: '/dashboard', icon: Home },
+  { title: 'Sales / Expense', url: '/sales-tracker', icon: IndianRupee },
+  { title: 'License Help', url: '/license-help', icon: FileText },
+  { title: 'Poster Maker', url: '/poster-maker', icon: ImageIcon },
+];
+
+const businessMenuItems = [
+  { title: 'Startup Mitra', url: '/startup-mitra', icon: Bot },
+  { title: 'ChefGuru', url: '/chef-guru', icon: Bot },
+  { title: 'Inventory', url: '/inventory', icon: Package },
+  { title: 'Reviews', url: '/reviews', icon: MessageSquare },
+  { title: 'Community Hub', url: '/community-hub', icon: Users },
+  { title: 'Offers', url: '/offers', icon: Gift },
+  { title: 'Tourism', url: '/tourism', icon: MapPin },
+];
+
+const settingsMenuItems = [
+  { title: 'Notifications', url: '/notifications', icon: Bell },
+  { title: 'Settings', url: '/settings', icon: Settings },
 ];
 
 export function AppSidebar() {
@@ -57,28 +61,75 @@ export function AppSidebar() {
             <span className="text-xl">🍛</span>
           </div>
           <div>
-            <h1 className="text-lg font-bold text-sidebar-foreground">रसोई मित्र</h1>
-            <p className="text-xs text-sidebar-foreground/70">RasoiMitra</p>
+            <h1 className="text-lg font-bold text-sidebar-foreground">BoostBiz</h1>
+            <p className="text-xs text-sidebar-foreground/70">Vendor Dashboard</p>
           </div>
         </div>
       </SidebarHeader>
       
       <SidebarContent className="p-2">
+        {/* Quick Access */}
         <SidebarGroup>
+          <SidebarGroupLabel className="text-sidebar-foreground/60 text-xs uppercase tracking-wider">
+            Quick Access
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map((item) => (
+              {mainMenuItems.map((item) => (
                 <SidebarMenuItem key={item.url}>
                   <SidebarMenuButton
                     onClick={() => navigate(item.url)}
                     isActive={location.pathname === item.url}
-                    className="h-14 text-lg gap-4"
+                    className="h-11 gap-3"
                   >
-                    <item.icon className="h-6 w-6" />
-                    <div className="flex flex-col items-start">
-                      <span className="font-semibold">{item.title}</span>
-                      <span className="text-xs opacity-70">{item.titleEn}</span>
-                    </div>
+                    <item.icon className="h-5 w-5" />
+                    <span className="font-medium">{item.title}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Business Tools */}
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-sidebar-foreground/60 text-xs uppercase tracking-wider">
+            Business Tools
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {businessMenuItems.map((item) => (
+                <SidebarMenuItem key={item.url}>
+                  <SidebarMenuButton
+                    onClick={() => navigate(item.url)}
+                    isActive={location.pathname === item.url}
+                    className="h-10 gap-3"
+                  >
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Settings */}
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-sidebar-foreground/60 text-xs uppercase tracking-wider">
+            Settings
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {settingsMenuItems.map((item) => (
+                <SidebarMenuItem key={item.url}>
+                  <SidebarMenuButton
+                    onClick={() => navigate(item.url)}
+                    isActive={location.pathname === item.url}
+                    className="h-10 gap-3"
+                  >
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
