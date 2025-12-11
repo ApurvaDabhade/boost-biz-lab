@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { AppSidebar, MobileSidebarTrigger } from '@/components/AppSidebar';
 import { 
   TrendingUp, 
   Package, 
@@ -126,9 +128,13 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-gradient-to-r from-blue-900 to-black border-b border-blue-800 backdrop-blur-sm">
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-black text-white">
+        <AppSidebar />
+        <div className="flex-1">
+          <MobileSidebarTrigger />
+          {/* Header */}
+          <header className="sticky top-0 z-40 bg-gradient-to-r from-blue-900 to-black border-b border-blue-800 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-blue-400">{t('app.name')}</h1>
@@ -441,7 +447,9 @@ const Dashboard = () => {
           </Card>
         </div>
       </div>
-    </div>
+      </div>
+      </div>
+    </SidebarProvider>
   );
 };
 

@@ -35,7 +35,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/dashboard" element={<RasoiHome />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/sales-tracker" element={<SalesTracker />} />
             <Route path="/license-help" element={<LicenseHelp />} />
             <Route path="/poster-maker" element={<PosterMaker />} />

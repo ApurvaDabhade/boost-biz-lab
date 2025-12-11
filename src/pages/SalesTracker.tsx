@@ -9,11 +9,11 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar, MobileSidebarTrigger } from '@/components/AppSidebar';
 
 const expenseCategories = [
-  { id: 'sabzi', label: 'सब्जी / Vegetables', emoji: '🥬' },
-  { id: 'masala', label: 'मसाला / Spices', emoji: '🌶️' },
-  { id: 'tel', label: 'तेल / Oil', emoji: '🫒' },
-  { id: 'gas', label: 'गैस / Gas', emoji: '🔥' },
-  { id: 'anya', label: 'अन्य / Other', emoji: '📦' },
+  { id: 'sabzi', label: 'Vegetables', emoji: '🥬' },
+  { id: 'masala', label: 'Spices', emoji: '🌶️' },
+  { id: 'tel', label: 'Oil', emoji: '🫒' },
+  { id: 'gas', label: 'Gas', emoji: '🔥' },
+  { id: 'anya', label: 'Other', emoji: '📦' },
 ];
 
 const SalesTracker = () => {
@@ -26,7 +26,6 @@ const SalesTracker = () => {
   const [expenseAmount, setExpenseAmount] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   
-  // Simple local storage for demo
   const [todaySales, setTodaySales] = useState(0);
   const [todayExpense, setTodayExpense] = useState(0);
 
@@ -53,21 +52,21 @@ const SalesTracker = () => {
   const handleSalesSubmit = () => {
     const amount = parseFloat(salesAmount);
     if (isNaN(amount) || amount <= 0) {
-      toast({ title: '⚠️ सही राशि डालें', description: 'Please enter valid amount' });
+      toast({ title: '⚠️ Enter valid amount', description: 'Please enter a valid amount' });
       return;
     }
     const newSales = todaySales + amount;
     setTodaySales(newSales);
     saveToday(newSales, todayExpense);
     setSalesAmount('');
-    toast({ title: '✅ बिक्री जोड़ी गई!', description: `₹${amount} added to sales` });
+    toast({ title: '✅ Sales Added!', description: `₹${amount} added to sales` });
     setActiveTab('profit');
   };
 
   const handleExpenseSubmit = () => {
     const amount = parseFloat(expenseAmount);
     if (isNaN(amount) || amount <= 0 || !selectedCategory) {
-      toast({ title: '⚠️ राशि और श्रेणी चुनें', description: 'Select category and enter amount' });
+      toast({ title: '⚠️ Select category and amount', description: 'Please select category and enter amount' });
       return;
     }
     const newExpense = todayExpense + amount;
@@ -75,7 +74,7 @@ const SalesTracker = () => {
     saveToday(todaySales, newExpense);
     setExpenseAmount('');
     setSelectedCategory('');
-    toast({ title: '✅ खर्च जोड़ा गया!', description: `₹${amount} added to expense` });
+    toast({ title: '✅ Expense Added!', description: `₹${amount} added to expense` });
     setActiveTab('profit');
   };
 
@@ -83,7 +82,7 @@ const SalesTracker = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
+      <div className="min-h-screen flex w-full bg-black text-white">
         <AppSidebar />
         
         <main className="flex-1 p-4 md:p-8">
@@ -95,28 +94,30 @@ const SalesTracker = () => {
               variant="ghost" 
               size="icon"
               onClick={() => navigate('/dashboard')}
-              className="rounded-full"
+              className="rounded-full text-white hover:bg-blue-800"
             >
               <ArrowLeft className="h-6 w-6" />
             </Button>
-            <h1 className="text-2xl font-bold text-foreground">
-              💰 बिक्री / खर्च
+            <h1 className="text-2xl font-bold text-blue-400">
+              💰 Sales & Expense Tracker
             </h1>
           </div>
 
           {/* Tab Buttons */}
           <div className="flex gap-2 mb-6 max-w-md mx-auto">
             {[
-              { id: 'sales', label: 'बिक्री', emoji: '📈' },
-              { id: 'expense', label: 'खर्च', emoji: '📉' },
-              { id: 'profit', label: 'नफ़ा', emoji: '💵' },
+              { id: 'sales', label: 'Sales', emoji: '📈' },
+              { id: 'expense', label: 'Expense', emoji: '📉' },
+              { id: 'profit', label: 'Profit', emoji: '💵' },
             ].map((tab) => (
               <Button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 variant={activeTab === tab.id ? 'default' : 'outline'}
                 className={`flex-1 h-14 text-lg font-bold rounded-xl ${
-                  activeTab === tab.id ? 'bg-primary' : ''
+                  activeTab === tab.id 
+                    ? 'bg-blue-600 hover:bg-blue-700' 
+                    : 'border-blue-700 text-white hover:bg-blue-900'
                 }`}
               >
                 {tab.emoji} {tab.label}
@@ -127,32 +128,29 @@ const SalesTracker = () => {
           <div className="max-w-md mx-auto">
             {/* Sales Tab */}
             {activeTab === 'sales' && (
-              <Card className="border-2 border-primary/30">
+              <Card className="bg-gradient-to-br from-gray-900 to-black border-blue-700">
                 <CardContent className="p-6">
-                  <h2 className="text-xl font-bold mb-4 text-center">
-                    📈 आज की बिक्री डालें
+                  <h2 className="text-xl font-bold mb-4 text-center text-white">
+                    📈 Enter Today's Sales
                   </h2>
-                  <p className="text-center text-muted-foreground mb-6 text-sm">
-                    Enter Today's Sales
-                  </p>
                   
                   <div className="relative mb-6">
-                    <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 h-8 w-8 text-primary" />
+                    <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 h-8 w-8 text-blue-400" />
                     <Input
                       type="number"
-                      placeholder="राशि डालें..."
+                      placeholder="Enter amount..."
                       value={salesAmount}
                       onChange={(e) => setSalesAmount(e.target.value)}
-                      className="h-16 text-2xl pl-14 text-center font-bold rounded-xl"
+                      className="h-16 text-2xl pl-14 text-center font-bold rounded-xl bg-gray-800 border-blue-700 text-white"
                     />
                   </div>
                   
                   <Button 
                     onClick={handleSalesSubmit}
-                    className="w-full h-14 text-xl font-bold rounded-xl bg-primary"
+                    className="w-full h-14 text-xl font-bold rounded-xl bg-green-600 hover:bg-green-700"
                   >
                     <Check className="h-6 w-6 mr-2" />
-                    जोड़ें / Add
+                    Add Sales
                   </Button>
                 </CardContent>
               </Card>
@@ -160,14 +158,11 @@ const SalesTracker = () => {
 
             {/* Expense Tab */}
             {activeTab === 'expense' && (
-              <Card className="border-2 border-secondary/30">
+              <Card className="bg-gradient-to-br from-gray-900 to-black border-orange-700">
                 <CardContent className="p-6">
-                  <h2 className="text-xl font-bold mb-4 text-center">
-                    📉 आज का खर्च डालें
+                  <h2 className="text-xl font-bold mb-4 text-center text-white">
+                    📉 Enter Today's Expense
                   </h2>
-                  <p className="text-center text-muted-foreground mb-4 text-sm">
-                    Enter Today's Expense
-                  </p>
                   
                   {/* Category Selection */}
                   <div className="grid grid-cols-2 gap-2 mb-6">
@@ -177,32 +172,34 @@ const SalesTracker = () => {
                         variant={selectedCategory === cat.id ? 'default' : 'outline'}
                         onClick={() => setSelectedCategory(cat.id)}
                         className={`h-14 text-sm font-semibold rounded-xl ${
-                          selectedCategory === cat.id ? 'bg-secondary text-secondary-foreground' : ''
+                          selectedCategory === cat.id 
+                            ? 'bg-orange-600 hover:bg-orange-700' 
+                            : 'border-orange-700 text-white hover:bg-orange-900'
                         }`}
                       >
                         <span className="mr-2 text-lg">{cat.emoji}</span>
-                        {cat.label.split(' / ')[0]}
+                        {cat.label}
                       </Button>
                     ))}
                   </div>
                   
                   <div className="relative mb-6">
-                    <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 h-8 w-8 text-secondary" />
+                    <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 h-8 w-8 text-orange-400" />
                     <Input
                       type="number"
-                      placeholder="राशि डालें..."
+                      placeholder="Enter amount..."
                       value={expenseAmount}
                       onChange={(e) => setExpenseAmount(e.target.value)}
-                      className="h-16 text-2xl pl-14 text-center font-bold rounded-xl"
+                      className="h-16 text-2xl pl-14 text-center font-bold rounded-xl bg-gray-800 border-orange-700 text-white"
                     />
                   </div>
                   
                   <Button 
                     onClick={handleExpenseSubmit}
-                    className="w-full h-14 text-xl font-bold rounded-xl bg-secondary text-secondary-foreground"
+                    className="w-full h-14 text-xl font-bold rounded-xl bg-orange-600 hover:bg-orange-700"
                   >
                     <Check className="h-6 w-6 mr-2" />
-                    जोड़ें / Add
+                    Add Expense
                   </Button>
                 </CardContent>
               </Card>
@@ -210,28 +207,26 @@ const SalesTracker = () => {
 
             {/* Profit Tab */}
             {activeTab === 'profit' && (
-              <Card className="border-2 border-accent/30">
+              <Card className="bg-gradient-to-br from-gray-900 to-black border-emerald-700">
                 <CardContent className="p-6 text-center">
-                  <h2 className="text-xl font-bold mb-6">
-                    💵 आज का हिसाब
+                  <h2 className="text-xl font-bold mb-6 text-white">
+                    💵 Today's Summary
                   </h2>
-                  <p className="text-muted-foreground mb-6 text-sm">Today's Summary</p>
                   
                   <div className="space-y-4 mb-8">
-                    <div className="flex justify-between items-center p-4 bg-primary/10 rounded-xl">
-                      <span className="text-lg">📈 बिक्री / Sales</span>
-                      <span className="text-2xl font-bold text-primary">₹{todaySales}</span>
+                    <div className="flex justify-between items-center p-4 bg-green-900/30 rounded-xl border border-green-700">
+                      <span className="text-lg text-gray-300">📈 Sales</span>
+                      <span className="text-2xl font-bold text-green-400">₹{todaySales}</span>
                     </div>
-                    <div className="flex justify-between items-center p-4 bg-secondary/10 rounded-xl">
-                      <span className="text-lg">📉 खर्च / Expense</span>
-                      <span className="text-2xl font-bold text-secondary-foreground">₹{todayExpense}</span>
+                    <div className="flex justify-between items-center p-4 bg-orange-900/30 rounded-xl border border-orange-700">
+                      <span className="text-lg text-gray-300">📉 Expense</span>
+                      <span className="text-2xl font-bold text-orange-400">₹{todayExpense}</span>
                     </div>
                   </div>
                   
-                  <div className={`p-6 rounded-2xl ${profit >= 0 ? 'bg-accent/20' : 'bg-destructive/20'}`}>
-                    <p className="text-lg mb-2">आज का मुनाफ़ा</p>
-                    <p className="text-xs text-muted-foreground mb-4">Today's Profit</p>
-                    <p className={`text-5xl font-bold ${profit >= 0 ? 'text-accent' : 'text-destructive'}`}>
+                  <div className={`p-6 rounded-2xl ${profit >= 0 ? 'bg-emerald-900/30 border border-emerald-600' : 'bg-red-900/30 border border-red-600'}`}>
+                    <p className="text-lg mb-2 text-gray-300">Today's Profit</p>
+                    <p className={`text-5xl font-bold ${profit >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                       ₹{profit}
                     </p>
                   </div>
