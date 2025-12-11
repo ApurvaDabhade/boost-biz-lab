@@ -18,6 +18,10 @@ import Offers from "./pages/Offers";
 import ChefGuru from "./pages/ChefGuru";
 import Settings from "./pages/Settings";
 import Notifications from "./pages/Notifications";
+import RasoiHome from "./pages/RasoiHome";
+import SalesTracker from "./pages/SalesTracker";
+import LicenseHelp from "./pages/LicenseHelp";
+import PosterMaker from "./pages/PosterMaker";
 
 const queryClient = new QueryClient();
 
@@ -31,7 +35,10 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<RasoiHome />} />
+            <Route path="/sales-tracker" element={<SalesTracker />} />
+            <Route path="/license-help" element={<LicenseHelp />} />
+            <Route path="/poster-maker" element={<PosterMaker />} />
             <Route path="/registration" element={<Registration />} />
             <Route path="/startup-mitra" element={<StartupMitra />} />
             <Route path="/community-hub" element={<CommunityHub />} />
