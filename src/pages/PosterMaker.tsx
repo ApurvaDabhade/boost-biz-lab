@@ -190,7 +190,7 @@ const PosterMaker = () => {
                       )}
                       
                       <div className="mt-4 pt-4 border-t border-gray-700 text-center">
-                        <p className="text-sm text-gray-500">🍛 Made with BoostBiz</p>
+                        <p className="text-sm text-gray-500">🍛 Made with RasoiMitra</p>
                       </div>
                     </div>
                   </div>

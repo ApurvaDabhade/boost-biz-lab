@@ -61,8 +61,8 @@ export function AppSidebar() {
             <span className="text-xl">🍛</span>
           </div>
           <div>
-            <h1 className="text-lg font-bold text-sidebar-foreground">BoostBiz</h1>
-            <p className="text-xs text-sidebar-foreground/70">Vendor Dashboard</p>
+            <h1 className="text-lg font-bold text-sidebar-foreground">RasoiMitra</h1>
+            <p className="text-xs text-sidebar-foreground/70">रसोई साथी</p>
           </div>
         </div>
       </SidebarHeader>
