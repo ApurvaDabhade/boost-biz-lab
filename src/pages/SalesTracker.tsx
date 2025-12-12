@@ -1,45 +1,78 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, IndianRupee, Check } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft, IndianRupee, Check, Plus, TrendingUp, TrendingDown, Receipt, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar, MobileSidebarTrigger } from '@/components/AppSidebar';
+import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
-const expenseCategories = [
-  { id: 'sabzi', label: 'Vegetables', emoji: '🥬' },
-  { id: 'masala', label: 'Spices', emoji: '🌶️' },
-  { id: 'tel', label: 'Oil', emoji: '🫒' },
-  { id: 'gas', label: 'Gas', emoji: '🔥' },
-  { id: 'anya', label: 'Other', emoji: '📦' },
+const saleCategories = [
+  { id: 'cash', label: 'Cash', emoji: '💵' },
+  { id: 'upi', label: 'UPI/Online', emoji: '📱' },
+  { id: 'card', label: 'Card', emoji: '💳' },
 ];
 
+const expenseCategories = [
+  { id: 'vegetables', label: 'Vegetables', emoji: '🥬' },
+  { id: 'gas', label: 'Gas/Fuel', emoji: '⛽' },
+  { id: 'packaging', label: 'Packaging', emoji: '📦' },
+  { id: 'transport', label: 'Transport', emoji: '🚗' },
+  { id: 'rent', label: 'Rent', emoji: '🏠' },
+  { id: 'other', label: 'Other', emoji: '📝' },
+];
+
+const quickAmounts = [50, 100, 200, 500, 1000, 2000];
+
+interface Transaction {
+  id: string;
+  type: 'sale' | 'expense';
+  amount: number;
+  category: string;
+  timestamp: Date;
+  note?: string;
+}
+
 const SalesTracker = () => {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'sales');
-  const [salesAmount, setSalesAmount] = useState('');
-  const [expenseAmount, setExpenseAmount] = useState('');
+  const [activeTab, setActiveTab] = useState<'today' | 'week' | 'month'>('today');
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addType, setAddType] = useState<'sale' | 'expense'>('sale');
+  const [amount, setAmount] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [note, setNote] = useState('');
   
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [todaySales, setTodaySales] = useState(0);
   const [todayExpense, setTodayExpense] = useState(0);
 
   useEffect(() => {
-    const saved = localStorage.getItem('rasoimitra_today');
+    const saved = localStorage.getItem('rasoimitra_transactions');
     if (saved) {
       const data = JSON.parse(saved);
-      const today = new Date().toDateString();
+      setTransactions(data.map((t: Transaction) => ({ ...t, timestamp: new Date(t.timestamp) })));
+    }
+    
+    // Calculate today's totals
+    const today = new Date().toDateString();
+    const savedToday = localStorage.getItem('rasoimitra_today');
+    if (savedToday) {
+      const data = JSON.parse(savedToday);
       if (data.date === today) {
         setTodaySales(data.sales || 0);
         setTodayExpense(data.expense || 0);
       }
     }
   }, []);
+
+  const saveTransactions = (txns: Transaction[]) => {
+    localStorage.setItem('rasoimitra_transactions', JSON.stringify(txns));
+  };
 
   const saveToday = (sales: number, expense: number) => {
     localStorage.setItem('rasoimitra_today', JSON.stringify({
@@ -49,43 +82,67 @@ const SalesTracker = () => {
     }));
   };
 
-  const handleSalesSubmit = () => {
-    const amount = parseFloat(salesAmount);
-    if (isNaN(amount) || amount <= 0) {
-      toast({ title: '⚠️ Enter valid amount', description: 'Please enter a valid amount' });
-      return;
-    }
-    const newSales = todaySales + amount;
-    setTodaySales(newSales);
-    saveToday(newSales, todayExpense);
-    setSalesAmount('');
-    toast({ title: '✅ Sales Added!', description: `₹${amount} added to sales` });
-    setActiveTab('profit');
+  const handleQuickAmount = (amt: number) => {
+    setAmount(amt.toString());
   };
 
-  const handleExpenseSubmit = () => {
-    const amount = parseFloat(expenseAmount);
-    if (isNaN(amount) || amount <= 0 || !selectedCategory) {
-      toast({ title: '⚠️ Select category and amount', description: 'Please select category and enter amount' });
+  const handleSubmit = () => {
+    const amtNum = parseFloat(amount);
+    if (isNaN(amtNum) || amtNum <= 0) {
+      toast({ title: '⚠️ Invalid Amount', description: 'Please enter a valid amount' });
       return;
     }
-    const newExpense = todayExpense + amount;
-    setTodayExpense(newExpense);
-    saveToday(todaySales, newExpense);
-    setExpenseAmount('');
+    
+    if (!selectedCategory) {
+      toast({ title: '⚠️ Select Category', description: 'Please select a category' });
+      return;
+    }
+
+    const newTransaction: Transaction = {
+      id: Date.now().toString(),
+      type: addType,
+      amount: amtNum,
+      category: selectedCategory,
+      timestamp: new Date(),
+      note: note || undefined,
+    };
+
+    const updatedTransactions = [newTransaction, ...transactions];
+    setTransactions(updatedTransactions);
+    saveTransactions(updatedTransactions);
+
+    if (addType === 'sale') {
+      const newSales = todaySales + amtNum;
+      setTodaySales(newSales);
+      saveToday(newSales, todayExpense);
+      toast({ title: '✅ Sale Added!', description: `₹${amtNum} added successfully` });
+    } else {
+      const newExpense = todayExpense + amtNum;
+      setTodayExpense(newExpense);
+      saveToday(todaySales, newExpense);
+      toast({ title: '✅ Expense Added!', description: `₹${amtNum} recorded successfully` });
+    }
+
+    // Reset form
+    setAmount('');
     setSelectedCategory('');
-    toast({ title: '✅ Expense Added!', description: `₹${amount} added to expense` });
-    setActiveTab('profit');
+    setNote('');
+    setShowAddModal(false);
   };
 
   const profit = todaySales - todayExpense;
+  const transactionCount = transactions.filter(t => 
+    new Date(t.timestamp).toDateString() === new Date().toDateString()
+  ).length;
+
+  const recentTransactions = transactions.slice(0, 5);
 
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background text-foreground">
         <AppSidebar />
         
-        <main className="flex-1 p-4 md:p-8">
+        <main className="flex-1 p-4 md:p-8 overflow-y-auto">
           <MobileSidebarTrigger />
           
           {/* Header */}
@@ -98,142 +155,251 @@ const SalesTracker = () => {
             >
               <ArrowLeft className="h-6 w-6" />
             </Button>
-            <h1 className="text-2xl font-bold text-primary">
-              💰 Sales & Expense Tracker
-            </h1>
+            <div>
+              <h1 className="text-2xl font-bold text-primary">
+                💰 Sales & Expense Tracker
+              </h1>
+              <p className="text-sm text-muted-foreground">Track your daily business 📊</p>
+            </div>
           </div>
 
-          {/* Tab Buttons */}
-          <div className="flex gap-2 mb-6 max-w-md mx-auto">
-            {[
-              { id: 'sales', label: 'Sales', emoji: '📈' },
-              { id: 'expense', label: 'Expense', emoji: '📉' },
-              { id: 'profit', label: 'Profit', emoji: '💵' },
-            ].map((tab) => (
-              <Button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                variant={activeTab === tab.id ? 'default' : 'outline'}
-                className={`flex-1 h-14 text-lg font-bold rounded-xl ${
-                  activeTab === tab.id 
-                    ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
-                    : 'border-border hover:bg-muted'
+          <div className="max-w-2xl mx-auto space-y-6">
+            {/* Period Tabs */}
+            <div className="flex gap-2 p-1 bg-muted rounded-xl">
+              {[
+                { id: 'today', label: 'Today' },
+                { id: 'week', label: 'This Week' },
+                { id: 'month', label: 'This Month' },
+              ].map((tab) => (
+                <Button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                  variant={activeTab === tab.id ? 'default' : 'ghost'}
+                  className={`flex-1 h-12 rounded-lg ${
+                    activeTab === tab.id 
+                      ? 'bg-card shadow-md text-card-foreground' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {tab.label}
+                </Button>
+              ))}
+            </div>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <Card className="bg-accent/10 border-accent/30">
+                <CardContent className="p-4 text-center">
+                  <span className="text-2xl">💵</span>
+                  <p className="text-xs text-muted-foreground mt-1">Total Sale</p>
+                  <p className="text-xl font-bold text-accent">₹{todaySales}</p>
+                </CardContent>
+              </Card>
+              <Card className="bg-destructive/10 border-destructive/30">
+                <CardContent className="p-4 text-center">
+                  <span className="text-2xl">📉</span>
+                  <p className="text-xs text-muted-foreground mt-1">Total Expense</p>
+                  <p className="text-xl font-bold text-destructive">₹{todayExpense}</p>
+                </CardContent>
+              </Card>
+              <Card className={`${profit >= 0 ? 'bg-accent/10 border-accent/30' : 'bg-destructive/10 border-destructive/30'}`}>
+                <CardContent className="p-4 text-center">
+                  <span className="text-2xl">🟢</span>
+                  <p className="text-xs text-muted-foreground mt-1">Net Profit</p>
+                  <p className={`text-xl font-bold ${profit >= 0 ? 'text-accent' : 'text-destructive'}`}>₹{profit}</p>
+                </CardContent>
+              </Card>
+              <Card className="bg-secondary/10 border-secondary/30">
+                <CardContent className="p-4 text-center">
+                  <span className="text-2xl">📝</span>
+                  <p className="text-xs text-muted-foreground mt-1">Transactions</p>
+                  <p className="text-xl font-bold text-secondary">{transactionCount}</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="grid grid-cols-2 gap-3">
+              <Button 
+                onClick={() => { setAddType('sale'); setShowAddModal(true); }}
+                className="h-16 text-lg font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
+              >
+                <Plus className="h-5 w-5 mr-2" />
+                Add Sale
+              </Button>
+              <Button 
+                onClick={() => { setAddType('expense'); setShowAddModal(true); }}
+                variant="outline"
+                className="h-16 text-lg font-bold rounded-xl border-destructive text-destructive hover:bg-destructive/10"
+              >
+                <Plus className="h-5 w-5 mr-2" />
+                Add Expense
+              </Button>
+            </div>
+
+            {/* Peak Hours Insight */}
+            <Card className="bg-primary/10 border-primary/30 shadow-lg">
+              <CardContent className="p-4 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                  <Clock className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Peak Hours Insight</p>
+                  <p className="font-semibold text-foreground">12 PM - 2 PM sees maximum sales 🍽️🔥</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Recent Transactions */}
+            <Card className="bg-card border-border shadow-lg">
+              <CardContent className="p-4">
+                <h3 className="text-lg font-semibold mb-4 text-card-foreground">📋 Recent Transactions</h3>
+                {recentTransactions.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">No transactions yet. Add your first sale!</p>
+                ) : (
+                  <div className="space-y-3">
+                    {recentTransactions.map((txn) => {
+                      const catData = txn.type === 'sale' 
+                        ? saleCategories.find(c => c.id === txn.category)
+                        : expenseCategories.find(c => c.id === txn.category);
+                      
+                      return (
+                        <div 
+                          key={txn.id}
+                          className="flex items-center justify-between p-3 bg-muted rounded-xl"
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="text-2xl">{catData?.emoji || '💰'}</span>
+                            <div>
+                              <p className="font-medium text-card-foreground">{catData?.label || txn.category}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {new Date(txn.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </p>
+                            </div>
+                          </div>
+                          <span className={`font-bold text-lg ${
+                            txn.type === 'sale' ? 'text-accent' : 'text-destructive'
+                          }`}>
+                            {txn.type === 'sale' ? '+' : '-'}₹{txn.amount}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Add Entry Modal */}
+          <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
+            <DialogContent className="bg-card border-border max-w-md">
+              <DialogHeader>
+                <DialogTitle className="text-center text-xl">
+                  {addType === 'sale' ? '📈 Add Sale' : '📉 Add Expense'}
+                </DialogTitle>
+              </DialogHeader>
+              
+              {/* Type Tabs */}
+              <div className="flex gap-2 p-1 bg-muted rounded-xl">
+                <Button
+                  onClick={() => { setAddType('sale'); setSelectedCategory(''); }}
+                  className={`flex-1 h-12 rounded-lg ${
+                    addType === 'sale' 
+                      ? 'bg-accent text-accent-foreground' 
+                      : 'bg-transparent text-muted-foreground hover:bg-muted'
+                  }`}
+                >
+                  Sale
+                </Button>
+                <Button
+                  onClick={() => { setAddType('expense'); setSelectedCategory(''); }}
+                  className={`flex-1 h-12 rounded-lg ${
+                    addType === 'expense' 
+                      ? 'bg-destructive text-destructive-foreground' 
+                      : 'bg-transparent text-muted-foreground hover:bg-muted'
+                  }`}
+                >
+                  Expense
+                </Button>
+              </div>
+
+              {/* Amount Input */}
+              <div className="relative">
+                <IndianRupee className={`absolute left-4 top-1/2 -translate-y-1/2 h-6 w-6 ${
+                  addType === 'sale' ? 'text-accent' : 'text-destructive'
+                }`} />
+                <Input
+                  type="number"
+                  placeholder="Enter amount..."
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="h-16 text-2xl pl-12 text-center font-bold rounded-xl bg-muted border-border"
+                />
+              </div>
+
+              {/* Quick Amounts */}
+              <div className="grid grid-cols-3 gap-2">
+                {quickAmounts.map((amt) => (
+                  <Button
+                    key={amt}
+                    variant="outline"
+                    onClick={() => handleQuickAmount(amt)}
+                    className={`h-12 rounded-xl border-border hover:bg-muted ${
+                      amount === amt.toString() ? 'bg-muted' : ''
+                    }`}
+                  >
+                    ₹{amt}
+                  </Button>
+                ))}
+              </div>
+
+              {/* Category Selection */}
+              <div>
+                <p className="text-sm font-medium mb-2 text-muted-foreground">Select Category</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {(addType === 'sale' ? saleCategories : expenseCategories).map((cat) => (
+                    <Button
+                      key={cat.id}
+                      variant={selectedCategory === cat.id ? 'default' : 'outline'}
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={`h-16 flex-col rounded-xl ${
+                        selectedCategory === cat.id 
+                          ? addType === 'sale' 
+                            ? 'bg-accent text-accent-foreground' 
+                            : 'bg-destructive text-destructive-foreground'
+                          : 'border-border hover:bg-muted'
+                      }`}
+                    >
+                      <span className="text-xl">{cat.emoji}</span>
+                      <span className="text-xs mt-1">{cat.label}</span>
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Note */}
+              <Input
+                placeholder="Add a note (optional)"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                className="h-12 rounded-xl bg-muted border-border"
+              />
+
+              {/* Save Button */}
+              <Button 
+                onClick={handleSubmit}
+                className={`w-full h-14 text-lg font-bold rounded-xl ${
+                  addType === 'sale' 
+                    ? 'bg-accent hover:bg-accent/90 text-accent-foreground' 
+                    : 'bg-destructive hover:bg-destructive/90 text-destructive-foreground'
                 }`}
               >
-                {tab.emoji} {tab.label}
+                <Check className="h-5 w-5 mr-2" />
+                Save Entry
               </Button>
-            ))}
-          </div>
-
-          <div className="max-w-md mx-auto">
-            {/* Sales Tab */}
-            {activeTab === 'sales' && (
-              <Card className="bg-card border-primary/30 shadow-lg">
-                <CardContent className="p-6">
-                  <h2 className="text-xl font-bold mb-4 text-center text-card-foreground">
-                    📈 Enter Today's Sales
-                  </h2>
-                  
-                  <div className="relative mb-6">
-                    <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 h-8 w-8 text-primary" />
-                    <Input
-                      type="number"
-                      placeholder="Enter amount..."
-                      value={salesAmount}
-                      onChange={(e) => setSalesAmount(e.target.value)}
-                      className="h-16 text-2xl pl-14 text-center font-bold rounded-xl bg-muted border-border"
-                    />
-                  </div>
-                  
-                  <Button 
-                    onClick={handleSalesSubmit}
-                    className="w-full h-14 text-xl font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
-                  >
-                    <Check className="h-6 w-6 mr-2" />
-                    Add Sales
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Expense Tab */}
-            {activeTab === 'expense' && (
-              <Card className="bg-card border-secondary/30 shadow-lg">
-                <CardContent className="p-6">
-                  <h2 className="text-xl font-bold mb-4 text-center text-card-foreground">
-                    📉 Enter Today's Expense
-                  </h2>
-                  
-                  {/* Category Selection */}
-                  <div className="grid grid-cols-2 gap-2 mb-6">
-                    {expenseCategories.map((cat) => (
-                      <Button
-                        key={cat.id}
-                        variant={selectedCategory === cat.id ? 'default' : 'outline'}
-                        onClick={() => setSelectedCategory(cat.id)}
-                        className={`h-14 text-sm font-semibold rounded-xl ${
-                          selectedCategory === cat.id 
-                            ? 'bg-secondary hover:bg-secondary/90 text-secondary-foreground' 
-                            : 'border-border hover:bg-muted'
-                        }`}
-                      >
-                        <span className="mr-2 text-lg">{cat.emoji}</span>
-                        {cat.label}
-                      </Button>
-                    ))}
-                  </div>
-                  
-                  <div className="relative mb-6">
-                    <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 h-8 w-8 text-secondary" />
-                    <Input
-                      type="number"
-                      placeholder="Enter amount..."
-                      value={expenseAmount}
-                      onChange={(e) => setExpenseAmount(e.target.value)}
-                      className="h-16 text-2xl pl-14 text-center font-bold rounded-xl bg-muted border-border"
-                    />
-                  </div>
-                  
-                  <Button 
-                    onClick={handleExpenseSubmit}
-                    className="w-full h-14 text-xl font-bold rounded-xl bg-secondary hover:bg-secondary/90 text-secondary-foreground"
-                  >
-                    <Check className="h-6 w-6 mr-2" />
-                    Add Expense
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Profit Tab */}
-            {activeTab === 'profit' && (
-              <Card className="bg-card border-accent/30 shadow-lg">
-                <CardContent className="p-6 text-center">
-                  <h2 className="text-xl font-bold mb-6 text-card-foreground">
-                    💵 Today's Summary
-                  </h2>
-                  
-                  <div className="space-y-4 mb-8">
-                    <div className="flex justify-between items-center p-4 bg-accent/10 rounded-xl border border-accent/30">
-                      <span className="text-lg text-muted-foreground">📈 Sales</span>
-                      <span className="text-2xl font-bold text-accent">₹{todaySales}</span>
-                    </div>
-                    <div className="flex justify-between items-center p-4 bg-secondary/10 rounded-xl border border-secondary/30">
-                      <span className="text-lg text-muted-foreground">📉 Expense</span>
-                      <span className="text-2xl font-bold text-secondary">₹{todayExpense}</span>
-                    </div>
-                  </div>
-                  
-                  <div className={`p-6 rounded-2xl ${profit >= 0 ? 'bg-accent/10 border border-accent/50' : 'bg-destructive/10 border border-destructive/50'}`}>
-                    <p className="text-lg mb-2 text-muted-foreground">Today's Profit</p>
-                    <p className={`text-5xl font-bold ${profit >= 0 ? 'text-accent' : 'text-destructive'}`}>
-                      ₹{profit}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
+            </DialogContent>
+          </Dialog>
         </main>
       </div>
     </SidebarProvider>
