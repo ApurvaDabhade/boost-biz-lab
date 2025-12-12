@@ -46,7 +46,7 @@ const LicenseHelp = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-black text-white">
+      <div className="min-h-screen flex w-full bg-background text-foreground">
         <AppSidebar />
         
         <main className="flex-1 p-4 md:p-8">
@@ -58,11 +58,11 @@ const LicenseHelp = () => {
               variant="ghost" 
               size="icon"
               onClick={() => navigate('/dashboard')}
-              className="rounded-full text-white hover:bg-blue-800"
+              className="rounded-full hover:bg-muted"
             >
               <ArrowLeft className="h-6 w-6" />
             </Button>
-            <h1 className="text-2xl font-bold text-blue-400">
+            <h1 className="text-2xl font-bold text-primary">
               📄 License & Scheme Assistance
             </h1>
           </div>
@@ -72,12 +72,12 @@ const LicenseHelp = () => {
             {steps.map((s, idx) => (
               <div key={s.num} className="flex items-center">
                 <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold transition-all
-                  ${s.done ? 'bg-green-600 text-white' : step === s.num ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 border border-gray-700'}
+                  ${s.done ? 'bg-accent text-accent-foreground' : step === s.num ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground border border-border'}
                 `}>
                   {s.done ? <Check className="h-6 w-6" /> : s.num}
                 </div>
                 {idx < steps.length - 1 && (
-                  <div className={`w-12 h-1 mx-1 ${s.done ? 'bg-green-600' : 'bg-gray-700'}`} />
+                  <div className={`w-12 h-1 mx-1 ${s.done ? 'bg-accent' : 'bg-border'}`} />
                 )}
               </div>
             ))}
@@ -86,24 +86,24 @@ const LicenseHelp = () => {
           <div className="max-w-md mx-auto">
             {/* Step 1: Aadhaar Upload */}
             {step === 1 && (
-              <Card className="bg-gradient-to-br from-gray-900 to-black border-blue-700">
+              <Card className="bg-card border-primary/30 shadow-lg">
                 <CardContent className="p-6 text-center">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-blue-900/50 flex items-center justify-center">
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
                     <span className="text-4xl">🪪</span>
                   </div>
-                  <h2 className="text-2xl font-bold mb-2 text-blue-400">Step 1</h2>
-                  <p className="text-xl font-semibold mb-1 text-white">Upload Aadhaar Card</p>
-                  <p className="text-gray-400 mb-6 text-sm">Take a clear photo of your Aadhaar</p>
+                  <h2 className="text-2xl font-bold mb-2 text-primary">Step 1</h2>
+                  <p className="text-xl font-semibold mb-1 text-card-foreground">Upload Aadhaar Card</p>
+                  <p className="text-muted-foreground mb-6 text-sm">Take a clear photo of your Aadhaar</p>
                   
                   <Button 
                     onClick={handleAadhaarUpload}
-                    className="w-full h-16 text-xl font-bold rounded-xl bg-blue-600 hover:bg-blue-700"
+                    className="w-full h-16 text-xl font-bold rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
                     <Upload className="h-6 w-6 mr-3" />
                     Upload Aadhaar
                   </Button>
                   
-                  <p className="mt-4 text-xs text-gray-500">
+                  <p className="mt-4 text-xs text-muted-foreground">
                     Photo should be clear and readable
                   </p>
                 </CardContent>
@@ -112,24 +112,24 @@ const LicenseHelp = () => {
 
             {/* Step 2: Shop Photo */}
             {step === 2 && (
-              <Card className="bg-gradient-to-br from-gray-900 to-black border-purple-700">
+              <Card className="bg-card border-secondary/30 shadow-lg">
                 <CardContent className="p-6 text-center">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-purple-900/50 flex items-center justify-center">
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-secondary/10 flex items-center justify-center">
                     <span className="text-4xl">🏪</span>
                   </div>
-                  <h2 className="text-2xl font-bold mb-2 text-purple-400">Step 2</h2>
-                  <p className="text-xl font-semibold mb-1 text-white">Upload Shop/Cart Photo</p>
-                  <p className="text-gray-400 mb-6 text-sm">Take a front photo of your shop or food cart</p>
+                  <h2 className="text-2xl font-bold mb-2 text-secondary">Step 2</h2>
+                  <p className="text-xl font-semibold mb-1 text-card-foreground">Upload Shop/Cart Photo</p>
+                  <p className="text-muted-foreground mb-6 text-sm">Take a front photo of your shop or food cart</p>
                   
                   <Button 
                     onClick={handleShopPhotoUpload}
-                    className="w-full h-16 text-xl font-bold rounded-xl bg-purple-600 hover:bg-purple-700"
+                    className="w-full h-16 text-xl font-bold rounded-xl bg-secondary hover:bg-secondary/90 text-secondary-foreground"
                   >
                     <Camera className="h-6 w-6 mr-3" />
                     Take Photo
                   </Button>
                   
-                  <p className="mt-4 text-xs text-gray-500">
+                  <p className="mt-4 text-xs text-muted-foreground">
                     Take photo from the front
                   </p>
                 </CardContent>
@@ -138,19 +138,19 @@ const LicenseHelp = () => {
 
             {/* Step 3: Download Form */}
             {step === 3 && (
-              <Card className="bg-gradient-to-br from-gray-900 to-black border-green-700">
+              <Card className="bg-card border-accent/30 shadow-lg">
                 <CardContent className="p-6 text-center">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-green-900/50 flex items-center justify-center">
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-accent/10 flex items-center justify-center">
                     <span className="text-4xl">✅</span>
                   </div>
-                  <h2 className="text-2xl font-bold mb-2 text-green-400">Step 3</h2>
-                  <p className="text-xl font-semibold mb-1 text-white">Your Forms are Ready!</p>
-                  <p className="text-gray-400 mb-6 text-sm">Download your pre-filled application forms</p>
+                  <h2 className="text-2xl font-bold mb-2 text-accent">Step 3</h2>
+                  <p className="text-xl font-semibold mb-1 text-card-foreground">Your Forms are Ready!</p>
+                  <p className="text-muted-foreground mb-6 text-sm">Download your pre-filled application forms</p>
                   
                   <div className="space-y-3">
                     <Button 
                       onClick={handleDownloadForm}
-                      className="w-full h-16 text-xl font-bold rounded-xl bg-green-600 hover:bg-green-700"
+                      className="w-full h-16 text-xl font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
                     >
                       <FileDown className="h-6 w-6 mr-3" />
                       FSSAI License Form
@@ -159,14 +159,14 @@ const LicenseHelp = () => {
                     <Button 
                       onClick={handleDownloadForm}
                       variant="outline"
-                      className="w-full h-16 text-xl font-bold rounded-xl border-cyan-700 text-cyan-400 hover:bg-cyan-900"
+                      className="w-full h-16 text-xl font-bold rounded-xl border-primary text-primary hover:bg-primary/10"
                     >
                       <FileDown className="h-6 w-6 mr-3" />
                       PM SVANidhi Form
                     </Button>
                   </div>
                   
-                  <p className="mt-6 text-sm text-green-400">
+                  <p className="mt-6 text-sm text-accent">
                     🎉 Congratulations! Your form is pre-filled
                   </p>
                 </CardContent>
@@ -182,7 +182,7 @@ const LicenseHelp = () => {
                   setAadhaarUploaded(false);
                   setShopPhotoUploaded(false);
                 }}
-                className="w-full mt-4 text-gray-400 hover:text-white"
+                className="w-full mt-4 text-muted-foreground hover:text-foreground"
               >
                 Start Over
               </Button>
