@@ -79,9 +79,9 @@ const Index = () => {
           <img
             src={heroImage}
             alt="Hero"
-            className="w-full h-full object-cover opacity-40"
+            className="w-full h-full object-cover opacity-60"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-background/50 to-background"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/40 to-background/80"></div>
         </div>
 
         {/* Hero Content */}
