@@ -41,118 +41,92 @@ const Reviews = () => {
     }>,
   } | null>(null);
 
-  // Mock recent reviews kept unchanged
+  // Mock recent reviews
   const recentReviews = [
     {
       id: 1,
-      customer: 'Rajesh Kumar',
+      customer: 'राजेश कुमार',
       rating: 5,
-      date: '2 hours ago',
-      comment: 'Amazing food! The paneer tikka was perfectly cooked and the service was super fast. Will definitely come back!',
+      date: '2 घंटे पहले',
+      comment: 'बहुत बढ़िया खाना! पनीर टिक्का परफेक्ट था और सर्विस बहुत तेज़। फिर आऊंगा!',
       sentiment: 'positive',
-      category: 'Food Quality'
+      category: 'खाने की क्वालिटी'
     },
     {
       id: 2,
-      customer: 'Priya Sharma',
+      customer: 'प्रिया शर्मा',
       rating: 4,
-      date: '5 hours ago',
-      comment: 'Good food but a bit expensive. The taste was great but portion size could be better.',
+      date: '5 घंटे पहले',
+      comment: 'अच्छा खाना पर थोड़ा महंगा है। स्वाद बढ़िया था पर पोर्शन थोड़ा और हो सकता था।',
       sentiment: 'neutral',
-      category: 'Value for Money'
+      category: 'पैसा वसूल'
     },
     {
       id: 3,
-      customer: 'Amit Singh',
+      customer: 'अमित सिंह',
       rating: 2,
-      date: '1 day ago',
-      comment: 'Very slow service today. Had to wait 45 minutes for my order. Food was cold when it arrived.',
+      date: '1 दिन पहले',
+      comment: 'आज सर्विस बहुत धीमी थी। 45 मिनट इंतज़ार करना पड़ा। खाना ठंडा था।',
       sentiment: 'negative',
-      category: 'Service Speed'
+      category: 'सर्विस स्पीड'
     },
     {
       id: 4,
-      customer: 'Sneha Patel',
+      customer: 'स्नेहा पटेल',
       rating: 5,
-      date: '1 day ago',
-      comment: 'Excellent hygiene and cleanliness. The staff was very polite and helpful. Food was delicious!',
+      date: '1 दिन पहले',
+      comment: 'साफ-सफाई बहुत अच्छी। स्टाफ बहुत पोलाइट था। खाना स्वादिष्ट!',
       sentiment: 'positive',
-      category: 'Staff Behavior'
+      category: 'स्टाफ व्यवहार'
     },
-    {
-      id: 5,
-      customer: 'Vikram Joshi',
-      rating: 3,
-      date: '2 days ago',
-      comment: 'Average experience. Nothing special but nothing bad either. Decent food for the price.',
-      sentiment: 'neutral',
-      category: 'Food Quality'
-    }
   ];
 
-useEffect(() => {
-  const fetchSentimentData = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/gap_analysis');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const json = await response.json();
-
-      if (json.status !== 'success') {
-        throw new Error('API returned an error status');
-      }
-
-      const data = json.data ?? {};
-
-      // Normalize backend data and provide fallbacks
-      setSentimentData({
-        overall: {
-          positive: data.overall?.positive ?? 0,
-          neutral: data.overall?.neutral ?? 0,
-          negative: data.overall?.negative ?? 0,
-          total: data.overall?.total ?? 0,
-          averageRating: data.overall?.averageRating ?? null,
-        },
-        trends: {
-          positive: data.trends?.positive ?? 0,
-          neutral: data.trends?.neutral ?? 0,
-          negative: data.trends?.negative ?? 0,
-        },
-        categories: Array.isArray(data.categories) ? data.categories : [],
-        citywideData: Array.isArray(data.citywideData) ? data.citywideData : [],
-      });
-    } catch (error) {
-      console.error('Error fetching sentiment data:', error);
-      setSentimentData(null);
-    }
-  };
-
-  fetchSentimentData();
-}, []);
-
-
-
+  useEffect(() => {
+    // Mock data for sentiment analysis since backend may not be running
+    const mockData = {
+      overall: {
+        positive: 68,
+        neutral: 22,
+        negative: 10,
+        total: 156,
+        averageRating: 4.2,
+      },
+      trends: {
+        positive: 5,
+        neutral: -2,
+        negative: -3,
+      },
+      categories: [
+        { name: 'खाने की क्वालिटी', positive: 75, neutral: 18, negative: 7, trend: 8 },
+        { name: 'सर्विस स्पीड', positive: 55, neutral: 25, negative: 20, trend: -5 },
+        { name: 'स्टाफ व्यवहार', positive: 80, neutral: 15, negative: 5, trend: 12 },
+        { name: 'साफ-सफाई', positive: 72, neutral: 20, negative: 8, trend: 3 },
+      ],
+      citywideData: [],
+    };
+    
+    setSentimentData(mockData);
+  }, []);
 
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment) {
-      case 'positive': return 'text-green-400';
-      case 'negative': return 'text-red-400';
-      default: return 'text-yellow-400';
+      case 'positive': return 'text-accent';
+      case 'negative': return 'text-destructive';
+      default: return 'text-secondary';
     }
   };
 
   const getSentimentBg = (sentiment: string) => {
     switch (sentiment) {
-      case 'positive': return 'bg-green-600';
-      case 'negative': return 'bg-red-600';
-      default: return 'bg-yellow-600';
+      case 'positive': return 'bg-accent';
+      case 'negative': return 'bg-destructive';
+      default: return 'bg-secondary';
     }
   };
 
   const getTrendIcon = (trend: number) => {
-    if (trend > 0) return <TrendingUp className="h-4 w-4 text-green-400" />;
-    if (trend < 0) return <TrendingDown className="h-4 w-4 text-red-400" />;
+    if (trend > 0) return <TrendingUp className="h-4 w-4 text-accent" />;
+    if (trend < 0) return <TrendingDown className="h-4 w-4 text-destructive" />;
     return <div className="h-4 w-4" />;
   };
 
@@ -186,48 +160,51 @@ useEffect(() => {
 
   if (sentimentData === null) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black text-white">
-        Loading sentiment data...
+      <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent mx-auto mb-4"></div>
+          <p>डेटा लोड हो रहा है...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <div className="sticky top-0 z-50 bg-gradient-to-r from-blue-900 to-black border-b border-blue-800 backdrop-blur-sm">
+      <div className="sticky top-0 z-50 bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-border backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => navigate('/dashboard')}
-              className="text-white hover:bg-blue-800"
+              className="text-foreground hover:bg-primary/10"
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="text-center">
-              <h1 className="text-xl font-bold">Customer Reviews & Feedback</h1>
-              <p className="text-xs text-blue-200">Sentiment Analysis Dashboard</p>
+              <h1 className="text-xl font-bold text-primary">⭐ ग्राहक रिव्यू</h1>
+              <p className="text-xs text-muted-foreground">सेंटीमेंट एनालिसिस</p>
             </div>
             <div className="flex gap-2">
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="border-blue-700 text-white hover:bg-blue-800"
+                className="border-border text-foreground hover:bg-primary/10"
                 onClick={handleFilter}
               >
                 <Filter className="h-4 w-4 mr-2" />
-                Filter
+                फ़िल्टर
               </Button>
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="border-blue-700 text-white hover:bg-blue-800"
+                className="border-border text-foreground hover:bg-primary/10"
                 onClick={handleExport}
               >
                 <Download className="h-4 w-4 mr-2" />
-                Export
+                एक्सपोर्ट
               </Button>
             </div>
           </div>
@@ -237,151 +214,109 @@ useEffect(() => {
       {/* Content */}
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-gradient-to-br from-emerald-900/20 to-black border-emerald-700">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <Card className="bg-card border-accent/30 shadow-lg">
             <CardContent className="p-6 flex justify-between items-center">
               <div>
-                <p className="text-sm text-gray-400">Positive Reviews</p>
-                <p className="text-2xl font-bold text-emerald-400">{sentimentData.overall.positive}%</p>
+                <p className="text-sm text-muted-foreground">पॉज़िटिव रिव्यू</p>
+                <p className="text-2xl font-bold text-accent">{sentimentData.overall.positive}%</p>
                 <div className="flex items-center mt-1">
                   {getTrendIcon(sentimentData.trends.positive)}
-                  <span className="text-xs text-emerald-400 ml-1">+{sentimentData.trends.positive}%</span>
+                  <span className="text-xs text-accent ml-1">+{sentimentData.trends.positive}%</span>
                 </div>
               </div>
-              <ThumbsUp className="h-8 w-8 text-emerald-400" />
+              <ThumbsUp className="h-8 w-8 text-accent" />
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-amber-900/20 to-black border-amber-700">
+          <Card className="bg-card border-secondary/30 shadow-lg">
             <CardContent className="p-6 flex justify-between items-center">
               <div>
-                <p className="text-sm text-gray-400">Neutral Reviews</p>
-                <p className="text-2xl font-bold text-amber-400">{sentimentData.overall.neutral}%</p>
+                <p className="text-sm text-muted-foreground">न्यूट्रल रिव्यू</p>
+                <p className="text-2xl font-bold text-secondary">{sentimentData.overall.neutral}%</p>
                 <div className="flex items-center mt-1">
                   {getTrendIcon(sentimentData.trends.neutral)}
-                  <span className="text-xs text-amber-400 ml-1">{sentimentData.trends.neutral}%</span>
+                  <span className="text-xs text-secondary ml-1">{sentimentData.trends.neutral}%</span>
                 </div>
               </div>
-              <MessageSquare className="h-8 w-8 text-amber-400" />
+              <MessageSquare className="h-8 w-8 text-secondary" />
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-rose-900/20 to-black border-rose-700">
+          <Card className="bg-card border-destructive/30 shadow-lg">
             <CardContent className="p-6 flex justify-between items-center">
               <div>
-                <p className="text-sm text-gray-400">Negative Reviews</p>
-                <p className="text-2xl font-bold text-rose-400">{sentimentData.overall.negative}%</p>
+                <p className="text-sm text-muted-foreground">नेगेटिव रिव्यू</p>
+                <p className="text-2xl font-bold text-destructive">{sentimentData.overall.negative}%</p>
                 <div className="flex items-center mt-1">
                   {getTrendIcon(sentimentData.trends.negative)}
-                  <span className="text-xs text-rose-400 ml-1">{sentimentData.trends.negative}%</span>
+                  <span className="text-xs text-destructive ml-1">{sentimentData.trends.negative}%</span>
                 </div>
               </div>
-              <ThumbsDown className="h-8 w-8 text-rose-400" />
+              <ThumbsDown className="h-8 w-8 text-destructive" />
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-indigo-900/20 to-black border-indigo-700">
+          <Card className="bg-card border-primary/30 shadow-lg">
             <CardContent className="p-6 flex justify-between items-center">
               <div>
-                <p className="text-sm text-gray-400">Average Rating</p>
-                <p className="text-2xl font-bold text-indigo-400">
+                <p className="text-sm text-muted-foreground">औसत रेटिंग</p>
+                <p className="text-2xl font-bold text-primary">
                   {sentimentData.overall.averageRating !== null ? sentimentData.overall.averageRating : '-'} / 5
                 </p>
                 <div className="flex items-center mt-1">
-                  <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                  <span className="text-xs text-gray-400 ml-1">{sentimentData.overall.total} reviews</span>
+                  <Star className="h-4 w-4 text-secondary fill-current" />
+                  <span className="text-xs text-muted-foreground ml-1">{sentimentData.overall.total} रिव्यू</span>
                 </div>
               </div>
-              <Star className="h-8 w-8 text-yellow-400" />
+              <Star className="h-8 w-8 text-secondary" />
             </CardContent>
           </Card>
         </div>
 
         {/* QR Code Feedback Collection Section */}
-        <Card className="bg-gradient-to-br from-purple-900/15 to-black border-purple-700 mb-8">
+        <Card className="bg-card border-primary/30 mb-8 shadow-lg">
           <CardContent className="p-8">
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <div className="flex items-center mb-4">
-                  <QrCode className="h-8 w-8 text-purple-400 mr-3" />
-                  <h3 className="text-2xl font-bold text-white">Quick Feedback Collection</h3>
+                  <QrCode className="h-8 w-8 text-primary mr-3" />
+                  <h3 className="text-2xl font-bold text-foreground">क्विक फीडबैक</h3>
                 </div>
-                <p className="text-gray-300 mb-6">
-                  Generate QR codes for easy customer feedback collection. Customers can scan and leave reviews instantly!
+                <p className="text-muted-foreground mb-6">
+                  QR कोड से आसान फीडबैक। ग्राहक स्कैन करके तुरंत रिव्यू दे सकते हैं!
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                  <div className="bg-gray-900/50 rounded-lg p-4">
-                    <div className="text-sm text-gray-400">QR Codes Generated</div>
-                    <div className="text-lg font-bold text-purple-400">24</div>
+                  <div className="bg-muted rounded-lg p-4">
+                    <div className="text-sm text-muted-foreground">QR कोड बनाए</div>
+                    <div className="text-lg font-bold text-primary">24</div>
                   </div>
-                  <div className="bg-gray-900/50 rounded-lg p-4">
-                    <div className="text-sm text-gray-400">Scans This Week</div>
-                    <div className="text-lg font-bold text-green-400">156</div>
+                  <div className="bg-muted rounded-lg p-4">
+                    <div className="text-sm text-muted-foreground">इस हफ्ते स्कैन</div>
+                    <div className="text-lg font-bold text-accent">156</div>
                   </div>
-                  <div className="bg-gray-900/50 rounded-lg p-4">
-                    <div className="text-sm text-gray-400">Response Rate</div>
-                    <div className="text-lg font-bold text-blue-400">68%</div>
+                  <div className="bg-muted rounded-lg p-4">
+                    <div className="text-sm text-muted-foreground">रिस्पॉन्स रेट</div>
+                    <div className="text-lg font-bold text-secondary">68%</div>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <Button 
-                    className="bg-purple-600 hover:bg-purple-700"
+                    className="bg-primary hover:bg-primary/90"
                     onClick={() => setShowQRCode(!showQRCode)}
                   >
                     <QrCode className="h-4 w-4 mr-2" />
-                    {showQRCode ? 'Hide QR Code' : 'Generate QR Code'}
+                    {showQRCode ? 'छुपाएं' : 'QR बनाएं'}
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="border-purple-600 text-purple-400 hover:bg-purple-900"
+                    className="border-border text-foreground hover:bg-primary/10"
                     onClick={handleMobileLink}
                   >
                     <Smartphone className="h-4 w-4 mr-2" />
-                    View Mobile Link
+                    मोबाइल लिंक
                   </Button>
                 </div>
-              </div>
-              <div className="ml-8 hidden lg:block">
-                {showQRCode ? (
-                  <div 
-                    className="w-48 h-48 bg-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
-                    onClick={() => {
-                      navigator.clipboard.writeText('https://rasoimitra.com/feedback');
-                      // Optional toast notification here
-                    }}
-                  >
-                    <div className="w-40 h-40 bg-gray-900 rounded-lg flex items-center justify-center">
-                      <div className="text-white text-xs text-center">
-                        <div className="mb-2">QR CODE</div>
-                        <div className="text-xs">Scan to leave feedback</div>
-                        <div className="text-xs mt-1">rasoimitra.com/feedback</div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="w-48 h-48 bg-gray-800 rounded-lg flex items-center justify-center">
-                    <div className="text-6xl text-gray-600">📱</div>
-                  </div>
-                )}
-                <p className="text-center text-sm text-gray-400 mt-2">
-                  {showQRCode ? 'Click QR Code to Copy Link' : 'Generate QR Code to Display'}
-                </p>
-                {showMobileLink && (
-                  <div className="mt-4 p-3 bg-gray-800 rounded-lg">
-                    <div className="text-xs text-gray-400 mb-2">Mobile Feedback Link:</div>
-                    <div className="text-sm text-blue-400 break-all">https://rasoimitra.com/feedback/mobile</div>
-                    <Button 
-                      size="sm" 
-                      className="mt-2 bg-blue-600 hover:bg-blue-700 text-xs"
-                      onClick={() => {
-                        navigator.clipboard.writeText('https://rasoimitra.com/feedback/mobile');
-                        // Optional toast notification
-                      }}
-                    >
-                      Copy Link
-                    </Button>
-                  </div>
-                )}
               </div>
             </div>
           </CardContent>
@@ -389,14 +324,14 @@ useEffect(() => {
 
         {/* Filter Panel */}
         {showFilter && (
-          <Card className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700 mb-6">
+          <Card className="bg-card border-border mb-6 shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">Filter Options</h3>
+                <h3 className="text-lg font-semibold text-foreground">फ़िल्टर ऑप्शन</h3>
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-gray-400 hover:text-white"
+                  className="text-muted-foreground hover:text-foreground"
                   onClick={() => setShowFilter(false)}
                 >
                   ✕
@@ -404,337 +339,131 @@ useEffect(() => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="text-sm text-gray-400 mb-2 block">Time Period</label>
-                  <select className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white">
-                    <option value="7d">Last 7 days</option>
-                    <option value="30d">Last 30 days</option>
-                    <option value="90d">Last 90 days</option>
+                  <label className="text-sm text-muted-foreground mb-2 block">समय अवधि</label>
+                  <select className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground">
+                    <option value="7d">पिछले 7 दिन</option>
+                    <option value="30d">पिछले 30 दिन</option>
+                    <option value="90d">पिछले 90 दिन</option>
                   </select>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400 mb-2 block">Sentiment</label>
-                  <select className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white">
-                    <option value="all">All Sentiments</option>
-                    <option value="positive">Positive Only</option>
-                    <option value="neutral">Neutral Only</option>
-                    <option value="negative">Negative Only</option>
+                  <label className="text-sm text-muted-foreground mb-2 block">सेंटीमेंट</label>
+                  <select className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground">
+                    <option value="all">सभी</option>
+                    <option value="positive">पॉज़िटिव</option>
+                    <option value="neutral">न्यूट्रल</option>
+                    <option value="negative">नेगेटिव</option>
                   </select>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-400 mb-2 block">Category</label>
-                  <select className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white">
-                    <option value="all">All Categories</option>
-                    <option value="food">Food Quality</option>
-                    <option value="service">Service Speed</option>
-                    <option value="cleanliness">Cleanliness</option>
-                    <option value="value">Value for Money</option>
-                    <option value="staff">Staff Behavior</option>
+                  <label className="text-sm text-muted-foreground mb-2 block">कैटेगरी</label>
+                  <select className="w-full bg-background border border-border rounded-lg px-3 py-2 text-foreground">
+                    <option value="all">सभी</option>
+                    <option value="food">खाने की क्वालिटी</option>
+                    <option value="service">सर्विस स्पीड</option>
+                    <option value="cleanliness">साफ-सफाई</option>
+                    <option value="staff">स्टाफ व्यवहार</option>
                   </select>
                 </div>
               </div>
               <div className="flex gap-3 mt-4">
-                <Button className="bg-blue-600 hover:bg-blue-700">
-                  Apply Filters
+                <Button className="bg-primary hover:bg-primary/90">
+                  फ़िल्टर लगाएं
                 </Button>
-                <Button variant="outline" className="border-gray-600 text-gray-300">
-                  Clear All
+                <Button variant="outline" className="border-border text-foreground">
+                  रीसेट
                 </Button>
               </div>
             </CardContent>
           </Card>
         )}
 
-        {/* Main Content Tabs */}
-        <Tabs defaultValue="sentiment" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-gray-800 border-blue-700">
-            <TabsTrigger value="sentiment" className="data-[state=active]:bg-blue-600">Sentiment Analysis</TabsTrigger>
-            <TabsTrigger value="categories" className="data-[state=active]:bg-blue-600">City wide Category Breakdown</TabsTrigger>
-            <TabsTrigger value="reviews" className="data-[state=active]:bg-blue-600">Recent Reviews</TabsTrigger>
+        {/* Tabs Content */}
+        <Tabs defaultValue="reviews" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2 bg-muted">
+            <TabsTrigger value="reviews" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              📝 हाल के रिव्यू
+            </TabsTrigger>
+            <TabsTrigger value="analysis" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              📊 कैटेगरी एनालिसिस
+            </TabsTrigger>
           </TabsList>
 
-          {/* Sentiment Analysis Tab */}
-          <TabsContent value="sentiment" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Pie Chart - Sentiment Distribution */}
-              <Card className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
-                <CardHeader>
-                  <CardTitle className="text-white">Sentiment Distribution</CardTitle>
-                  <CardDescription className="text-gray-400">Overall customer sentiment breakdown</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-center mb-6">
-                    <div className="relative w-48 h-48">
-                      {/* Pie Chart SVG */}
-                      <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                        {/* Positive slice */}
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="40"
-                          fill="none"
-                          stroke="#10b981"
-                          strokeWidth="8"
-                          strokeDasharray={`${sentimentData.overall.positive * 2.51} 251`}
-                          className="drop-shadow-lg"
-                        />
-                        {/* Neutral slice */}
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="40"
-                          fill="none"
-                          stroke="#f59e0b"
-                          strokeWidth="8"
-                          strokeDasharray={`${sentimentData.overall.neutral * 2.51} 251`}
-                          strokeDashoffset={`-${sentimentData.overall.positive * 2.51}`}
-                          className="drop-shadow-lg"
-                        />
-                        {/* Negative slice */}
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="40"
-                          fill="none"
-                          stroke="#ef4444"
-                          strokeWidth="8"
-                          strokeDasharray={`${sentimentData.overall.negative * 2.51} 251`}
-                          strokeDashoffset={`-${(sentimentData.overall.positive + sentimentData.overall.neutral) * 2.51}`}
-                          className="drop-shadow-lg"
-                        />
-                      </svg>
-                      {/* Center text */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="text-2xl font-bold text-white">{sentimentData.overall.total}</div>
-                          <div className="text-xs text-gray-400">Total Reviews</div>
-                        </div>
-                      </div>
+          <TabsContent value="reviews" className="space-y-4">
+            {recentReviews.map((review) => (
+              <Card key={review.id} className="bg-card border-border shadow-lg">
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h4 className="font-bold text-foreground">{review.customer}</h4>
+                      <p className="text-sm text-muted-foreground">{review.date}</p>
                     </div>
-                  </div>
-                  {/* Legend */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <div className="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
-                        <span className="text-sm text-gray-300">Positive</span>
-                      </div>
-                      <span className="text-sm font-semibold text-green-400">{sentimentData.overall.positive}%</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <div className="w-4 h-4 bg-yellow-500 rounded-full mr-3"></div>
-                        <span className="text-sm text-gray-300">Neutral</span>
-                      </div>
-                      <span className="text-sm font-semibold text-yellow-400">{sentimentData.overall.neutral}%</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <div className="w-4 h-4 bg-red-500 rounded-full mr-3"></div>
-                        <span className="text-sm text-gray-300">Negative</span>
-                      </div>
-                      <span className="text-sm font-semibold text-red-400">{sentimentData.overall.negative}%</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Bar Chart - Citywise Sentiment */}
-              <Card className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
-                <CardHeader>
-                  <CardTitle className="text-white">Citywise Sentiment Breakdown</CardTitle>
-                  <CardDescription className="text-gray-400">Sentiment distribution across cities</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {sentimentData.categories.slice(0, 6).map((city, index) => (
-                      <div key={index} className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium text-white">{city.name || "Unknown"}</span>
-                          <span className="text-xs text-gray-400">{city.positive + city.negative} reviews</span>
-                        </div>
-                        <div className="flex h-6 bg-gray-800 rounded-lg overflow-hidden">
-                          <div 
-                            className="bg-green-500 flex items-center justify-center"
-                            style={{ width: `${city.positive}%` }}
-                          >
-                            <span className="text-xs font-bold text-white">{city.positive}%</span>
-                          </div>
-                          <div 
-                            className="bg-yellow-500 flex items-center justify-center"
-                            style={{ width: `${city.neutral}%` }}
-                          >
-                            <span className="text-xs font-bold text-white">{city.neutral}%</span>
-                          </div>
-                          <div 
-                            className="bg-red-500 flex items-center justify-center"
-                            style={{ width: `${city.negative}%` }}
-                          >
-                            <span className="text-xs font-bold text-white">{city.negative}%</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          {/* Citywide Category Breakdown Tab */}
-          <TabsContent value="categories" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Horizontal Bar Chart for Categories */}
-              <Card className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
-                <CardHeader>
-                  <CardTitle className="text-white">City wide Category Performance</CardTitle>
-                  <CardDescription className="text-gray-400">Sentiment breakdown by category</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-6">
-                    {sentimentData.categories.map((category, index) => (
-                      <div key={index} className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium text-white">{category.name}</span>
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs text-gray-400">Trend:</span>
-                            {category.trend > 0 ? (
-                              <span className="text-xs text-green-400">+{category.trend}% ↗️</span>
-                            ) : (
-                              <span className="text-xs text-red-400">{category.trend}% ↘️</span>
-                            )}
-                          </div>
-                        </div>
-                        <div className="space-y-1">
-                          {/* Positive bar */}
-                          <div className="flex items-center">
-                            <div className="w-16 text-xs text-gray-400">Positive</div>
-                            <div className="flex-1 bg-gray-800 rounded-full h-3 overflow-hidden">
-                              <div 
-                                className="bg-green-500 h-full flex items-center justify-end pr-2"
-                                style={{ width: `${category.positive}%` }}
-                              >
-                                <span className="text-xs font-bold text-white">{category.positive}%</span>
-                              </div>
-                            </div>
-                          </div>
-                          {/* Neutral bar */}
-                          <div className="flex items-center">
-                            <div className="w-16 text-xs text-gray-400">Neutral</div>
-                            <div className="flex-1 bg-gray-800 rounded-full h-3 overflow-hidden">
-                              <div 
-                                className="bg-yellow-500 h-full flex items-center justify-end pr-2"
-                                style={{ width: `${category.neutral}%` }}
-                              >
-                                <span className="text-xs font-bold text-white">{category.neutral}%</span>
-                              </div>
-                            </div>
-                          </div>
-                          {/* Negative bar */}
-                          <div className="flex items-center">
-                            <div className="w-16 text-xs text-gray-400">Negative</div>
-                            <div className="flex-1 bg-gray-800 rounded-full h-3 overflow-hidden">
-                              <div 
-                                className="bg-red-500 h-full flex items-center justify-end pr-2"
-                                style={{ width: `${category.negative}%` }}
-                              >
-                                <span className="text-xs font-bold text-white">{category.negative}%</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Radar Chart for Category Comparison (simplified to bar here) */}
-              <Card className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
-                <CardHeader>
-                  <CardTitle className="text-white">Category Comparison</CardTitle>
-                  <CardDescription className="text-gray-400">Positive sentiment across all categories</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {sentimentData.categories.map((category, index) => (
-                      <div key={index} className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium text-white">{category.name}</span>
-                          <span className="text-sm font-bold text-green-400">{category.positive}%</span>
-                        </div>
-                        <div className="w-full bg-gray-800 rounded-full h-4 overflow-hidden">
-                          <div 
-                            className="bg-gradient-to-r from-green-500 to-emerald-500 h-full flex items-center justify-end pr-3 transition-all duration-1000 ease-out"
-                            style={{ width: `${category.positive}%` }}
-                          >
-                            <span className="text-xs font-bold text-white">{category.positive}%</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-6 p-4 bg-gray-800/50 rounded-lg">
-                    <div className="text-sm text-gray-300 mb-2">Top Performing Categories:</div>
-                    <div className="space-y-1">
-                      {sentimentData.categories
-                        .sort((a, b) => b.positive - a.positive)
-                        .slice(0, 3)
-                        .map((category, index) => (
-                          <div key={index} className="flex justify-between items-center text-xs">
-                            <span className="text-gray-400">{index + 1}. {category.name}</span>
-                            <span className="text-green-400 font-semibold">{category.positive}%</span>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          {/* Recent Reviews Tab */}
-          <TabsContent value="reviews" className="space-y-6">
-            <div className="space-y-4">
-              {recentReviews.map((review) => (
-                <Card key={review.id} className="bg-gradient-to-br from-gray-900/80 to-black border-blue-700">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center">
-                        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center mr-3">
-                          <span className="text-white font-semibold">
-                            {review.customer.split(' ').map(n => n[0]).join('')}
-                          </span>
-                        </div>
-                        <div>
-                          <h4 className="text-white font-semibold">{review.customer}</h4>
-                          <p className="text-sm text-gray-400">{review.date}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <Badge className={`${getSentimentBg(review.sentiment)} text-white`}>
-                          {review.sentiment}
-                        </Badge>
-                      </div>
-                    </div>
-                    <div className="flex items-center mb-3">
-                      <div className="flex items-center mr-4">
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
                         {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-4 w-4 ${i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-600'}`}
+                          <Star 
+                            key={i} 
+                            className={`h-4 w-4 ${i < review.rating ? 'text-secondary fill-current' : 'text-muted'}`} 
                           />
                         ))}
-                        <span className="ml-2 text-sm text-gray-400">({review.rating}/5)</span>
                       </div>
-                      <Badge variant="outline" className="border-blue-600 text-blue-400">
-                        {review.category}
+                      <Badge className={getSentimentBg(review.sentiment)}>
+                        {review.sentiment === 'positive' ? 'पॉज़िटिव' : review.sentiment === 'negative' ? 'नेगेटिव' : 'न्यूट्रल'}
                       </Badge>
                     </div>
-                    <p className="text-gray-300">{review.comment}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                  </div>
+                  <p className="text-muted-foreground mb-3">{review.comment}</p>
+                  <Badge variant="outline" className="border-border text-muted-foreground">
+                    {review.category}
+                  </Badge>
+                </CardContent>
+              </Card>
+            ))}
+          </TabsContent>
+
+          <TabsContent value="analysis" className="space-y-4">
+            <Card className="bg-card border-border shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-foreground">कैटेगरी वाइज़ एनालिसिस</CardTitle>
+                <CardDescription className="text-muted-foreground">हर कैटेगरी में ग्राहकों की राय</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {sentimentData.categories.map((category, index) => (
+                    <div key={index} className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium text-foreground">{category.name}</span>
+                        <div className="flex items-center gap-2">
+                          {getTrendIcon(category.trend)}
+                          <span className={category.trend >= 0 ? 'text-accent' : 'text-destructive'}>
+                            {category.trend >= 0 ? '+' : ''}{category.trend}%
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex h-4 rounded-full overflow-hidden bg-muted">
+                        <div 
+                          className="bg-accent" 
+                          style={{ width: `${category.positive}%` }}
+                        />
+                        <div 
+                          className="bg-secondary" 
+                          style={{ width: `${category.neutral}%` }}
+                        />
+                        <div 
+                          className="bg-destructive" 
+                          style={{ width: `${category.negative}%` }}
+                        />
+                      </div>
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>पॉज़िटिव: {category.positive}%</span>
+                        <span>न्यूट्रल: {category.neutral}%</span>
+                        <span>नेगेटिव: {category.negative}%</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </div>

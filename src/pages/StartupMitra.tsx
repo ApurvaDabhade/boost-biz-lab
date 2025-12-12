@@ -25,7 +25,7 @@ const StartupMitra = () => {
     {
       id: '1',
       type: 'bot',
-      content: 'Namaste! I\'m Startup Mitra, your AI business advisor. I can help you with menu suggestions, location advice, supplier connections, and business basics. What would you like to know?',
+      content: 'नमस्ते! मैं Startup Mitra हूँ, आपका AI बिज़नेस सलाहकार। मैं आपको मेनू सुझाव, स्थान सलाह, सप्लायर कनेक्शन और बिज़नेस बेसिक्स में मदद कर सकता हूँ। आप क्या जानना चाहते हैं?',
       timestamp: new Date(),
     },
   ]);
@@ -33,16 +33,16 @@ const StartupMitra = () => {
   const [isRecording, setIsRecording] = useState(false);
 
   const quickActions = [
-    { icon: Lightbulb, label: t('startup.menuSuggestions'), color: 'text-yellow-400' },
-    { icon: MapPin, label: t('startup.locationAdvice'), color: 'text-green-400' },
-    { icon: Users, label: t('startup.supplierConnections'), color: 'text-blue-400' },
-    { icon: BookOpen, label: t('startup.businessBasics'), color: 'text-purple-400' },
+    { icon: Lightbulb, label: 'मेनू सुझाव', color: 'text-primary' },
+    { icon: MapPin, label: 'स्थान सलाह', color: 'text-accent' },
+    { icon: Users, label: 'सप्लायर कनेक्शन', color: 'text-secondary' },
+    { icon: BookOpen, label: 'बिज़नेस बेसिक्स', color: 'text-primary' },
   ];
 
   const exampleQuestions = [
-    t('startup.example1'),
-    t('startup.example2'),
-    t('startup.example3'),
+    'मेरे क्षेत्र में कौन से व्यंजन बेचूं?',
+    'स्टॉल लगाने के लिए सबसे अच्छी जगह?',
+    'पनीर रोल की कीमत क्या रखूं?',
   ];
 
   const handleSendMessage = () => {
@@ -58,7 +58,6 @@ const StartupMitra = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
 
-    // Simulate AI response
     setTimeout(() => {
       const botResponse = generateAIResponse(inputValue);
       const botMessage: Message = {
@@ -74,65 +73,61 @@ const StartupMitra = () => {
   const generateAIResponse = (question: string): string => {
     const lowerQuestion = question.toLowerCase();
 
-    if (lowerQuestion.includes('menu') || lowerQuestion.includes('dish') || lowerQuestion.includes('food')) {
-      return 'Based on your location near tourist areas, I recommend:\n\n1. **Pani Puri** - High demand, low cost (₹5-10 per plate)\n2. **Masala Dosa** - Popular breakfast item (₹40-60)\n3. **Cold Coffee/Lassi** - Great for summer months (₹30-50)\n\nThese items have 80% profit margins and are trending in your area!';
+    if (lowerQuestion.includes('menu') || lowerQuestion.includes('dish') || lowerQuestion.includes('food') || lowerQuestion.includes('मेनू') || lowerQuestion.includes('व्यंजन')) {
+      return '📍 आपके क्षेत्र के आधार पर सुझाव:\n\n1. **पानी पूरी** - कम खर्च में बढ़िया मुनाफा (₹5-10 प्रति प्लेट)\n2. **मसाला डोसा** - सुबह का लोकप्रिय आइटम (₹40-60)\n3. **कोल्ड कॉफी/लस्सी** - गर्मियों के लिए बढ़िया (₹30-50)\n\n💡 इन आइटम्स में 80% मुनाफा है!';
     }
 
-    if (lowerQuestion.includes('location') || lowerQuestion.includes('stall') || lowerQuestion.includes('where')) {
-      return 'Based on tourist flow analysis:\n\n**Top 3 Locations:**\n1. Near Gateway of India - 5000+ daily footfall\n2. Colaba Market Area - High tourist traffic in evenings\n3. Marine Drive - Weekend hotspot\n\n💡 Tip: Set up between 5 PM - 10 PM for maximum sales!';
+    if (lowerQuestion.includes('location') || lowerQuestion.includes('stall') || lowerQuestion.includes('where') || lowerQuestion.includes('स्थान') || lowerQuestion.includes('जगह')) {
+      return '📍 टूरिस्ट ट्रैफिक के आधार पर:\n\n**टॉप 3 जगहें:**\n1. गेटवे ऑफ इंडिया के पास - 5000+ दैनिक भीड़\n2. कोलाबा मार्केट - शाम को ज़्यादा ग्राहक\n3. मरीन ड्राइव - वीकेंड हॉटस्पॉट\n\n💡 टिप: शाम 5 से 10 बजे के बीच सेटअप करें!';
     }
 
-    if (lowerQuestion.includes('price') || lowerQuestion.includes('pricing') || lowerQuestion.includes('cost')) {
-      return 'Smart Pricing Strategy:\n\n1. **Cost-Plus Method:** Calculate ingredient cost + 200-300% markup\n2. **Competitive Pricing:** Check nearby vendors (I found 3 similar stalls charging ₹40-60)\n3. **Value Pricing:** Bundle items (Pani Puri + Sev Puri = ₹80)\n\nRecommendation: Start at ₹50 per plate and adjust based on demand!';
+    if (lowerQuestion.includes('price') || lowerQuestion.includes('pricing') || lowerQuestion.includes('cost') || lowerQuestion.includes('कीमत')) {
+      return '💰 स्मार्ट प्राइसिंग:\n\n1. **लागत + मुनाफा:** सामग्री की लागत + 200-300% मार्कअप\n2. **प्रतियोगी मूल्य:** पास के विक्रेता ₹40-60 ले रहे हैं\n3. **कॉम्बो डील:** पानी पूरी + सेव पूरी = ₹80\n\n✅ सुझाव: ₹50 प्रति प्लेट से शुरू करें!';
     }
 
-    if (lowerQuestion.includes('supplier') || lowerQuestion.includes('ingredient') || lowerQuestion.includes('vendor')) {
-      return 'Local Supplier Connections:\n\n**Vegetables:**\n- Mumbai Vegetable Market - 2.5 km away\n- Daily delivery available\n\n**Spices & Masala:**\n- Spice Bazaar - 1.8 km away\n- Bulk discounts available\n\n**Dairy (Paneer, Milk):**\n- Fresh Dairy Co. - 3 km away\n- Next-day delivery\n\nWould you like me to connect you with any of these suppliers?';
-    }
-
-    return 'That\'s a great question! As your AI advisor, I can help with:\n\n📋 Menu Planning & Item Suggestions\n📍 Best Locations for Setup\n💰 Pricing Strategies\n🤝 Supplier & Vendor Connections\n📊 Inventory Management Tips\n🎯 Marketing & Branding Basics\n\nWhat specific area would you like to explore?';
+    return '🙏 बढ़िया सवाल! मैं इनमें मदद कर सकता हूँ:\n\n📋 मेनू प्लानिंग\n📍 सबसे अच्छी जगह\n💰 प्राइसिंग\n🤝 सप्लायर कनेक्शन\n📊 इन्वेंटरी टिप्स\n🎯 मार्केटिंग बेसिक्स\n\nआप क्या जानना चाहेंगे?';
   };
 
   const handleQuickAction = (label: string) => {
     setInputValue(label);
     toast({
-      title: 'Quick action selected',
-      description: 'Click send to get personalized advice',
+      title: 'क्विक एक्शन चुना गया',
+      description: 'सलाह पाने के लिए भेजें दबाएं',
     });
   };
 
   const handleVoiceInput = () => {
     setIsRecording(!isRecording);
     toast({
-      title: isRecording ? 'Voice recording stopped' : 'Voice recording started',
-      description: isRecording ? 'Processing your question...' : 'Speak your question now',
+      title: isRecording ? 'रिकॉर्डिंग बंद' : 'रिकॉर्डिंग शुरू',
+      description: isRecording ? 'आपका सवाल प्रोसेस हो रहा है...' : 'अभी अपना सवाल बोलें',
     });
 
     if (!isRecording) {
       setTimeout(() => {
-        setInputValue('What dishes should I sell in this area?');
+        setInputValue('इस क्षेत्र में कौन से व्यंजन बेचूं?');
         setIsRecording(false);
       }, 2000);
     }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <div className="sticky top-0 z-50 bg-gradient-to-r from-blue-900 to-black border-b border-blue-800 backdrop-blur-sm">
+      <div className="sticky top-0 z-50 bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-border backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => navigate('/dashboard')}
-              className="text-white hover:bg-blue-800"
+              className="text-foreground hover:bg-primary/10"
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="text-center">
-              <h1 className="text-2xl font-bold">{t('startup.title')}</h1>
-              <p className="text-sm text-blue-200">{t('startup.subtitle')}</p>
+              <h1 className="text-2xl font-bold text-primary">🚀 Startup Mitra</h1>
+              <p className="text-sm text-muted-foreground">आपका बिज़नेस सलाहकार</p>
             </div>
             <div className="w-10" />
           </div>
@@ -140,32 +135,32 @@ const StartupMitra = () => {
       </div>
 
       {/* Hero Section */}
-      <div className="relative h-64 overflow-hidden">
+      <div className="relative h-48 overflow-hidden">
         <img
           src={startupImage}
           alt="Startup Journey"
           className="w-full h-full object-cover opacity-50"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent flex items-end">
-          <div className="container mx-auto px-4 pb-6">
-            <h2 className="text-3xl font-bold mb-2 animate-fade-in-up">Your 24x7 Business Mentor</h2>
-            <p className="text-blue-200 animate-fade-in-up">Get expert guidance on starting and growing your food business</p>
+        <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent flex items-end">
+          <div className="container mx-auto px-4 pb-4">
+            <h2 className="text-2xl font-bold mb-1 animate-fade-in-up">24x7 बिज़नेस गाइड</h2>
+            <p className="text-muted-foreground animate-fade-in-up text-sm">फ़ूड बिज़नेस शुरू करने में एक्सपर्ट सलाह</p>
           </div>
         </div>
       </div>
 
       {/* Quick Actions */}
       <div className="container mx-auto px-4 py-6">
-        <h3 className="text-xl font-bold mb-4">Quick Help</h3>
+        <h3 className="text-xl font-bold mb-4 text-foreground">जल्दी मदद</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           {quickActions.map((action, index) => (
             <Card
               key={index}
-              className="bg-gradient-to-br from-gray-900 to-black border-blue-700 p-4 cursor-pointer hover:border-blue-500 transition-all card-hover"
+              className="bg-card border-border p-4 cursor-pointer hover:border-primary/50 transition-all card-hover"
               onClick={() => handleQuickAction(action.label)}
             >
               <action.icon className={`h-8 w-8 ${action.color} mb-2`} />
-              <p className="text-sm text-white">{action.label}</p>
+              <p className="text-sm text-card-foreground font-medium">{action.label}</p>
             </Card>
           ))}
         </div>
@@ -175,13 +170,13 @@ const StartupMitra = () => {
           <img
             src={aiAssistantImage}
             alt="AI Assistant"
-            className="w-full h-48 object-cover"
+            className="w-full h-32 object-cover"
           />
         </div>
 
         {/* Chat Area */}
-        <Card className="bg-gradient-to-br from-gray-900 to-black border-blue-700 mb-20">
-          <ScrollArea className="h-[400px] p-4">
+        <Card className="bg-card border-border mb-20">
+          <ScrollArea className="h-[300px] p-4">
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -190,13 +185,13 @@ const StartupMitra = () => {
                 } animate-fade-in-up`}
               >
                 <div
-                  className={`inline-block max-w-[80%] p-3 rounded-lg ${
+                  className={`inline-block max-w-[85%] p-3 rounded-lg ${
                     message.type === 'user'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-800 text-white border border-blue-700'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted text-card-foreground border border-border'
                   }`}
                 >
-                  <p className="whitespace-pre-line">{message.content}</p>
+                  <p className="whitespace-pre-line text-sm">{message.content}</p>
                   <p className="text-xs mt-1 opacity-70">
                     {message.timestamp.toLocaleTimeString()}
                   </p>
@@ -208,13 +203,13 @@ const StartupMitra = () => {
 
         {/* Example Questions */}
         <div className="mb-20">
-          <h4 className="text-sm text-blue-200 mb-3">Example Questions:</h4>
+          <h4 className="text-sm text-muted-foreground mb-3">उदाहरण सवाल:</h4>
           <div className="space-y-2">
             {exampleQuestions.map((question, index) => (
               <Button
                 key={index}
                 variant="outline"
-                className="w-full text-left justify-start bg-blue-900/30 border-blue-600 text-blue-100 hover:bg-blue-800 hover:text-white hover:border-blue-500 transition-all"
+                className="w-full text-left justify-start bg-card border-border text-card-foreground hover:bg-primary/10 hover:border-primary/50 transition-all"
                 onClick={() => setInputValue(question)}
               >
                 {question}
@@ -225,7 +220,7 @@ const StartupMitra = () => {
       </div>
 
       {/* Input Area */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black to-transparent p-4 border-t border-blue-800">
+      <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background to-transparent p-4 border-t border-border">
         <div className="container mx-auto max-w-4xl flex gap-2">
           <Button
             size="icon"
@@ -239,12 +234,12 @@ const StartupMitra = () => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            placeholder={t('startup.askQuestion')}
-            className="bg-gray-900 border-blue-700 text-white placeholder:text-gray-400"
+            placeholder="अपना सवाल यहाँ लिखें..."
+            className="bg-card border-border text-foreground placeholder:text-muted-foreground"
           />
           <Button
             onClick={handleSendMessage}
-            className="bg-blue-600 hover:bg-blue-700 flex-shrink-0"
+            className="bg-primary hover:bg-primary/90 flex-shrink-0"
           >
             <Send className="h-5 w-5" />
           </Button>

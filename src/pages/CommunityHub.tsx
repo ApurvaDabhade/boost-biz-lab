@@ -49,78 +49,78 @@ const CommunityHub = () => {
     {
       id: '1',
       type: 'request',
-      userName: 'Rajesh Kumar',
-      item: 'Paneer',
+      userName: 'राजेश कुमार',
+      item: 'पनीर',
       quantity: '20 kg',
       urgency: 'urgent',
       distance: 1.2,
       isVerified: true,
       phone: '+91 98765 43210',
       timestamp: new Date(Date.now() - 3600000),
-      description: 'Need for Navratri orders. Urgent requirement!',
+      description: 'नवरात्रि ऑर्डर के लिए चाहिए। जरूरी!',
     },
     {
       id: '2',
       type: 'offer',
-      userName: 'Priya Sharma',
-      item: 'Tomatoes',
+      userName: 'प्रिया शर्मा',
+      item: 'टमाटर',
       quantity: '15 kg',
       urgency: 'normal',
       distance: 0.8,
       isVerified: true,
       phone: '+91 98765 43211',
       timestamp: new Date(Date.now() - 7200000),
-      description: 'Fresh tomatoes, slightly overstock. Good price available.',
+      description: 'ताज़े टमाटर, थोड़ा ज़्यादा है। अच्छी कीमत मिलेगी।',
     },
     {
       id: '3',
       type: 'request',
-      userName: 'Amit Patel',
-      item: 'Cooking Oil',
-      quantity: '10 liters',
+      userName: 'अमित पटेल',
+      item: 'खाना पकाने का तेल',
+      quantity: '10 लीटर',
       urgency: 'normal',
       distance: 2.5,
       isVerified: false,
       phone: '+91 98765 43212',
       timestamp: new Date(Date.now() - 10800000),
-      description: 'Need refined oil for festival cooking',
+      description: 'त्योहार की रसोई के लिए रिफाइंड तेल चाहिए',
     },
     {
       id: '4',
       type: 'offer',
-      userName: 'Meena Devi',
-      item: 'Fresh Coriander',
+      userName: 'मीना देवी',
+      item: 'ताज़ा धनिया',
       quantity: '5 kg',
       urgency: 'urgent',
       distance: 1.5,
       isVerified: true,
       phone: '+91 98765 43213',
       timestamp: new Date(Date.now() - 14400000),
-      description: 'Excess stock, must sell today. Best price!',
+      description: 'ज़्यादा स्टॉक है, आज बेचना है। बढ़िया कीमत!',
     },
     {
       id: '5',
       type: 'festival-help',
-      userName: 'Ramesh Vendors',
-      item: 'Diwali Special Orders',
-      quantity: '50 orders',
+      userName: 'रमेश वेंडर्स',
+      item: 'दिवाली स्पेशल ऑर्डर',
+      quantity: '50 ऑर्डर',
       urgency: 'urgent',
       distance: 0.5,
       isVerified: true,
       phone: '+91 98765 43215',
       timestamp: new Date(Date.now() - 1800000),
-      description: 'High demand during Diwali! Need nearby restaurants to help fulfill orders. Good profit opportunity!',
+      description: 'दिवाली में बहुत डिमांड! पास की दुकानों से मदद चाहिए। अच्छा मुनाफा!',
       isFestivalHelp: true,
       totalOrders: 50,
-      profitShare: '40% of revenue',
+      profitShare: 'कमाई का 40%',
     },
   ]);
 
   const handleSubmitPost = () => {
     if (!formData.item || !formData.quantity) {
       toast({
-        title: 'Missing information',
-        description: 'Please fill in all required fields',
+        title: 'जानकारी अधूरी',
+        description: 'कृपया सभी जरूरी फील्ड भरें',
         variant: 'destructive',
       });
       return;
@@ -129,7 +129,7 @@ const CommunityHub = () => {
     const newPost: CommunityPost = {
       id: Date.now().toString(),
       type: postType,
-      userName: 'You',
+      userName: 'आप',
       item: formData.item,
       quantity: formData.quantity,
       urgency: formData.urgency,
@@ -145,22 +145,22 @@ const CommunityHub = () => {
     setFormData({ item: '', quantity: '', description: '', urgency: 'normal', totalOrders: '', profitShare: '50' });
 
     toast({
-      title: postType === 'request' ? 'Request posted!' : 'Offer posted!',
-      description: 'Your post is now visible to the community',
+      title: postType === 'request' ? 'मांग पोस्ट हुई!' : 'ऑफर पोस्ट हुआ!',
+      description: 'आपकी पोस्ट अब कम्युनिटी को दिख रही है',
     });
   };
 
   const handleContact = (post: CommunityPost) => {
     toast({
-      title: 'Contact Information',
-      description: `Call ${post.userName} at ${post.phone}`,
+      title: 'संपर्क जानकारी',
+      description: `${post.userName} को कॉल करें: ${post.phone}`,
     });
   };
 
   const handleAcceptHelp = (post: CommunityPost) => {
     toast({
-      title: 'Help Request Accepted!',
-      description: `You've accepted to help with ${post.totalOrders} orders. Profit share: ${post.profitShare}`,
+      title: 'मदद स्वीकार!',
+      description: `आपने ${post.totalOrders} ऑर्डर में मदद स्वीकार की। मुनाफा: ${post.profitShare}`,
     });
   };
 
@@ -172,22 +172,22 @@ const CommunityHub = () => {
   });
 
   return (
-    <div className="min-h-screen bg-black text-white pb-20">
+    <div className="min-h-screen bg-background text-foreground pb-20">
       {/* Header */}
-      <div className="sticky top-0 z-50 bg-gradient-to-r from-blue-900 to-black border-b border-blue-800 backdrop-blur-sm">
+      <div className="sticky top-0 z-50 bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-border backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => navigate('/dashboard')}
-              className="text-white hover:bg-blue-800"
+              className="text-foreground hover:bg-primary/10"
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="text-center">
-              <h1 className="text-2xl font-bold">{t('community.title')}</h1>
-              <p className="text-sm text-blue-200">{t('community.subtitle')}</p>
+              <h1 className="text-2xl font-bold text-primary">🤝 कम्युनिटी हब</h1>
+              <p className="text-sm text-muted-foreground">वेंडर नेटवर्क से जुड़ें</p>
             </div>
             <div className="w-10" />
           </div>
@@ -195,16 +195,16 @@ const CommunityHub = () => {
       </div>
 
       {/* Hero Image */}
-      <div className="relative h-64 overflow-hidden">
+      <div className="relative h-48 overflow-hidden">
         <img
           src={communityImage}
           alt="Community Hub"
           className="w-full h-full object-cover opacity-60"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent flex items-end">
-          <div className="container mx-auto px-4 pb-6">
-            <h2 className="text-3xl font-bold mb-2 animate-fade-in-up">Build Your Vendor Network</h2>
-            <p className="text-blue-200 animate-fade-in-up">Exchange ingredients, share resources, grow together</p>
+        <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent flex items-end">
+          <div className="container mx-auto px-4 pb-4">
+            <h2 className="text-2xl font-bold mb-1 animate-fade-in-up">अपना वेंडर नेटवर्क बनाएं</h2>
+            <p className="text-muted-foreground animate-fade-in-up text-sm">सामान का आदान-प्रदान करें, साथ बढ़ें</p>
           </div>
         </div>
       </div>
@@ -216,34 +216,33 @@ const CommunityHub = () => {
             onClick={() => setActiveTab('requests')}
             className={`flex-1 ${
               activeTab === 'requests'
-                ? 'bg-blue-600 hover:bg-blue-700'
-                : 'bg-gray-800 hover:bg-gray-700'
+                ? 'bg-primary hover:bg-primary/90'
+                : 'bg-muted hover:bg-muted/80 text-foreground'
             }`}
           >
             <AlertCircle className="h-5 w-5 mr-2" />
-            {t('community.requests')} ({posts.filter((p) => p.type === 'request').length})
+            मांग ({posts.filter((p) => p.type === 'request').length})
           </Button>
           <Button
             onClick={() => setActiveTab('offers')}
             className={`flex-1 ${
               activeTab === 'offers'
-                ? 'bg-green-600 hover:bg-green-700'
-                : 'bg-gray-800 hover:bg-gray-700'
+                ? 'bg-accent hover:bg-accent/90'
+                : 'bg-muted hover:bg-muted/80 text-foreground'
             }`}
           >
             <CheckCircle className="h-5 w-5 mr-2" />
-            {t('community.offers')} ({posts.filter((p) => p.type === 'offer').length})
+            ऑफर ({posts.filter((p) => p.type === 'offer').length})
           </Button>
           <Button
             onClick={() => setActiveTab('festival-help')}
             className={`flex-1 ${
               activeTab === 'festival-help'
-                ? 'bg-orange-600 hover:bg-orange-700'
-                : 'bg-gray-800 hover:bg-gray-700'
+                ? 'bg-secondary hover:bg-secondary/90'
+                : 'bg-muted hover:bg-muted/80 text-foreground'
             }`}
           >
-            🎉
-            <span className="ml-2">Festival Help ({posts.filter((p) => p.type === 'festival-help').length})</span>
+            🎉 त्योहार ({posts.filter((p) => p.type === 'festival-help').length})
           </Button>
         </div>
 
@@ -254,41 +253,41 @@ const CommunityHub = () => {
             setPostType('request');
           }}>
             <DialogTrigger asChild>
-              <Button className="flex-1 bg-orange-600 hover:bg-orange-700">
+              <Button className="flex-1 bg-secondary hover:bg-secondary/90">
                 <Plus className="h-5 w-5 mr-2" />
-                {t('community.postRequest')}
+                मांग पोस्ट करें
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-gray-900 text-white border-blue-700">
+            <DialogContent className="bg-card text-foreground border-border">
               <DialogHeader>
-                <DialogTitle>Post Ingredient Request</DialogTitle>
+                <DialogTitle>सामान की मांग पोस्ट करें</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm text-blue-200">Item Name *</label>
+                  <label className="text-sm text-muted-foreground">आइटम का नाम *</label>
                   <Input
                     value={formData.item}
                     onChange={(e) => setFormData({ ...formData, item: e.target.value })}
-                    placeholder="e.g., Paneer, Tomatoes"
-                    className="bg-gray-800 border-blue-700 text-white"
+                    placeholder="जैसे: पनीर, टमाटर"
+                    className="bg-background border-border"
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-blue-200">Quantity *</label>
+                  <label className="text-sm text-muted-foreground">मात्रा *</label>
                   <Input
                     value={formData.quantity}
                     onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                    placeholder="e.g., 20 kg"
-                    className="bg-gray-800 border-blue-700 text-white"
+                    placeholder="जैसे: 20 kg"
+                    className="bg-background border-border"
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-blue-200">Description</label>
+                  <label className="text-sm text-muted-foreground">विवरण</label>
                   <Textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Additional details..."
-                    className="bg-gray-800 border-blue-700 text-white"
+                    placeholder="अतिरिक्त जानकारी..."
+                    className="bg-background border-border"
                   />
                 </div>
                 <div className="flex items-center gap-2">
@@ -300,10 +299,10 @@ const CommunityHub = () => {
                     }
                     className="rounded"
                   />
-                  <label className="text-sm">Mark as Urgent</label>
+                  <label className="text-sm">जरूरी है</label>
                 </div>
-                <Button onClick={handleSubmitPost} className="w-full bg-blue-600 hover:bg-blue-700">
-                  Post Request
+                <Button onClick={handleSubmitPost} className="w-full bg-primary hover:bg-primary/90">
+                  मांग पोस्ट करें
                 </Button>
               </div>
             </DialogContent>
@@ -314,41 +313,41 @@ const CommunityHub = () => {
             setPostType('offer');
           }}>
             <DialogTrigger asChild>
-              <Button className="flex-1 bg-green-600 hover:bg-green-700">
+              <Button className="flex-1 bg-accent hover:bg-accent/90">
                 <Plus className="h-5 w-5 mr-2" />
-                {t('community.postOffer')}
+                ऑफर पोस्ट करें
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-gray-900 text-white border-blue-700">
+            <DialogContent className="bg-card text-foreground border-border">
               <DialogHeader>
-                <DialogTitle>Post Ingredient Offer</DialogTitle>
+                <DialogTitle>सामान का ऑफर पोस्ट करें</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm text-blue-200">Item Name *</label>
+                  <label className="text-sm text-muted-foreground">आइटम का नाम *</label>
                   <Input
                     value={formData.item}
                     onChange={(e) => setFormData({ ...formData, item: e.target.value })}
-                    placeholder="e.g., Paneer, Tomatoes"
-                    className="bg-gray-800 border-blue-700 text-white"
+                    placeholder="जैसे: पनीर, टमाटर"
+                    className="bg-background border-border"
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-blue-200">Quantity *</label>
+                  <label className="text-sm text-muted-foreground">मात्रा *</label>
                   <Input
                     value={formData.quantity}
                     onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                    placeholder="e.g., 20 kg"
-                    className="bg-gray-800 border-blue-700 text-white"
+                    placeholder="जैसे: 20 kg"
+                    className="bg-background border-border"
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-blue-200">Description</label>
+                  <label className="text-sm text-muted-foreground">विवरण</label>
                   <Textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Additional details..."
-                    className="bg-gray-800 border-blue-700 text-white"
+                    placeholder="अतिरिक्त जानकारी..."
+                    className="bg-background border-border"
                   />
                 </div>
                 <div className="flex items-center gap-2">
@@ -360,10 +359,10 @@ const CommunityHub = () => {
                     }
                     className="rounded"
                   />
-                  <label className="text-sm">Urgent Sale</label>
+                  <label className="text-sm">जल्दी बेचना है</label>
                 </div>
-                <Button onClick={handleSubmitPost} className="w-full bg-blue-600 hover:bg-blue-700">
-                  Post Offer
+                <Button onClick={handleSubmitPost} className="w-full bg-primary hover:bg-primary/90">
+                  ऑफर पोस्ट करें
                 </Button>
               </div>
             </DialogContent>
@@ -375,49 +374,49 @@ const CommunityHub = () => {
           {filteredPosts.map((post) => (
             <Card
               key={post.id}
-              className={`bg-gradient-to-br from-gray-900 to-black border-blue-700 p-4 animate-fade-in-up card-hover ${
-                post.urgency === 'urgent' ? 'border-orange-500 animate-pulse-glow' : ''
+              className={`bg-card border-border p-4 animate-fade-in-up card-hover shadow-lg ${
+                post.urgency === 'urgent' ? 'border-secondary animate-pulse-glow' : ''
               }`}
             >
               <div className="flex justify-between items-start mb-3">
                 <div>
-                  <h3 className="text-lg font-bold text-white">{post.item}</h3>
-                  <p className="text-sm text-blue-200">Quantity: {post.quantity}</p>
+                  <h3 className="text-lg font-bold text-foreground">{post.item}</h3>
+                  <p className="text-sm text-muted-foreground">मात्रा: {post.quantity}</p>
                 </div>
                 <div className="flex gap-2">
                   {post.urgency === 'urgent' && (
-                    <Badge className="bg-orange-600 text-white">
-                      {t('community.urgent')}
+                    <Badge className="bg-secondary text-secondary-foreground">
+                      जरूरी
                     </Badge>
                   )}
                   {post.isVerified && (
-                    <Badge className="bg-green-600 text-white">
-                      {t('community.verified')}
+                    <Badge className="bg-accent text-accent-foreground">
+                      वेरिफाइड
                     </Badge>
                   )}
                 </div>
               </div>
 
-              <p className="text-gray-300 text-sm mb-3">{post.description}</p>
+              <p className="text-muted-foreground text-sm mb-3">{post.description}</p>
 
-              <div className="flex items-center justify-between text-sm text-gray-400 mb-3">
+              <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
                 <div className="flex items-center gap-4">
                   <span className="flex items-center gap-1">
                     <MapPin className="h-4 w-4" />
-                    {post.distance} {t('community.distance')}
+                    {post.distance} km दूर
                   </span>
                   <span>{post.timestamp.toLocaleDateString()}</span>
                 </div>
-                <span className="font-medium text-white">{post.userName}</span>
+                <span className="font-medium text-foreground">{post.userName}</span>
               </div>
 
               {post.isFestivalHelp && (
-                <div className="mb-3 p-3 bg-orange-900/30 border border-orange-600 rounded">
-                  <p className="text-sm text-orange-200 mb-1">
-                    <strong>Total Orders:</strong> {post.totalOrders}
+                <div className="mb-3 p-3 bg-secondary/20 border border-secondary/30 rounded">
+                  <p className="text-sm text-foreground mb-1">
+                    <strong>कुल ऑर्डर:</strong> {post.totalOrders}
                   </p>
-                  <p className="text-sm text-orange-200">
-                    <strong>Profit Share:</strong> {post.profitShare}
+                  <p className="text-sm text-foreground">
+                    <strong>मुनाफा:</strong> {post.profitShare}
                   </p>
                 </div>
               )}
@@ -426,25 +425,25 @@ const CommunityHub = () => {
                 <div className="flex gap-2">
                   <Button
                     onClick={() => handleAcceptHelp(post)}
-                    className="flex-1 bg-orange-600 hover:bg-orange-700"
+                    className="flex-1 bg-secondary hover:bg-secondary/90"
                   >
-                    Accept & Help
+                    मदद करें
                   </Button>
                   <Button
                     onClick={() => handleContact(post)}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700"
+                    className="flex-1 bg-primary hover:bg-primary/90"
                   >
                     <Phone className="h-4 w-4 mr-2" />
-                    Contact
+                    संपर्क
                   </Button>
                 </div>
               ) : (
                 <Button
                   onClick={() => handleContact(post)}
-                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  className="w-full bg-primary hover:bg-primary/90"
                 >
                   <Phone className="h-4 w-4 mr-2" />
-                  {t('community.contact')}
+                  संपर्क करें
                 </Button>
               )}
             </Card>
@@ -452,9 +451,9 @@ const CommunityHub = () => {
         </div>
 
         {filteredPosts.length === 0 && (
-          <Card className="bg-gradient-to-br from-gray-900 to-black border-blue-700 p-8 text-center">
-            <p className="text-gray-400">
-              No {activeTab} found. Be the first to post!
+          <Card className="bg-card border-border p-8 text-center shadow-lg">
+            <p className="text-muted-foreground">
+              कोई {activeTab === 'requests' ? 'मांग' : activeTab === 'offers' ? 'ऑफर' : 'त्योहार मदद'} नहीं मिली। पहले पोस्ट करें!
             </p>
           </Card>
         )}
