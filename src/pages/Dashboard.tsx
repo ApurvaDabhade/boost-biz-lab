@@ -26,6 +26,8 @@ import {
   Filter,
   Search
 } from 'lucide-react';
+import foodStallBg from '@/assets/food-stall-bg.jpg';
+import indianThali from '@/assets/indian-thali.jpg';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -129,22 +131,28 @@ const Dashboard = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-black text-white">
+      <div className="min-h-screen flex w-full bg-background text-foreground">
         <AppSidebar />
-        <div className="flex-1">
+        <div className="flex-1 relative">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <img src={foodStallBg} alt="Food stall background" className="w-full h-full object-cover opacity-10" />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/90 to-background"></div>
+          </div>
+          
           <MobileSidebarTrigger />
           {/* Header */}
-          <header className="sticky top-0 z-40 bg-gradient-to-r from-blue-900 to-black border-b border-blue-800 backdrop-blur-sm">
+          <header className="sticky top-0 z-40 bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-border backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-blue-400">{t('app.name')}</h1>
-            <p className="text-sm text-blue-200">{t('app.subtitle')}</p>
+            <h1 className="text-2xl font-bold text-primary">{t('app.name')}</h1>
+            <p className="text-sm text-muted-foreground">{t('app.subtitle')}</p>
           </div>
           <div className="flex items-center gap-3">
             <Button 
               variant="ghost" 
               size="icon" 
-              className="text-white hover:bg-blue-800"
+              className="hover:bg-primary/10"
               onClick={() => navigate('/notifications')}
             >
               <Bell className="h-5 w-5" />
@@ -152,7 +160,7 @@ const Dashboard = () => {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="text-white hover:bg-blue-800"
+              className="hover:bg-primary/10"
               onClick={() => navigate('/settings')}
             >
               <Settings className="h-5 w-5" />
@@ -160,7 +168,7 @@ const Dashboard = () => {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="text-white hover:bg-blue-800"
+              className="hover:bg-primary/10"
               onClick={() => navigate('/')}
             >
               <LogOut className="h-5 w-5" />
@@ -170,22 +178,22 @@ const Dashboard = () => {
       </header>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 relative z-10">
         {/* Welcome Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-3xl font-bold mb-2">Welcome back! 👋</h2>
-              <p className="text-blue-200">Here's what's happening with your business today</p>
+              <p className="text-muted-foreground">Here's what's happening with your business today</p>
             </div>
             <div className="hidden md:flex gap-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-600/20 to-red-600/20 rounded-lg flex items-center justify-center">
-                <span className="text-3xl">🍛</span>
+              <div className="w-20 h-20 rounded-lg overflow-hidden shadow-lg">
+                <img src={indianThali} alt="Indian Thali" className="w-full h-full object-cover" />
               </div>
-              <div className="w-20 h-20 bg-gradient-to-br from-green-600/20 to-emerald-600/20 rounded-lg flex items-center justify-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg flex items-center justify-center">
                 <span className="text-3xl">🥗</span>
               </div>
-              <div className="w-20 h-20 bg-gradient-to-br from-yellow-600/20 to-orange-600/20 rounded-lg flex items-center justify-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-secondary/20 to-primary/20 rounded-lg flex items-center justify-center">
                 <span className="text-3xl">🍕</span>
               </div>
             </div>
@@ -195,7 +203,7 @@ const Dashboard = () => {
         {/* Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {metrics.map((metric, index) => (
-            <Card key={index} className="bg-gradient-to-br from-gray-900 to-black border-blue-700 p-6 relative overflow-hidden">
+            <Card key={index} className="bg-card border-border p-6 relative overflow-hidden shadow-lg hover:shadow-primary/20 transition-shadow">
               <div className="absolute top-2 right-2 opacity-20">
                 {index === 0 && <span className="text-2xl">💰</span>}
                 {index === 1 && <span className="text-2xl">♻️</span>}
@@ -203,15 +211,15 @@ const Dashboard = () => {
                 {index === 3 && <span className="text-2xl">🎉</span>}
               </div>
               <div className="flex justify-between items-start mb-2">
-                <p className="text-sm text-gray-400">{metric.label}</p>
+                <p className="text-sm text-muted-foreground">{metric.label}</p>
                 <Badge 
                   variant={metric.trend === 'up' ? 'default' : metric.trend === 'down' ? 'secondary' : 'outline'}
-                  className={metric.trend === 'up' ? 'bg-green-600' : metric.trend === 'down' ? 'bg-red-600' : 'bg-blue-600'}
+                  className={metric.trend === 'up' ? 'bg-accent text-accent-foreground' : metric.trend === 'down' ? 'bg-destructive text-destructive-foreground' : 'bg-primary text-primary-foreground'}
                 >
                   {metric.change}
                 </Badge>
               </div>
-              <p className="text-2xl font-bold text-white">{metric.value}</p>
+              <p className="text-2xl font-bold text-card-foreground">{metric.value}</p>
             </Card>
           ))}
         </div>
@@ -223,14 +231,14 @@ const Dashboard = () => {
             {quickActions.map((action, index) => (
               <Card
                 key={index}
-                className="bg-gradient-to-br from-gray-900 to-black border-blue-700 p-6 cursor-pointer hover:scale-105 transition-transform duration-300"
+                className="bg-card border-border p-6 cursor-pointer hover:scale-105 transition-transform duration-300 shadow-lg hover:shadow-primary/20"
                 onClick={() => navigate(action.route)}
               >
                 <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${action.color} flex items-center justify-center mb-4`}>
                   <action.icon className="h-6 w-6 text-white" />
                 </div>
-                <h4 className="text-xl font-bold mb-2 text-white">{action.title}</h4>
-                <p className="text-gray-300 text-sm">{action.desc}</p>
+                <h4 className="text-xl font-bold mb-2 text-card-foreground">{action.title}</h4>
+                <p className="text-muted-foreground text-sm">{action.desc}</p>
               </Card>
             ))}
           </div>
@@ -240,15 +248,15 @@ const Dashboard = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-2xl font-bold text-white">🌟 Trends Intelligence Hub</h3>
-              <p className="text-gray-400">AI-powered insights for smarter cost management and menu innovation</p>
+              <h3 className="text-2xl font-bold text-foreground">🌟 Trends Intelligence Hub</h3>
+              <p className="text-muted-foreground">AI-powered insights for smarter cost management and menu innovation</p>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="border-blue-700 text-white">
+              <Button variant="outline" size="sm" className="border-border">
                 <Download className="h-4 w-4 mr-2" />
                 Export Data
               </Button>
-              <Button variant="outline" size="sm" className="border-blue-700 text-white">
+              <Button variant="outline" size="sm" className="border-border">
                 <Filter className="h-4 w-4 mr-2" />
                 Filter
               </Button>
@@ -256,28 +264,28 @@ const Dashboard = () => {
           </div>
 
           {/* Smart Suggestions Based on Data */}
-          <Card className="bg-gradient-to-br from-blue-900/10 to-black border-blue-700 mb-6">
+          <Card className="bg-card border-primary/30 mb-6 shadow-lg">
             <CardContent className="p-6">
               <div className="flex items-center mb-4">
-                <TrendingUp className="h-6 w-6 text-blue-400 mr-3" />
-                <h4 className="text-xl font-bold text-blue-400">Smart Recommendations</h4>
+                <TrendingUp className="h-6 w-6 text-primary mr-3" />
+                <h4 className="text-xl font-bold text-primary">Smart Recommendations</h4>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-800/30 rounded-lg p-4">
+                <div className="bg-accent/10 rounded-lg p-4 border border-accent/20">
                   <div className="flex items-center mb-2">
-                    <span className="text-green-400 mr-2">📈</span>
-                    <span className="text-sm font-semibold text-white">Price Stability</span>
+                    <span className="text-accent mr-2">📈</span>
+                    <span className="text-sm font-semibold text-card-foreground">Price Stability</span>
                   </div>
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     All Masala Karela ingredients showing stable pricing (0% change). Amchur (₹182.27) and Cumin Seeds (₹170.61) are premium spices - good time to stock up.
                   </p>
                 </div>
-                <div className="bg-gray-800/30 rounded-lg p-4">
+                <div className="bg-secondary/10 rounded-lg p-4 border border-secondary/20">
                   <div className="flex items-center mb-2">
-                    <span className="text-yellow-400 mr-2">💡</span>
-                    <span className="text-sm font-semibold text-white">Menu Innovation</span>
+                    <span className="text-secondary mr-2">💡</span>
+                    <span className="text-sm font-semibold text-card-foreground">Menu Innovation</span>
                   </div>
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     Karela Chips and Karela Pickle are trending! Low-cost ingredients (Karela ₹20.18/kg, Onion ₹16.29/kg) make these profitable additions to your menu.
                   </p>
                 </div>
@@ -286,40 +294,40 @@ const Dashboard = () => {
           </Card>
 
           <Tabs value={activeTrendTab} onValueChange={setActiveTrendTab} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 bg-gray-900 border-blue-700">
-              <TabsTrigger value="price-tracker" className="data-[state=active]:bg-blue-600">🥦 Price Tracker</TabsTrigger>
-              <TabsTrigger value="recipe-breakdown" className="data-[state=active]:bg-blue-600">🍛 Recipe Breakdown</TabsTrigger>
-              <TabsTrigger value="dish-recommendations" className="data-[state=active]:bg-blue-600">🍽️ Dish Recommendations</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3 bg-muted border-border">
+              <TabsTrigger value="price-tracker" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">🥦 Price Tracker</TabsTrigger>
+              <TabsTrigger value="recipe-breakdown" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">🍛 Recipe Breakdown</TabsTrigger>
+              <TabsTrigger value="dish-recommendations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">🍽️ Dish Recommendations</TabsTrigger>
             </TabsList>
 
             {/* Price Tracker Tab */}
             <TabsContent value="price-tracker" className="space-y-4">
-              <Card className="bg-gray-900 border-blue-700">
+              <Card className="bg-card border-border shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-white">Ingredient Price Tracker</CardTitle>
-                  <CardDescription className="text-gray-400">Real-time market prices and trends</CardDescription>
+                  <CardTitle className="text-card-foreground">Ingredient Price Tracker</CardTitle>
+                  <CardDescription className="text-muted-foreground">Real-time market prices and trends</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="border-b border-gray-700">
-                          <th className="text-left py-3 px-4 text-gray-300">Ingredient</th>
-                          <th className="text-right py-3 px-4 text-gray-300">Price (INR)</th>
-                          <th className="text-right py-3 px-4 text-gray-300">Adjusted Price (INR)</th>
-                          <th className="text-center py-3 px-4 text-gray-300">Trend</th>
+                        <tr className="border-b border-border">
+                          <th className="text-left py-3 px-4 text-muted-foreground">Ingredient</th>
+                          <th className="text-right py-3 px-4 text-muted-foreground">Price (INR)</th>
+                          <th className="text-right py-3 px-4 text-muted-foreground">Adjusted Price (INR)</th>
+                          <th className="text-center py-3 px-4 text-muted-foreground">Trend</th>
                         </tr>
                       </thead>
                       <tbody>
                         {priceTrackerData.map((item, index) => (
-                          <tr key={index} className="border-b border-gray-800 hover:bg-gray-800/50">
-                            <td className="py-3 px-4 text-white font-medium">{item.ingredient}</td>
-                            <td className="py-3 px-4 text-right text-white">₹{item.price}</td>
-                            <td className="py-3 px-4 text-right text-blue-400">₹{item.adjustedPrice}</td>
+                          <tr key={index} className="border-b border-border hover:bg-muted/50">
+                            <td className="py-3 px-4 text-card-foreground font-medium">{item.ingredient}</td>
+                            <td className="py-3 px-4 text-right text-card-foreground">₹{item.price}</td>
+                            <td className="py-3 px-4 text-right text-primary">₹{item.adjustedPrice}</td>
                             <td className="py-3 px-4 text-center">
-                              {item.trend === 'up' && <ArrowUp className="h-4 w-4 text-green-400 mx-auto" />}
-                              {item.trend === 'down' && <ArrowDown className="h-4 w-4 text-red-400 mx-auto" />}
-                              {item.trend === 'neutral' && <ArrowRight className="h-4 w-4 text-gray-400 mx-auto" />}
+                              {item.trend === 'up' && <ArrowUp className="h-4 w-4 text-accent mx-auto" />}
+                              {item.trend === 'down' && <ArrowDown className="h-4 w-4 text-destructive mx-auto" />}
+                              {item.trend === 'neutral' && <ArrowRight className="h-4 w-4 text-muted-foreground mx-auto" />}
                             </td>
                           </tr>
                         ))}
@@ -332,36 +340,36 @@ const Dashboard = () => {
 
             {/* Recipe Breakdown Tab */}
             <TabsContent value="recipe-breakdown" className="space-y-4">
-              <Card className="bg-gray-900 border-blue-700">
+              <Card className="bg-card border-border shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-white">Recipe Ingredient Breakdown</CardTitle>
-                  <CardDescription className="text-gray-400">Detailed cost analysis for your menu items</CardDescription>
+                  <CardTitle className="text-card-foreground">Recipe Ingredient Breakdown</CardTitle>
+                  <CardDescription className="text-muted-foreground">Detailed cost analysis for your menu items</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="border-b border-gray-700">
-                          <th className="text-left py-3 px-4 text-gray-300">Dish</th>
-                          <th className="text-left py-3 px-4 text-gray-300">Ingredient</th>
-                          <th className="text-left py-3 px-4 text-gray-300">Quantity</th>
-                          <th className="text-right py-3 px-4 text-gray-300">Current Price</th>
-                          <th className="text-right py-3 px-4 text-gray-300">Predicted Price</th>
-                          <th className="text-center py-3 px-4 text-gray-300">Trend</th>
+                        <tr className="border-b border-border">
+                          <th className="text-left py-3 px-4 text-muted-foreground">Dish</th>
+                          <th className="text-left py-3 px-4 text-muted-foreground">Ingredient</th>
+                          <th className="text-left py-3 px-4 text-muted-foreground">Quantity</th>
+                          <th className="text-right py-3 px-4 text-muted-foreground">Current Price</th>
+                          <th className="text-right py-3 px-4 text-muted-foreground">Predicted Price</th>
+                          <th className="text-center py-3 px-4 text-muted-foreground">Trend</th>
                         </tr>
                       </thead>
                       <tbody>
                         {recipeBreakdownData.map((item, index) => (
-                          <tr key={index} className="border-b border-gray-800 hover:bg-gray-800/50">
-                            <td className="py-3 px-4 text-white font-medium">{item.dish}</td>
-                            <td className="py-3 px-4 text-gray-300">{item.ingredient}</td>
-                            <td className="py-3 px-4 text-gray-400">{item.quantity}</td>
-                            <td className="py-3 px-4 text-right text-white">₹{item.price}</td>
-                            <td className="py-3 px-4 text-right text-blue-400">₹{item.predictedPrice}</td>
+                          <tr key={index} className="border-b border-border hover:bg-muted/50">
+                            <td className="py-3 px-4 text-card-foreground font-medium">{item.dish}</td>
+                            <td className="py-3 px-4 text-muted-foreground">{item.ingredient}</td>
+                            <td className="py-3 px-4 text-muted-foreground">{item.quantity}</td>
+                            <td className="py-3 px-4 text-right text-card-foreground">₹{item.price}</td>
+                            <td className="py-3 px-4 text-right text-primary">₹{item.predictedPrice}</td>
                             <td className="py-3 px-4 text-center">
-                              {item.trend === 'up' && <ArrowUp className="h-4 w-4 text-green-400 mx-auto" />}
-                              {item.trend === 'down' && <ArrowDown className="h-4 w-4 text-red-400 mx-auto" />}
-                              {item.trend === 'neutral' && <ArrowRight className="h-4 w-4 text-gray-400 mx-auto" />}
+                              {item.trend === 'up' && <ArrowUp className="h-4 w-4 text-accent mx-auto" />}
+                              {item.trend === 'down' && <ArrowDown className="h-4 w-4 text-destructive mx-auto" />}
+                              {item.trend === 'neutral' && <ArrowRight className="h-4 w-4 text-muted-foreground mx-auto" />}
                             </td>
                           </tr>
                         ))}
@@ -374,37 +382,37 @@ const Dashboard = () => {
 
             {/* Dish Recommendations Tab */}
             <TabsContent value="dish-recommendations" className="space-y-4">
-              <Card className="bg-gray-900 border-blue-700">
+              <Card className="bg-card border-border shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-white">Smart Dish Recommendations</CardTitle>
-                  <CardDescription className="text-gray-400">AI-powered suggestions to expand your menu</CardDescription>
+                  <CardTitle className="text-card-foreground">Smart Dish Recommendations</CardTitle>
+                  <CardDescription className="text-muted-foreground">AI-powered suggestions to expand your menu</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="border-b border-gray-700">
-                          <th className="text-left py-3 px-4 text-gray-300">Base Dish</th>
-                          <th className="text-left py-3 px-4 text-gray-300">Recommendation</th>
-                          <th className="text-left py-3 px-4 text-gray-300">Category</th>
-                          <th className="text-right py-3 px-4 text-gray-300">Cost Estimate</th>
-                          <th className="text-left py-3 px-4 text-gray-300">Prep Time</th>
-                          <th className="text-center py-3 px-4 text-gray-300">Status</th>
+                        <tr className="border-b border-border">
+                          <th className="text-left py-3 px-4 text-muted-foreground">Base Dish</th>
+                          <th className="text-left py-3 px-4 text-muted-foreground">Recommendation</th>
+                          <th className="text-left py-3 px-4 text-muted-foreground">Category</th>
+                          <th className="text-right py-3 px-4 text-muted-foreground">Cost Estimate</th>
+                          <th className="text-left py-3 px-4 text-muted-foreground">Prep Time</th>
+                          <th className="text-center py-3 px-4 text-muted-foreground">Status</th>
                         </tr>
                       </thead>
                       <tbody>
                         {dishRecommendations.map((item, index) => (
-                          <tr key={index} className="border-b border-gray-800 hover:bg-gray-800/50">
-                            <td className="py-3 px-4 text-white font-medium">{item.baseDish}</td>
-                            <td className="py-3 px-4 text-blue-400 font-medium">{item.recommendation}</td>
-                            <td className="py-3 px-4 text-gray-300">{item.category}</td>
-                            <td className="py-3 px-4 text-right text-white">₹{item.costEstimate}</td>
-                            <td className="py-3 px-4 text-gray-400">{item.prepTime}</td>
+                          <tr key={index} className="border-b border-border hover:bg-muted/50">
+                            <td className="py-3 px-4 text-card-foreground font-medium">{item.baseDish}</td>
+                            <td className="py-3 px-4 text-primary font-medium">{item.recommendation}</td>
+                            <td className="py-3 px-4 text-muted-foreground">{item.category}</td>
+                            <td className="py-3 px-4 text-right text-card-foreground">₹{item.costEstimate}</td>
+                            <td className="py-3 px-4 text-muted-foreground">{item.prepTime}</td>
                             <td className="py-3 px-4 text-center">
                               {item.trending ? (
-                                <Badge className="bg-yellow-600 text-white">🔥 Trending</Badge>
+                                <Badge className="bg-secondary text-secondary-foreground">🔥 Trending</Badge>
                               ) : (
-                                <Badge variant="outline" className="border-gray-600 text-gray-400">Regular</Badge>
+                                <Badge variant="outline" className="border-border text-muted-foreground">Regular</Badge>
                               )}
                             </td>
                           </tr>
@@ -420,12 +428,12 @@ const Dashboard = () => {
 
         {/* Insights Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="bg-gradient-to-br from-cyan-950/50 to-black/80 border-cyan-800/50 shadow-[0_0_30px_-5px_rgba(34,211,238,0.3)] p-6">
+          <Card className="bg-card border-primary/30 shadow-lg hover:shadow-primary/20 transition-shadow p-6">
             <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="h-5 w-5 text-cyan-400" />
-              <h4 className="text-xl font-bold text-cyan-400">Today's Trends</h4>
+              <TrendingUp className="h-5 w-5 text-primary" />
+              <h4 className="text-xl font-bold text-primary">Today's Trends</h4>
             </div>
-            <ul className="space-y-3 text-gray-300">
+            <ul className="space-y-3 text-muted-foreground">
               <li>✨ Peak hours: 12PM-2PM & 7PM-9PM</li>
               <li>🔥 Hot item: Paneer Roll (+45% orders)</li>
               <li>📍 High footfall near Gateway of India</li>
@@ -433,12 +441,12 @@ const Dashboard = () => {
             </ul>
           </Card>
 
-          <Card className="bg-gradient-to-br from-emerald-950/50 to-black/80 border-emerald-800/50 shadow-[0_0_30px_-5px_rgba(16,185,129,0.3)] p-6">
+          <Card className="bg-card border-accent/30 shadow-lg hover:shadow-accent/20 transition-shadow p-6">
             <div className="flex items-center gap-2 mb-4">
-              <BarChart3 className="h-5 w-5 text-emerald-400" />
-              <h4 className="text-xl font-bold text-emerald-400">Smart Recommendations</h4>
+              <BarChart3 className="h-5 w-5 text-accent" />
+              <h4 className="text-xl font-bold text-accent">Smart Recommendations</h4>
             </div>
-            <ul className="space-y-3 text-gray-300">
+            <ul className="space-y-3 text-muted-foreground">
               <li>💡 Consider combo offers for slow items</li>
               <li>🎯 Reduce paneer quantity by 15%</li>
               <li>📢 Launch festival special menu</li>
