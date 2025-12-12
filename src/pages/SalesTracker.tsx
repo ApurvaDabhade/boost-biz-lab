@@ -82,7 +82,7 @@ const SalesTracker = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-black text-white">
+      <div className="min-h-screen flex w-full bg-background text-foreground">
         <AppSidebar />
         
         <main className="flex-1 p-4 md:p-8">
@@ -94,11 +94,11 @@ const SalesTracker = () => {
               variant="ghost" 
               size="icon"
               onClick={() => navigate('/dashboard')}
-              className="rounded-full text-white hover:bg-blue-800"
+              className="rounded-full hover:bg-muted"
             >
               <ArrowLeft className="h-6 w-6" />
             </Button>
-            <h1 className="text-2xl font-bold text-blue-400">
+            <h1 className="text-2xl font-bold text-primary">
               💰 Sales & Expense Tracker
             </h1>
           </div>
@@ -116,8 +116,8 @@ const SalesTracker = () => {
                 variant={activeTab === tab.id ? 'default' : 'outline'}
                 className={`flex-1 h-14 text-lg font-bold rounded-xl ${
                   activeTab === tab.id 
-                    ? 'bg-blue-600 hover:bg-blue-700' 
-                    : 'border-blue-700 text-white hover:bg-blue-900'
+                    ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
+                    : 'border-border hover:bg-muted'
                 }`}
               >
                 {tab.emoji} {tab.label}
@@ -128,26 +128,26 @@ const SalesTracker = () => {
           <div className="max-w-md mx-auto">
             {/* Sales Tab */}
             {activeTab === 'sales' && (
-              <Card className="bg-gradient-to-br from-gray-900 to-black border-blue-700">
+              <Card className="bg-card border-primary/30 shadow-lg">
                 <CardContent className="p-6">
-                  <h2 className="text-xl font-bold mb-4 text-center text-white">
+                  <h2 className="text-xl font-bold mb-4 text-center text-card-foreground">
                     📈 Enter Today's Sales
                   </h2>
                   
                   <div className="relative mb-6">
-                    <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 h-8 w-8 text-blue-400" />
+                    <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 h-8 w-8 text-primary" />
                     <Input
                       type="number"
                       placeholder="Enter amount..."
                       value={salesAmount}
                       onChange={(e) => setSalesAmount(e.target.value)}
-                      className="h-16 text-2xl pl-14 text-center font-bold rounded-xl bg-gray-800 border-blue-700 text-white"
+                      className="h-16 text-2xl pl-14 text-center font-bold rounded-xl bg-muted border-border"
                     />
                   </div>
                   
                   <Button 
                     onClick={handleSalesSubmit}
-                    className="w-full h-14 text-xl font-bold rounded-xl bg-green-600 hover:bg-green-700"
+                    className="w-full h-14 text-xl font-bold rounded-xl bg-accent hover:bg-accent/90 text-accent-foreground"
                   >
                     <Check className="h-6 w-6 mr-2" />
                     Add Sales
@@ -158,9 +158,9 @@ const SalesTracker = () => {
 
             {/* Expense Tab */}
             {activeTab === 'expense' && (
-              <Card className="bg-gradient-to-br from-gray-900 to-black border-orange-700">
+              <Card className="bg-card border-secondary/30 shadow-lg">
                 <CardContent className="p-6">
-                  <h2 className="text-xl font-bold mb-4 text-center text-white">
+                  <h2 className="text-xl font-bold mb-4 text-center text-card-foreground">
                     📉 Enter Today's Expense
                   </h2>
                   
@@ -173,8 +173,8 @@ const SalesTracker = () => {
                         onClick={() => setSelectedCategory(cat.id)}
                         className={`h-14 text-sm font-semibold rounded-xl ${
                           selectedCategory === cat.id 
-                            ? 'bg-orange-600 hover:bg-orange-700' 
-                            : 'border-orange-700 text-white hover:bg-orange-900'
+                            ? 'bg-secondary hover:bg-secondary/90 text-secondary-foreground' 
+                            : 'border-border hover:bg-muted'
                         }`}
                       >
                         <span className="mr-2 text-lg">{cat.emoji}</span>
@@ -184,19 +184,19 @@ const SalesTracker = () => {
                   </div>
                   
                   <div className="relative mb-6">
-                    <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 h-8 w-8 text-orange-400" />
+                    <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 h-8 w-8 text-secondary" />
                     <Input
                       type="number"
                       placeholder="Enter amount..."
                       value={expenseAmount}
                       onChange={(e) => setExpenseAmount(e.target.value)}
-                      className="h-16 text-2xl pl-14 text-center font-bold rounded-xl bg-gray-800 border-orange-700 text-white"
+                      className="h-16 text-2xl pl-14 text-center font-bold rounded-xl bg-muted border-border"
                     />
                   </div>
                   
                   <Button 
                     onClick={handleExpenseSubmit}
-                    className="w-full h-14 text-xl font-bold rounded-xl bg-orange-600 hover:bg-orange-700"
+                    className="w-full h-14 text-xl font-bold rounded-xl bg-secondary hover:bg-secondary/90 text-secondary-foreground"
                   >
                     <Check className="h-6 w-6 mr-2" />
                     Add Expense
@@ -207,26 +207,26 @@ const SalesTracker = () => {
 
             {/* Profit Tab */}
             {activeTab === 'profit' && (
-              <Card className="bg-gradient-to-br from-gray-900 to-black border-emerald-700">
+              <Card className="bg-card border-accent/30 shadow-lg">
                 <CardContent className="p-6 text-center">
-                  <h2 className="text-xl font-bold mb-6 text-white">
+                  <h2 className="text-xl font-bold mb-6 text-card-foreground">
                     💵 Today's Summary
                   </h2>
                   
                   <div className="space-y-4 mb-8">
-                    <div className="flex justify-between items-center p-4 bg-green-900/30 rounded-xl border border-green-700">
-                      <span className="text-lg text-gray-300">📈 Sales</span>
-                      <span className="text-2xl font-bold text-green-400">₹{todaySales}</span>
+                    <div className="flex justify-between items-center p-4 bg-accent/10 rounded-xl border border-accent/30">
+                      <span className="text-lg text-muted-foreground">📈 Sales</span>
+                      <span className="text-2xl font-bold text-accent">₹{todaySales}</span>
                     </div>
-                    <div className="flex justify-between items-center p-4 bg-orange-900/30 rounded-xl border border-orange-700">
-                      <span className="text-lg text-gray-300">📉 Expense</span>
-                      <span className="text-2xl font-bold text-orange-400">₹{todayExpense}</span>
+                    <div className="flex justify-between items-center p-4 bg-secondary/10 rounded-xl border border-secondary/30">
+                      <span className="text-lg text-muted-foreground">📉 Expense</span>
+                      <span className="text-2xl font-bold text-secondary">₹{todayExpense}</span>
                     </div>
                   </div>
                   
-                  <div className={`p-6 rounded-2xl ${profit >= 0 ? 'bg-emerald-900/30 border border-emerald-600' : 'bg-red-900/30 border border-red-600'}`}>
-                    <p className="text-lg mb-2 text-gray-300">Today's Profit</p>
-                    <p className={`text-5xl font-bold ${profit >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                  <div className={`p-6 rounded-2xl ${profit >= 0 ? 'bg-accent/10 border border-accent/50' : 'bg-destructive/10 border border-destructive/50'}`}>
+                    <p className="text-lg mb-2 text-muted-foreground">Today's Profit</p>
+                    <p className={`text-5xl font-bold ${profit >= 0 ? 'text-accent' : 'text-destructive'}`}>
                       ₹{profit}
                     </p>
                   </div>
