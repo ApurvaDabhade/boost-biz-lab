@@ -355,7 +355,7 @@ const Dashboard = () => {
                     className={`h-24 flex flex-col items-center justify-center gap-2 text-lg ${
                       selectedDish === recipe.dish 
                         ? 'bg-primary text-primary-foreground' 
-                        : 'border-2 hover:border-primary'
+                        : 'border-2 border-border text-foreground hover:border-primary hover:text-primary'
                     }`}
                   >
                     <span className="text-3xl">{recipe.emoji}</span>

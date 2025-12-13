@@ -558,7 +558,7 @@ const PosterMaker = () => {
                     <p className="text-muted-foreground text-sm mb-4">
                       No printing costs! Customers scan & see your menu on their phone.
                     </p>
-                    <Button className="w-full" variant="outline">
+                    <Button className="w-full text-foreground" variant="outline">
                       Create Menu →
                     </Button>
                   </CardContent>
@@ -579,7 +579,7 @@ const PosterMaker = () => {
                     <p className="text-muted-foreground text-sm mb-4">
                       Upload your food video - we add music & captions automatically!
                     </p>
-                    <Button className="w-full" variant="outline">
+                    <Button className="w-full text-foreground" variant="outline">
                       <Upload className="h-4 w-4 mr-2" />
                       Upload Video
                     </Button>
@@ -627,15 +627,15 @@ const PosterMaker = () => {
                     <CardDescription>Quick sales ideas for your stall</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <Button variant="outline" className="w-full justify-start h-14">
+                    <Button variant="outline" className="w-full justify-start h-14 text-foreground">
                       <span className="text-xl mr-3">🎁</span>
                       Combo Offer - Thali + Drink
                     </Button>
-                    <Button variant="outline" className="w-full justify-start h-14">
+                    <Button variant="outline" className="w-full justify-start h-14 text-foreground">
                       <span className="text-xl mr-3">⏰</span>
                       Happy Hours (2-4 PM discount)
                     </Button>
-                    <Button variant="outline" className="w-full justify-start h-14">
+                    <Button variant="outline" className="w-full justify-start h-14 text-foreground">
                       <span className="text-xl mr-3">🎉</span>
                       Festival Special Menu
                     </Button>
