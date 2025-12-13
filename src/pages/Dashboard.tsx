@@ -4,7 +4,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar, MobileSidebarTrigger } from '@/components/AppSidebar';
 import { 
@@ -12,7 +11,6 @@ import {
   Package, 
   MessageSquare, 
   Users, 
-  BarChart3, 
   Gift,
   MapPin,
   Bot,
@@ -21,10 +19,8 @@ import {
   LogOut,
   ArrowUp,
   ArrowDown,
-  ArrowRight,
-  Download,
-  Filter,
-  Search
+  Minus,
+  ChevronRight
 } from 'lucide-react';
 import foodStallBg from '@/assets/food-stall-bg.jpg';
 import indianThali from '@/assets/indian-thali.jpg';
@@ -32,42 +28,79 @@ import indianThali from '@/assets/indian-thali.jpg';
 const Dashboard = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const [activeTrendTab, setActiveTrendTab] = useState('price-tracker');
+  const [selectedDish, setSelectedDish] = useState<string | null>(null);
 
-  // Mock data for trends features - Updated with Masala Karela recipe data
+  // Stock market style price tracker data
   const priceTrackerData = [
-    { ingredient: 'Amchur', price: 182.27, adjustedPrice: 182.27, trend: 'neutral' },
-    { ingredient: 'Cumin Seeds', price: 170.61, adjustedPrice: 170.61, trend: 'neutral' },
-    { ingredient: 'Sunflower Oil', price: 138.70, adjustedPrice: 138.70, trend: 'neutral' },
-    { ingredient: 'Coriander Powder', price: 132.90, adjustedPrice: 132.90, trend: 'neutral' },
-    { ingredient: 'Salt', price: 95.50, adjustedPrice: 95.50, trend: 'neutral' },
-    { ingredient: 'Turmeric Powder', price: 87.79, adjustedPrice: 87.79, trend: 'neutral' },
-    { ingredient: 'Red Chilli Powder', price: 71.80, adjustedPrice: 71.80, trend: 'neutral' },
-    { ingredient: 'Karela', price: 20.18, adjustedPrice: 20.18, trend: 'neutral' },
-    { ingredient: 'Gram Flour', price: 17.71, adjustedPrice: 17.71, trend: 'neutral' },
-    { ingredient: 'Onion', price: 16.29, adjustedPrice: 16.29, trend: 'neutral' },
+    { ingredient: 'Sunflower Oil', unit: '1L', price: 138.70, change: 2.5, trend: 'up' },
+    { ingredient: 'Onion', unit: '1kg', price: 32.00, change: -5.0, trend: 'down' },
+    { ingredient: 'Tomato', unit: '1kg', price: 45.00, change: 0, trend: 'neutral' },
+    { ingredient: 'Potato', unit: '1kg', price: 28.00, change: -2.0, trend: 'down' },
+    { ingredient: 'Ginger', unit: '250g', price: 35.00, change: 3.0, trend: 'up' },
+    { ingredient: 'Garlic', unit: '250g', price: 40.00, change: 0, trend: 'neutral' },
+    { ingredient: 'Green Chilli', unit: '100g', price: 15.00, change: -1.0, trend: 'down' },
+    { ingredient: 'Coriander', unit: '100g', price: 12.00, change: 0, trend: 'neutral' },
+    { ingredient: 'Cumin Seeds', unit: '100g', price: 45.00, change: 1.5, trend: 'up' },
+    { ingredient: 'Turmeric Powder', unit: '100g', price: 25.00, change: 0, trend: 'neutral' },
   ];
 
-  const recipeBreakdownData = [
-    { dish: 'Masala Karela', ingredient: 'Amchur', quantity: '10g', price: 18.23, predictedPrice: 18.23, trend: 'neutral' },
-    { dish: 'Masala Karela', ingredient: 'Cumin Seeds', quantity: '5g', price: 8.53, predictedPrice: 8.53, trend: 'neutral' },
-    { dish: 'Masala Karela', ingredient: 'Sunflower Oil', quantity: '30ml', price: 4.16, predictedPrice: 4.16, trend: 'neutral' },
-    { dish: 'Masala Karela', ingredient: 'Coriander Powder', quantity: '8g', price: 10.63, predictedPrice: 10.63, trend: 'neutral' },
-    { dish: 'Masala Karela', ingredient: 'Salt', quantity: '5g', price: 0.48, predictedPrice: 0.48, trend: 'neutral' },
-    { dish: 'Masala Karela', ingredient: 'Turmeric Powder', quantity: '3g', price: 2.63, predictedPrice: 2.63, trend: 'neutral' },
-    { dish: 'Masala Karela', ingredient: 'Red Chilli Powder', quantity: '5g', price: 3.59, predictedPrice: 3.59, trend: 'neutral' },
-    { dish: 'Masala Karela', ingredient: 'Karela', quantity: '500g', price: 10.09, predictedPrice: 10.09, trend: 'neutral' },
-    { dish: 'Masala Karela', ingredient: 'Gram Flour', quantity: '50g', price: 0.89, predictedPrice: 0.89, trend: 'neutral' },
-    { dish: 'Masala Karela', ingredient: 'Onion', quantity: '100g', price: 1.63, predictedPrice: 1.63, trend: 'neutral' },
+  // Recipe breakdown data - cost per plate
+  const recipeData = [
+    { 
+      dish: 'Poha', 
+      emoji: '🍚',
+      totalCost: 18,
+      ingredients: [
+        { name: 'Poha', qty: '100g', cost: 8 },
+        { name: 'Onion', qty: '50g', cost: 2 },
+        { name: 'Potato', qty: '50g', cost: 1 },
+        { name: 'Oil', qty: '15ml', cost: 2 },
+        { name: 'Spices', qty: 'mix', cost: 3 },
+        { name: 'Peanuts', qty: '20g', cost: 2 },
+      ]
+    },
+    { 
+      dish: 'Upma', 
+      emoji: '🥣',
+      totalCost: 15,
+      ingredients: [
+        { name: 'Suji', qty: '100g', cost: 6 },
+        { name: 'Onion', qty: '30g', cost: 1 },
+        { name: 'Vegetables', qty: '50g', cost: 3 },
+        { name: 'Oil', qty: '10ml', cost: 1 },
+        { name: 'Spices', qty: 'mix', cost: 4 },
+      ]
+    },
+    { 
+      dish: 'Vada Pav', 
+      emoji: '🥔',
+      totalCost: 12,
+      ingredients: [
+        { name: 'Pav', qty: '1 pc', cost: 3 },
+        { name: 'Potato', qty: '80g', cost: 2 },
+        { name: 'Besan', qty: '30g', cost: 2 },
+        { name: 'Chutney', qty: 'mix', cost: 2 },
+        { name: 'Oil', qty: '20ml', cost: 3 },
+      ]
+    },
+    { 
+      dish: 'Tea', 
+      emoji: '☕',
+      totalCost: 8,
+      ingredients: [
+        { name: 'Tea Leaves', qty: '5g', cost: 2 },
+        { name: 'Milk', qty: '100ml', cost: 4 },
+        { name: 'Sugar', qty: '10g', cost: 1 },
+        { name: 'Ginger', qty: '2g', cost: 1 },
+      ]
+    },
   ];
 
+  // Dish recommendations based on existing menu
   const dishRecommendations = [
-    { baseDish: 'Masala Karela', recommendation: 'Stuffed Karela', category: 'Vegetable Based', trending: false, costEstimate: 65, prepTime: '30 min' },
-    { baseDish: 'Masala Karela', recommendation: 'Karela Chips', category: 'Snacks', trending: true, costEstimate: 45, prepTime: '20 min' },
-    { baseDish: 'Masala Karela', recommendation: 'Karela Raita', category: 'Side Dish', trending: false, costEstimate: 35, prepTime: '15 min' },
-    { baseDish: 'Masala Karela', recommendation: 'Karela Pickle', category: 'Preserved', trending: true, costEstimate: 55, prepTime: '45 min' },
-    { baseDish: 'Masala Karela', recommendation: 'Karela Curry', category: 'Main Course', trending: false, costEstimate: 75, prepTime: '25 min' },
-    { baseDish: 'Masala Karela', recommendation: 'Karela Paratha', category: 'Bread', trending: false, costEstimate: 40, prepTime: '35 min' },
+    { baseDish: 'Poha', recommended: 'Upma', reason: 'Same equipment, similar ingredients', emoji: '🥣' },
+    { baseDish: 'Tea', recommended: 'Bun Maska', reason: 'Perfect combo, easy to add', emoji: '🥐' },
+    { baseDish: 'Vada Pav', recommended: 'Samosa', reason: 'Uses same frying setup', emoji: '🥟' },
   ];
 
   const metrics = [
@@ -128,6 +161,8 @@ const Dashboard = () => {
       route: '/tourism',
     },
   ];
+
+  const selectedRecipe = recipeData.find(r => r.dish === selectedDish);
 
   return (
     <SidebarProvider>
@@ -224,6 +259,180 @@ const Dashboard = () => {
           ))}
         </div>
 
+        {/* 📊 INGREDIENT PRICE TRACKER - Stock Market Style */}
+        <div className="mb-8">
+          <Card className="bg-card border-border shadow-xl overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-border">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-2xl flex items-center gap-3">
+                    <span className="text-3xl">📊</span>
+                    Ingredient Price Tracker
+                  </CardTitle>
+                  <CardDescription className="text-base mt-1">
+                    Today's market prices • Updated just now
+                  </CardDescription>
+                </div>
+                <Badge className="bg-primary/20 text-primary text-lg px-4 py-2">
+                  {new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              {/* Stock ticker style header */}
+              <div className="grid grid-cols-4 bg-muted/50 px-6 py-3 border-b border-border text-sm font-semibold text-muted-foreground">
+                <span>Ingredient</span>
+                <span className="text-center">Unit</span>
+                <span className="text-right">Price (₹)</span>
+                <span className="text-center">Trend</span>
+              </div>
+              
+              {/* Price rows */}
+              <div className="divide-y divide-border">
+                {priceTrackerData.map((item, index) => (
+                  <div 
+                    key={index} 
+                    className="grid grid-cols-4 px-6 py-4 hover:bg-muted/30 transition-colors items-center"
+                  >
+                    <span className="font-semibold text-lg text-foreground">{item.ingredient}</span>
+                    <span className="text-center text-muted-foreground">{item.unit}</span>
+                    <span className="text-right text-xl font-bold text-foreground">₹{item.price.toFixed(0)}</span>
+                    <div className="flex items-center justify-center gap-2">
+                      {item.trend === 'up' && (
+                        <>
+                          <ArrowUp className="h-6 w-6 text-red-500" />
+                          <span className="text-red-500 font-semibold">+{item.change}%</span>
+                        </>
+                      )}
+                      {item.trend === 'down' && (
+                        <>
+                          <ArrowDown className="h-6 w-6 text-green-500" />
+                          <span className="text-green-500 font-semibold">{item.change}%</span>
+                        </>
+                      )}
+                      {item.trend === 'neutral' && (
+                        <>
+                          <Minus className="h-6 w-6 text-muted-foreground" />
+                          <span className="text-muted-foreground">No change</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Quick insight */}
+              <div className="bg-accent/10 border-t border-accent/20 px-6 py-4">
+                <p className="text-accent font-semibold flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  💡 Tip: Onion & Potato prices are down today - good time to stock up!
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* 🍛 RECIPE BREAKDOWN */}
+        <div className="mb-8">
+          <Card className="bg-card border-border shadow-xl overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-secondary/10 to-primary/10 border-b border-border">
+              <CardTitle className="text-2xl flex items-center gap-3">
+                <span className="text-3xl">🍛</span>
+                Recipe Cost Breakdown
+              </CardTitle>
+              <CardDescription className="text-base">
+                Tap a dish to see ingredient cost per plate
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6">
+              {/* Dish selector - big tap targets */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                {recipeData.map((recipe) => (
+                  <Button
+                    key={recipe.dish}
+                    onClick={() => setSelectedDish(selectedDish === recipe.dish ? null : recipe.dish)}
+                    variant={selectedDish === recipe.dish ? 'default' : 'outline'}
+                    className={`h-24 flex flex-col items-center justify-center gap-2 text-lg ${
+                      selectedDish === recipe.dish 
+                        ? 'bg-primary text-primary-foreground' 
+                        : 'border-2 hover:border-primary'
+                    }`}
+                  >
+                    <span className="text-3xl">{recipe.emoji}</span>
+                    <span className="font-semibold">{recipe.dish}</span>
+                    <span className="text-sm opacity-80">₹{recipe.totalCost}/plate</span>
+                  </Button>
+                ))}
+              </div>
+              
+              {/* Selected recipe breakdown */}
+              {selectedRecipe && (
+                <div className="bg-muted/50 rounded-xl p-6 animate-fade-in">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-xl font-bold flex items-center gap-2">
+                      <span className="text-2xl">{selectedRecipe.emoji}</span>
+                      {selectedRecipe.dish} - Ingredients
+                    </h4>
+                    <Badge className="bg-primary text-primary-foreground text-lg px-4 py-2">
+                      Total: ₹{selectedRecipe.totalCost}
+                    </Badge>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {selectedRecipe.ingredients.map((ing, idx) => (
+                      <div key={idx} className="bg-card border border-border rounded-lg p-3 flex justify-between items-center">
+                        <div>
+                          <p className="font-semibold text-foreground">{ing.name}</p>
+                          <p className="text-sm text-muted-foreground">{ing.qty}</p>
+                        </div>
+                        <span className="text-lg font-bold text-primary">₹{ing.cost}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* 🍽️ DISH RECOMMENDATIONS */}
+        <div className="mb-8">
+          <Card className="bg-card border-border shadow-xl overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-accent/10 to-secondary/10 border-b border-border">
+              <CardTitle className="text-2xl flex items-center gap-3">
+                <span className="text-3xl">🍽️</span>
+                Easy Dish Recommendations
+              </CardTitle>
+              <CardDescription className="text-base">
+                Add these to your menu - no new equipment needed!
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="space-y-4">
+                {dishRecommendations.map((rec, idx) => (
+                  <div 
+                    key={idx}
+                    className="flex items-center justify-between bg-muted/50 rounded-xl p-4 hover:bg-muted transition-colors"
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="text-4xl">{rec.emoji}</span>
+                      <div>
+                        <p className="text-lg font-bold text-foreground">
+                          Add <span className="text-primary">{rec.recommended}</span>
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          You sell {rec.baseDish} → {rec.reason}
+                        </p>
+                      </div>
+                    </div>
+                    <ChevronRight className="h-6 w-6 text-muted-foreground" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Quick Actions */}
         <div className="mb-8">
           <h3 className="text-2xl font-bold mb-4">Quick Actions</h3>
@@ -243,219 +452,8 @@ const Dashboard = () => {
             ))}
           </div>
         </div>
-
-        {/* Trends Features Section */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h3 className="text-2xl font-bold text-foreground">🌟 Trends Intelligence Hub</h3>
-              <p className="text-muted-foreground">AI-powered insights for smarter cost management and menu innovation</p>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary/10">
-                <Download className="h-4 w-4 mr-2" />
-                Export Data
-              </Button>
-              <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary/10">
-                <Filter className="h-4 w-4 mr-2" />
-                Filter
-              </Button>
-            </div>
-          </div>
-
-          {/* Smart Suggestions Based on Data */}
-          <Card className="bg-card border-primary/30 mb-6 shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center mb-4">
-                <TrendingUp className="h-6 w-6 text-primary mr-3" />
-                <h4 className="text-xl font-bold text-primary">Smart Recommendations</h4>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-accent/10 rounded-lg p-4 border border-accent/20">
-                  <div className="flex items-center mb-2">
-                    <span className="text-accent mr-2">📈</span>
-                    <span className="text-sm font-semibold text-card-foreground">Price Stability</span>
-                  </div>
-                  <p className="text-muted-foreground text-sm">
-                    All Masala Karela ingredients showing stable pricing (0% change). Amchur (₹182.27) and Cumin Seeds (₹170.61) are premium spices - good time to stock up.
-                  </p>
-                </div>
-                <div className="bg-secondary/10 rounded-lg p-4 border border-secondary/20">
-                  <div className="flex items-center mb-2">
-                    <span className="text-secondary mr-2">💡</span>
-                    <span className="text-sm font-semibold text-card-foreground">Menu Innovation</span>
-                  </div>
-                  <p className="text-muted-foreground text-sm">
-                    Karela Chips and Karela Pickle are trending! Low-cost ingredients (Karela ₹20.18/kg, Onion ₹16.29/kg) make these profitable additions to your menu.
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Tabs value={activeTrendTab} onValueChange={setActiveTrendTab} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 bg-muted border-border">
-              <TabsTrigger value="price-tracker" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">🥦 Price Tracker</TabsTrigger>
-              <TabsTrigger value="recipe-breakdown" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">🍛 Recipe Breakdown</TabsTrigger>
-              <TabsTrigger value="dish-recommendations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">🍽️ Dish Recommendations</TabsTrigger>
-            </TabsList>
-
-            {/* Price Tracker Tab */}
-            <TabsContent value="price-tracker" className="space-y-4">
-              <Card className="bg-card border-border shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-card-foreground">Ingredient Price Tracker</CardTitle>
-                  <CardDescription className="text-muted-foreground">Real-time market prices and trends</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b border-border">
-                          <th className="text-left py-3 px-4 text-muted-foreground">Ingredient</th>
-                          <th className="text-right py-3 px-4 text-muted-foreground">Price (INR)</th>
-                          <th className="text-right py-3 px-4 text-muted-foreground">Adjusted Price (INR)</th>
-                          <th className="text-center py-3 px-4 text-muted-foreground">Trend</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {priceTrackerData.map((item, index) => (
-                          <tr key={index} className="border-b border-border hover:bg-muted/50">
-                            <td className="py-3 px-4 text-card-foreground font-medium">{item.ingredient}</td>
-                            <td className="py-3 px-4 text-right text-card-foreground">₹{item.price}</td>
-                            <td className="py-3 px-4 text-right text-primary">₹{item.adjustedPrice}</td>
-                            <td className="py-3 px-4 text-center">
-                              {item.trend === 'up' && <ArrowUp className="h-4 w-4 text-accent mx-auto" />}
-                              {item.trend === 'down' && <ArrowDown className="h-4 w-4 text-destructive mx-auto" />}
-                              {item.trend === 'neutral' && <ArrowRight className="h-4 w-4 text-muted-foreground mx-auto" />}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Recipe Breakdown Tab */}
-            <TabsContent value="recipe-breakdown" className="space-y-4">
-              <Card className="bg-card border-border shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-card-foreground">Recipe Ingredient Breakdown</CardTitle>
-                  <CardDescription className="text-muted-foreground">Detailed cost analysis for your menu items</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b border-border">
-                          <th className="text-left py-3 px-4 text-muted-foreground">Dish</th>
-                          <th className="text-left py-3 px-4 text-muted-foreground">Ingredient</th>
-                          <th className="text-left py-3 px-4 text-muted-foreground">Quantity</th>
-                          <th className="text-right py-3 px-4 text-muted-foreground">Current Price</th>
-                          <th className="text-right py-3 px-4 text-muted-foreground">Predicted Price</th>
-                          <th className="text-center py-3 px-4 text-muted-foreground">Trend</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {recipeBreakdownData.map((item, index) => (
-                          <tr key={index} className="border-b border-border hover:bg-muted/50">
-                            <td className="py-3 px-4 text-card-foreground font-medium">{item.dish}</td>
-                            <td className="py-3 px-4 text-muted-foreground">{item.ingredient}</td>
-                            <td className="py-3 px-4 text-muted-foreground">{item.quantity}</td>
-                            <td className="py-3 px-4 text-right text-card-foreground">₹{item.price}</td>
-                            <td className="py-3 px-4 text-right text-primary">₹{item.predictedPrice}</td>
-                            <td className="py-3 px-4 text-center">
-                              {item.trend === 'up' && <ArrowUp className="h-4 w-4 text-accent mx-auto" />}
-                              {item.trend === 'down' && <ArrowDown className="h-4 w-4 text-destructive mx-auto" />}
-                              {item.trend === 'neutral' && <ArrowRight className="h-4 w-4 text-muted-foreground mx-auto" />}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Dish Recommendations Tab */}
-            <TabsContent value="dish-recommendations" className="space-y-4">
-              <Card className="bg-card border-border shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-card-foreground">Smart Dish Recommendations</CardTitle>
-                  <CardDescription className="text-muted-foreground">AI-powered suggestions to expand your menu</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b border-border">
-                          <th className="text-left py-3 px-4 text-muted-foreground">Base Dish</th>
-                          <th className="text-left py-3 px-4 text-muted-foreground">Recommendation</th>
-                          <th className="text-left py-3 px-4 text-muted-foreground">Category</th>
-                          <th className="text-right py-3 px-4 text-muted-foreground">Cost Estimate</th>
-                          <th className="text-left py-3 px-4 text-muted-foreground">Prep Time</th>
-                          <th className="text-center py-3 px-4 text-muted-foreground">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {dishRecommendations.map((item, index) => (
-                          <tr key={index} className="border-b border-border hover:bg-muted/50">
-                            <td className="py-3 px-4 text-card-foreground font-medium">{item.baseDish}</td>
-                            <td className="py-3 px-4 text-primary font-medium">{item.recommendation}</td>
-                            <td className="py-3 px-4 text-muted-foreground">{item.category}</td>
-                            <td className="py-3 px-4 text-right text-card-foreground">₹{item.costEstimate}</td>
-                            <td className="py-3 px-4 text-muted-foreground">{item.prepTime}</td>
-                            <td className="py-3 px-4 text-center">
-                              {item.trending ? (
-                                <Badge className="bg-secondary text-secondary-foreground">🔥 Trending</Badge>
-                              ) : (
-                                <Badge variant="outline" className="border-border text-muted-foreground">Regular</Badge>
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
-
-        {/* Insights Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="bg-card border-primary/30 shadow-lg hover:shadow-primary/20 transition-shadow p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="h-5 w-5 text-primary" />
-              <h4 className="text-xl font-bold text-primary">Today's Trends</h4>
-            </div>
-            <ul className="space-y-3 text-muted-foreground">
-              <li>✨ Peak hours: 12PM-2PM & 7PM-9PM</li>
-              <li>🔥 Hot item: Paneer Roll (+45% orders)</li>
-              <li>📍 High footfall near Gateway of India</li>
-              <li>🎉 Diwali prep: Stock up on sweets</li>
-            </ul>
-          </Card>
-
-          <Card className="bg-card border-accent/30 shadow-lg hover:shadow-accent/20 transition-shadow p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <BarChart3 className="h-5 w-5 text-accent" />
-              <h4 className="text-xl font-bold text-accent">Smart Recommendations</h4>
-            </div>
-            <ul className="space-y-3 text-muted-foreground">
-              <li>💡 Consider combo offers for slow items</li>
-              <li>🎯 Reduce paneer quantity by 15%</li>
-              <li>📢 Launch festival special menu</li>
-              <li>🤝 Connect with 3 nearby suppliers</li>
-            </ul>
-          </Card>
-        </div>
       </div>
-      </div>
+        </div>
       </div>
     </SidebarProvider>
   );
