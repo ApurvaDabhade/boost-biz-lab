@@ -252,13 +252,13 @@ const Dashboard = () => {
               <p className="text-muted-foreground">AI-powered insights for smarter cost management and menu innovation</p>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="border-border text-foreground hover:bg-primary/10">
+              <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary/10">
                 <Download className="h-4 w-4 mr-2" />
-                डेटा एक्सपोर्ट
+                Export Data
               </Button>
-              <Button variant="outline" size="sm" className="border-border text-foreground hover:bg-primary/10">
+              <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary/10">
                 <Filter className="h-4 w-4 mr-2" />
-                फ़िल्टर
+                Filter
               </Button>
             </div>
           </div>

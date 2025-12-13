@@ -282,19 +282,19 @@ const ChefGuru = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-gradient-to-r from-purple-900 to-black border-b border-purple-800 backdrop-blur-sm">
+      <header className="sticky top-0 z-50 bg-gradient-to-r from-primary/20 to-secondary/20 border-b border-border backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')} className="text-white">
+            <Button variant="ghost" size="icon" onClick={() => navigate('/dashboard')} className="text-foreground hover:bg-primary/10">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex items-center gap-3">
-              <ChefHat className="h-8 w-8 text-purple-400" />
+              <ChefHat className="h-8 w-8 text-primary" />
               <div>
-                <h1 className="text-2xl font-bold text-purple-400">ChefGuru</h1>
-                <p className="text-sm text-purple-200">Your Intelligent Kitchen Assistant</p>
+                <h1 className="text-2xl font-bold text-primary">ChefGuru</h1>
+                <p className="text-sm text-muted-foreground">Your Intelligent Kitchen Assistant</p>
               </div>
             </div>
           </div>
@@ -303,11 +303,11 @@ const ChefGuru = () => {
 
       {/* Hero Section with Image */}
       <div className="relative h-64 overflow-hidden">
-        <img src={aiAssistantImage} alt="ChefGuru Assistant" className="w-full h-full object-cover opacity-40" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black flex items-center justify-center">
+        <img src={aiAssistantImage} alt="ChefGuru Assistant" className="w-full h-full object-cover opacity-70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background flex items-center justify-center">
           <div className="text-center">
-            <h2 className="text-3xl font-bold mb-2">💡 Smart Kitchen Intelligence</h2>
-            <p className="text-gray-300">Real-time insights for your business growth</p>
+            <h2 className="text-3xl font-bold mb-2 text-foreground">💡 Smart Kitchen Intelligence</h2>
+            <p className="text-muted-foreground">Real-time insights for your business growth</p>
           </div>
         </div>
       </div>
@@ -315,43 +315,43 @@ const ChefGuru = () => {
       {/* Food Images Section */}
       <div className="container mx-auto px-4 py-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="relative h-32 bg-gradient-to-br from-orange-900/20 to-black border border-orange-700 rounded-lg overflow-hidden group cursor-pointer">
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent"></div>
+          <div className="relative h-32 bg-gradient-to-br from-primary/20 to-background border border-primary/30 rounded-lg overflow-hidden group cursor-pointer">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent"></div>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-6xl opacity-60 group-hover:opacity-80 transition-opacity">🍛</div>
             </div>
             <div className="absolute bottom-2 left-2 right-2">
-              <div className="text-xs font-medium text-white bg-black/50 rounded px-2 py-1 text-center">Pav Bhaji</div>
+              <div className="text-xs font-medium text-foreground bg-card/80 rounded px-2 py-1 text-center">Pav Bhaji</div>
             </div>
           </div>
 
-          <div className="relative h-32 bg-gradient-to-br from-green-900/20 to-black border border-green-700 rounded-lg overflow-hidden group cursor-pointer">
-            <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent"></div>
+          <div className="relative h-32 bg-gradient-to-br from-accent/20 to-background border border-accent/30 rounded-lg overflow-hidden group cursor-pointer">
+            <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent"></div>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-6xl opacity-60 group-hover:opacity-80 transition-opacity">🥗</div>
             </div>
             <div className="absolute bottom-2 left-2 right-2">
-              <div className="text-xs font-medium text-white bg-black/50 rounded px-2 py-1 text-center">Paneer Tikka</div>
+              <div className="text-xs font-medium text-foreground bg-card/80 rounded px-2 py-1 text-center">Paneer Tikka</div>
             </div>
           </div>
 
-          <div className="relative h-32 bg-gradient-to-br from-red-900/20 to-black border border-red-700 rounded-lg overflow-hidden group cursor-pointer">
-            <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent"></div>
+          <div className="relative h-32 bg-gradient-to-br from-destructive/20 to-background border border-destructive/30 rounded-lg overflow-hidden group cursor-pointer">
+            <div className="absolute inset-0 bg-gradient-to-br from-destructive/10 to-transparent"></div>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-6xl opacity-60 group-hover:opacity-80 transition-opacity">🍕</div>
             </div>
             <div className="absolute bottom-2 left-2 right-2">
-              <div className="text-xs font-medium text-white bg-black/50 rounded px-2 py-1 text-center">Chicken Curry</div>
+              <div className="text-xs font-medium text-foreground bg-card/80 rounded px-2 py-1 text-center">Chicken Curry</div>
             </div>
           </div>
 
-          <div className="relative h-32 bg-gradient-to-br from-yellow-900/20 to-black border border-yellow-700 rounded-lg overflow-hidden group cursor-pointer">
-            <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent"></div>
+          <div className="relative h-32 bg-gradient-to-br from-secondary/20 to-background border border-secondary/30 rounded-lg overflow-hidden group cursor-pointer">
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 to-transparent"></div>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-6xl opacity-60 group-hover:opacity-80 transition-opacity">🍜</div>
             </div>
             <div className="absolute bottom-2 left-2 right-2">
-              <div className="text-xs font-medium text-white bg-black/50 rounded px-2 py-1 text-center">Masala Dosa</div>
+              <div className="text-xs font-medium text-foreground bg-card/80 rounded px-2 py-1 text-center">Masala Dosa</div>
             </div>
           </div>
         </div>
@@ -360,11 +360,11 @@ const ChefGuru = () => {
       {/* Main Content with Tabs */}
       <div className="container mx-auto px-4 pb-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 bg-gray-800 border-purple-700">
-            <TabsTrigger value="chat" className="data-[state=active]:bg-purple-600">
+          <TabsList className="grid w-full grid-cols-2 bg-muted border-border">
+            <TabsTrigger value="chat" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               💬 Chat Assistant
             </TabsTrigger>
-            <TabsTrigger value="trends" className="data-[state=active]:bg-purple-600">
+            <TabsTrigger value="trends" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               📊 Trend Analysis
             </TabsTrigger>
           </TabsList>
@@ -379,11 +379,11 @@ const ChefGuru = () => {
                     <Card
                       className={`max-w-[80%] p-4 ${
                         message.type === 'user'
-                          ? 'bg-gradient-to-r from-purple-600 to-purple-800 border-purple-700'
-                          : 'bg-gradient-to-br from-gray-900 to-black border-purple-700'
+                          ? 'bg-gradient-to-r from-primary to-primary/80 border-primary/50'
+                          : 'bg-card border-border'
                       }`}
                     >
-                      <p className="text-white whitespace-pre-line">{message.content}</p>
+                      <p className={`whitespace-pre-line ${message.type === 'user' ? 'text-primary-foreground' : 'text-card-foreground'}`}>{message.content}</p>
                       {message.buttons && (
                         <div className="flex flex-wrap gap-2 mt-3">
                           {message.buttons.map((button, index) => (
@@ -391,7 +391,7 @@ const ChefGuru = () => {
                               key={index}
                               size="sm"
                               variant="outline"
-                              className="border-purple-600 text-purple-400 hover:bg-purple-800 cursor-pointer"
+                              className="border-primary text-primary hover:bg-primary/10 cursor-pointer"
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -404,7 +404,7 @@ const ChefGuru = () => {
                           ))}
                         </div>
                       )}
-                      <p className="text-xs text-gray-400 mt-2">
+                      <p className="text-xs text-muted-foreground mt-2">
                         {message.timestamp.toLocaleTimeString('en-US', {
                           hour: '2-digit',
                           minute: '2-digit',
@@ -417,13 +417,13 @@ const ChefGuru = () => {
             </ScrollArea>
 
             {/* Example Questions */}
-            <div className="border-t border-purple-800 pt-4">
-              <p className="text-sm text-gray-400 mb-2">Start the flow by typing a dish name:</p>
+            <div className="border-t border-border pt-4">
+              <p className="text-sm text-muted-foreground mb-2">Start the flow by typing a dish name:</p>
               <div className="flex flex-wrap gap-2">
                 <Button
                   size="sm"
                   variant="outline"
-                  className="border-purple-600 text-purple-400 text-xs"
+                  className="border-primary text-primary text-xs hover:bg-primary/10"
                   onClick={() => handleQuickAction('Masala Puri')}
                 >
                   Masala Puri
@@ -431,7 +431,7 @@ const ChefGuru = () => {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="border-purple-600 text-purple-400 text-xs"
+                  className="border-primary text-primary text-xs hover:bg-primary/10"
                   onClick={() => handleQuickAction('Pav Bhaji')}
                 >
                   Pav Bhaji
@@ -439,7 +439,7 @@ const ChefGuru = () => {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="border-purple-600 text-purple-400 text-xs"
+                  className="border-primary text-primary text-xs hover:bg-primary/10"
                   onClick={() => handleQuickAction('Paneer Tikka')}
                 >
                   Paneer Tikka
@@ -447,7 +447,7 @@ const ChefGuru = () => {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="border-purple-600 text-purple-400 text-xs"
+                  className="border-primary text-primary text-xs hover:bg-primary/10"
                   onClick={() => handleQuickAction('Masala Dosa')}
                 >
                   Masala Dosa
@@ -460,27 +460,27 @@ const ChefGuru = () => {
           <TabsContent value="trends" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Top Performing Dishes */}
-              <Card className="bg-gradient-to-br from-gray-900/80 to-black border-purple-700">
+              <Card className="bg-card border-primary/30 shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-white">🏆 Top Performing Dishes</CardTitle>
-                  <CardDescription className="text-gray-400">Based on popularity data analysis</CardDescription>
+                  <CardTitle className="text-card-foreground">🏆 Top Performing Dishes</CardTitle>
+                  <CardDescription className="text-muted-foreground">Based on popularity data analysis</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     {popularityData.slice(0, 15).map((dish, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg">
+                      <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg">
                         <div className="flex items-center">
-                          <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center mr-3">
-                            <span className="text-white font-bold text-sm">{index + 1}</span>
+                          <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center mr-3">
+                            <span className="text-primary-foreground font-bold text-sm">{index + 1}</span>
                           </div>
                           <div>
-                            <div className="text-white font-medium">{dish.dish_name}</div>
-                            <div className="text-xs text-gray-400">Score: {dish.popularity_score}</div>
+                            <div className="text-card-foreground font-medium">{dish.dish_name}</div>
+                            <div className="text-xs text-muted-foreground">Score: {dish.popularity_score}</div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-sm text-gray-300">{dish.views.toLocaleString()} views</div>
-                          <div className="text-xs text-gray-400">{dish.likes.toLocaleString()} likes</div>
+                          <div className="text-sm text-card-foreground">{dish.views.toLocaleString()} views</div>
+                          <div className="text-xs text-muted-foreground">{dish.likes.toLocaleString()} likes</div>
                         </div>
                       </div>
                     ))}
@@ -489,10 +489,10 @@ const ChefGuru = () => {
               </Card>
 
               {/* Engagement Analysis */}
-              <Card className="bg-gradient-to-br from-gray-900/80 to-black border-purple-700">
+              <Card className="bg-card border-secondary/30 shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-white">📈 Engagement Analysis</CardTitle>
-                  <CardDescription className="text-gray-400">Views, likes, and comments breakdown</CardDescription>
+                  <CardTitle className="text-card-foreground">📈 Engagement Analysis</CardTitle>
+                  <CardDescription className="text-muted-foreground">Views, likes, and comments breakdown</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
@@ -510,7 +510,7 @@ const ChefGuru = () => {
                         const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
                         return (
-                          <div key={index} className="flex flex-col items-center p-3 bg-gray-800/30 rounded-lg">
+                          <div key={index} className="flex flex-col items-center p-3 bg-muted rounded-lg">
                             <div className="relative w-20 h-20 mb-2">
                               <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 80 80">
                                 <circle
@@ -520,7 +520,7 @@ const ChefGuru = () => {
                                   stroke="currentColor"
                                   strokeWidth="6"
                                   fill="none"
-                                  className="text-gray-700"
+                                  className="text-muted-foreground/20"
                                 />
                                 <circle
                                   cx="40"
@@ -531,17 +531,17 @@ const ChefGuru = () => {
                                   fill="none"
                                   strokeDasharray={strokeDasharray}
                                   strokeDashoffset={strokeDashoffset}
-                                  className="text-purple-500 transition-all duration-1000 ease-in-out"
+                                  className="text-primary transition-all duration-1000 ease-in-out"
                                   strokeLinecap="round"
                                 />
                               </svg>
                               <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="text-xs font-bold text-white">{Math.round(percentage)}%</span>
+                                <span className="text-xs font-bold text-foreground">{Math.round(percentage)}%</span>
                               </div>
                             </div>
                             <div className="text-center">
-                              <div className="text-xs font-medium text-white truncate max-w-20">{dish.dish_name}</div>
-                              <div className="text-xs text-gray-400">{dish.popularity_score}</div>
+                              <div className="text-xs font-medium text-card-foreground truncate max-w-20">{dish.dish_name}</div>
+                              <div className="text-xs text-muted-foreground">{dish.popularity_score}</div>
                             </div>
                           </div>
                         );
@@ -550,7 +550,7 @@ const ChefGuru = () => {
 
                     {/* Bar Chart for Engagement Metrics */}
                     <div className="space-y-4">
-                      <h4 className="text-sm font-semibold text-white">Engagement Metrics Comparison</h4>
+                      <h4 className="text-sm font-semibold text-card-foreground">Engagement Metrics Comparison</h4>
                       <div className="space-y-3">
                         {popularityData.slice(0, 15).map((dish, index) => {
                           const maxViews = popularityData.length ? Math.max(...popularityData.map((d) => d.views)) : 1;
@@ -560,42 +560,42 @@ const ChefGuru = () => {
                           return (
                             <div key={index} className="space-y-2">
                               <div className="flex justify-between items-center">
-                                <span className="text-sm font-medium text-white">{dish.dish_name}</span>
-                                <span className="text-xs text-gray-400">{dish.popularity_score} score</span>
+                                <span className="text-sm font-medium text-card-foreground">{dish.dish_name}</span>
+                                <span className="text-xs text-muted-foreground">{dish.popularity_score} score</span>
                               </div>
                               <div className="space-y-1">
                                 {/* Views Bar */}
                                 <div className="flex items-center">
-                                  <Eye className="h-3 w-3 text-blue-400 mr-2" />
-                                  <div className="flex-1 bg-gray-800 rounded-full h-3 overflow-hidden">
+                                  <Eye className="h-3 w-3 text-primary mr-2" />
+                                  <div className="flex-1 bg-muted rounded-full h-3 overflow-hidden">
                                     <div
-                                      className="bg-gradient-to-r from-blue-500 to-blue-400 h-full transition-all duration-1000 ease-out"
+                                      className="bg-gradient-to-r from-primary to-primary/70 h-full transition-all duration-1000 ease-out"
                                       style={{ width: `${(dish.views / maxViews) * 100}%` }}
                                     ></div>
                                   </div>
-                                  <span className="text-xs text-gray-400 ml-2 w-12 text-right">{Math.round(dish.views / 1000000)}M</span>
+                                  <span className="text-xs text-muted-foreground ml-2 w-12 text-right">{Math.round(dish.views / 1000000)}M</span>
                                 </div>
                                 {/* Likes Bar */}
                                 <div className="flex items-center">
-                                  <Heart className="h-3 w-3 text-red-400 mr-2" />
-                                  <div className="flex-1 bg-gray-800 rounded-full h-3 overflow-hidden">
+                                  <Heart className="h-3 w-3 text-destructive mr-2" />
+                                  <div className="flex-1 bg-muted rounded-full h-3 overflow-hidden">
                                     <div
-                                      className="bg-gradient-to-r from-red-500 to-red-400 h-full transition-all duration-1000 ease-out"
+                                      className="bg-gradient-to-r from-destructive to-destructive/70 h-full transition-all duration-1000 ease-out"
                                       style={{ width: `${(dish.likes / maxLikes) * 100}%` }}
                                     ></div>
                                   </div>
-                                  <span className="text-xs text-gray-400 ml-2 w-12 text-right">{Math.round(dish.likes / 1000)}K</span>
+                                  <span className="text-xs text-muted-foreground ml-2 w-12 text-right">{Math.round(dish.likes / 1000)}K</span>
                                 </div>
                                 {/* Comments Bar */}
                                 <div className="flex items-center">
-                                  <MessageCircle className="h-3 w-3 text-green-400 mr-2" />
-                                  <div className="flex-1 bg-gray-800 rounded-full h-3 overflow-hidden">
+                                  <MessageCircle className="h-3 w-3 text-accent mr-2" />
+                                  <div className="flex-1 bg-muted rounded-full h-3 overflow-hidden">
                                     <div
-                                      className="bg-gradient-to-r from-green-500 to-green-400 h-full transition-all duration-1000 ease-out"
+                                      className="bg-gradient-to-r from-accent to-accent/70 h-full transition-all duration-1000 ease-out"
                                       style={{ width: `${(dish.comments_count / maxComments) * 100}%` }}
                                     ></div>
                                   </div>
-                                  <span className="text-xs text-gray-400 ml-2 w-12 text-right">{dish.comments_count}</span>
+                                  <span className="text-xs text-muted-foreground ml-2 w-12 text-right">{dish.comments_count}</span>
                                 </div>
                               </div>
                             </div>
@@ -606,7 +606,7 @@ const ChefGuru = () => {
 
                     {/* Engagement Ratio Pie Chart */}
                     <div className="mt-6">
-                      <h4 className="text-sm font-semibold text-white mb-3">Overall Engagement Distribution</h4>
+                      <h4 className="text-sm font-semibold text-card-foreground mb-3">Overall Engagement Distribution</h4>
                       <div className="flex items-center justify-center">
                         <div className="relative w-32 h-32">
                           <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 120 120">
@@ -625,7 +625,7 @@ const ChefGuru = () => {
                                     popularityData.reduce((sum, d) => sum + d.comments_count, 0))) *
                                 251.2
                               } 251.2`}
-                              className="text-blue-500"
+                              className="text-primary"
                             />
                             {/* Total Likes */}
                             <circle
@@ -649,7 +649,7 @@ const ChefGuru = () => {
                                     popularityData.reduce((sum, d) => sum + d.comments_count, 0))) *
                                 251.2
                               }`}
-                              className="text-red-500"
+                              className="text-destructive"
                             />
                             {/* Total Comments */}
                             <circle
@@ -674,29 +674,29 @@ const ChefGuru = () => {
                                     popularityData.reduce((sum, d) => sum + d.comments_count, 0))) *
                                 251.2
                               }`}
-                              className="text-green-500"
+                              className="text-accent"
                             />
                           </svg>
                           <div className="absolute inset-0 flex items-center justify-center">
                             <div className="text-center">
-                              <div className="text-lg font-bold text-white">Engagement</div>
-                              <div className="text-xs text-gray-400">Distribution</div>
+                              <div className="text-lg font-bold text-card-foreground">Engagement</div>
+                              <div className="text-xs text-muted-foreground">Distribution</div>
                             </div>
                           </div>
                         </div>
                       </div>
                       <div className="flex justify-center space-x-6 mt-4">
                         <div className="flex items-center">
-                          <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
-                          <span className="text-xs text-gray-400">Views</span>
+                          <div className="w-3 h-3 bg-primary rounded-full mr-2"></div>
+                          <span className="text-xs text-muted-foreground">Views</span>
                         </div>
                         <div className="flex items-center">
-                          <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                          <span className="text-xs text-gray-400">Likes</span>
+                          <div className="w-3 h-3 bg-destructive rounded-full mr-2"></div>
+                          <span className="text-xs text-muted-foreground">Likes</span>
                         </div>
                         <div className="flex items-center">
-                          <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                          <span className="text-xs text-gray-400">Comments</span>
+                          <div className="w-3 h-3 bg-accent rounded-full mr-2"></div>
+                          <span className="text-xs text-muted-foreground">Comments</span>
                         </div>
                       </div>
                     </div>
@@ -706,44 +706,44 @@ const ChefGuru = () => {
             </div>
 
             {/* Gap Analysis */}
-            <Card className="bg-gradient-to-br from-gray-900/80 to-black border-purple-700">
+            <Card className="bg-card border-primary/30 shadow-lg">
               <CardHeader>
-                <CardTitle className="text-white">🎯 Gap Analysis & Recommendations</CardTitle>
-                <CardDescription className="text-gray-400">Opportunities to improve your menu</CardDescription>
+                <CardTitle className="text-card-foreground">🎯 Gap Analysis & Recommendations</CardTitle>
+                <CardDescription className="text-muted-foreground">Opportunities to improve your menu</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="text-lg font-semibold text-white mb-3">📊 Performance Gaps</h4>
+                    <h4 className="text-lg font-semibold text-card-foreground mb-3">📊 Performance Gaps</h4>
                     <div className="space-y-3">
-                      <div className="p-3 bg-yellow-900/20 border border-yellow-700 rounded-lg">
-                        <div className="text-yellow-400 font-medium">Low Engagement Items</div>
-                        <div className="text-sm text-gray-300">Masala Dosa: High views but low engagement ratio</div>
+                      <div className="p-3 bg-secondary/10 border border-secondary/30 rounded-lg">
+                        <div className="text-secondary font-medium">Low Engagement Items</div>
+                        <div className="text-sm text-muted-foreground">Masala Dosa: High views but low engagement ratio</div>
                       </div>
-                      <div className="p-3 bg-green-900/20 border border-green-700 rounded-lg">
-                        <div className="text-green-400 font-medium">High Potential</div>
-                        <div className="text-sm text-gray-300">Paneer Tikka: Strong performance, consider expanding</div>
+                      <div className="p-3 bg-accent/10 border border-accent/30 rounded-lg">
+                        <div className="text-accent font-medium">High Potential</div>
+                        <div className="text-sm text-muted-foreground">Paneer Tikka: Strong performance, consider expanding</div>
                       </div>
-                      <div className="p-3 bg-blue-900/20 border border-blue-700 rounded-lg">
-                        <div className="text-blue-400 font-medium">Seasonal Opportunity</div>
-                        <div className="text-sm text-gray-300">Winter items showing increased demand</div>
+                      <div className="p-3 bg-primary/10 border border-primary/30 rounded-lg">
+                        <div className="text-primary font-medium">Seasonal Opportunity</div>
+                        <div className="text-sm text-muted-foreground">Winter items showing increased demand</div>
                       </div>
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold text-white mb-3">💡 Action Items</h4>
+                    <h4 className="text-lg font-semibold text-card-foreground mb-3">💡 Action Items</h4>
                     <div className="space-y-3">
-                      <div className="p-3 bg-gray-800/50 rounded-lg">
-                        <div className="text-white font-medium">1. Menu Optimization</div>
-                        <div className="text-sm text-gray-400">Focus on top 5 performing dishes</div>
+                      <div className="p-3 bg-muted rounded-lg">
+                        <div className="text-card-foreground font-medium">1. Menu Optimization</div>
+                        <div className="text-sm text-muted-foreground">Focus on top 5 performing dishes</div>
                       </div>
-                      <div className="p-3 bg-gray-800/50 rounded-lg">
-                        <div className="text-white font-medium">2. Add Seasonal Items</div>
-                        <div className="text-sm text-gray-400">Introduce winter specials and festival items</div>
+                      <div className="p-3 bg-muted rounded-lg">
+                        <div className="text-card-foreground font-medium">2. Add Seasonal Items</div>
+                        <div className="text-sm text-muted-foreground">Introduce winter specials and festival items</div>
                       </div>
-                      <div className="p-3 bg-gray-800/50 rounded-lg">
-                        <div className="text-white font-medium">3. Engagement Boost</div>
-                        <div className="text-sm text-gray-400">Improve presentation of low-engagement items</div>
+                      <div className="p-3 bg-muted rounded-lg">
+                        <div className="text-card-foreground font-medium">3. Engagement Boost</div>
+                        <div className="text-sm text-muted-foreground">Improve presentation of low-engagement items</div>
                       </div>
                     </div>
                   </div>
@@ -755,12 +755,12 @@ const ChefGuru = () => {
       </div>
 
       {/* Input Area */}
-      <div className="sticky bottom-0 bg-gradient-to-t from-black via-black to-transparent border-t border-purple-800 p-4">
+      <div className="sticky bottom-0 bg-gradient-to-t from-background via-background to-transparent border-t border-border p-4">
         <div className="container mx-auto max-w-4xl flex gap-3">
           <Button
             size="icon"
             variant="outline"
-            className={`border-purple-600 ${isRecording ? 'bg-red-600' : 'text-purple-400'}`}
+            className={`border-primary ${isRecording ? 'bg-destructive text-destructive-foreground' : 'text-primary'}`}
             onClick={handleVoiceInput}
           >
             <Mic className="h-5 w-5" />
@@ -770,9 +770,9 @@ const ChefGuru = () => {
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
             placeholder="Ask ChefGuru anything..."
-            className="flex-1 bg-gray-900 border-purple-700 text-white"
+            className="flex-1 bg-muted border-border text-foreground"
           />
-          <Button size="icon" className="bg-purple-600 hover:bg-purple-700" onClick={handleSendMessage}>
+          <Button size="icon" className="bg-primary hover:bg-primary/90 text-primary-foreground" onClick={handleSendMessage}>
             <Send className="h-5 w-5" />
           </Button>
         </div>

@@ -117,7 +117,7 @@ const PosterMaker = () => {
                           className={`flex-shrink-0 h-16 px-6 rounded-xl ${
                             selectedCategory === cat.id 
                               ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
-                              : 'border-border hover:bg-muted'
+                              : 'border-border text-foreground hover:bg-muted'
                           }`}
                         >
                           <span className="text-2xl mr-2">{cat.emoji}</span>
