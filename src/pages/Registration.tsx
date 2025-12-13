@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -20,7 +19,6 @@ interface MenuItem {
 
 const Registration = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
   const { toast } = useToast();
   
   const [currentStep, setCurrentStep] = useState<RegistrationStep>('account');
@@ -45,25 +43,25 @@ const Registration = () => {
   });
 
   const businessTypes = [
-    'स्ट्रीट फूड वेंडर',
-    'छोटा रेस्टोरेंट',
-    'फूड स्टॉल',
-    'बुटीक',
-    'हैंडीक्राफ्ट',
-    'टूरिज़्म',
-    'कैफे',
+    'Street Food Vendor',
+    'Small Restaurant',
+    'Food Stall',
+    'Boutique',
+    'Handicraft',
+    'Tourism',
+    'Cafe',
   ];
 
   const steps: RegistrationStep[] = ['account', 'business', 'menu', 'inventory'];
   const stepIndex = steps.indexOf(currentStep);
-  const stepLabels = ['खाता बनाएं', 'बिज़नेस जानकारी', 'मेनू', 'स्टॉक'];
+  const stepLabels = ['Create Account', 'Business Info', 'Menu', 'Stock'];
 
   const handleNext = () => {
     if (currentStep === 'account') {
       if (!formData.name || !formData.phone) {
         toast({
-          title: 'जानकारी अधूरी',
-          description: 'कृपया नाम और फ़ोन नंबर भरें',
+          title: 'Incomplete Information',
+          description: 'Please enter name and phone number',
           variant: 'destructive',
         });
         return;
@@ -72,8 +70,8 @@ const Registration = () => {
 
     if (currentStep === 'business' && (!formData.businessType || !formData.businessName)) {
       toast({
-        title: 'जानकारी अधूरी',
-        description: 'कृपया बिज़नेस जानकारी भरें',
+        title: 'Incomplete Information',
+        description: 'Please fill in business details',
         variant: 'destructive',
       });
       return;
@@ -95,8 +93,8 @@ const Registration = () => {
   const handleAddMenuItem = () => {
     if (!currentMenuItem.name || !currentMenuItem.price) {
       toast({
-        title: 'आइटम अधूरा',
-        description: 'कृपया नाम और कीमत भरें',
+        title: 'Incomplete Item',
+        description: 'Please enter name and price',
         variant: 'destructive',
       });
       return;
@@ -110,15 +108,15 @@ const Registration = () => {
     setCurrentMenuItem({ name: '', price: '', ingredients: '' });
     
     toast({
-      title: 'मेनू आइटम जोड़ा!',
-      description: `${currentMenuItem.name} मेनू में जोड़ा गया`,
+      title: 'Menu Item Added!',
+      description: `${currentMenuItem.name} added to menu`,
     });
   };
 
   const handleSubmit = () => {
     toast({
-      title: 'रजिस्ट्रेशन पूरा!',
-      description: 'RasoiMitra में आपका स्वागत है। डैशबोर्ड पर जा रहे हैं...',
+      title: 'Registration Complete!',
+      description: 'Welcome to RasoiMitra. Redirecting to dashboard...',
     });
 
     setTimeout(() => {
@@ -128,15 +126,15 @@ const Registration = () => {
 
   const handleVoiceInput = () => {
     toast({
-      title: 'वॉइस रिकॉर्डिंग',
-      description: 'अब अपने मेनू आइटम बोलें...',
+      title: 'Voice Recording',
+      description: 'Speak your menu items now...',
     });
   };
 
   const handleCSVUpload = () => {
     toast({
-      title: 'CSV अपलोड',
-      description: 'अपनी मेनू CSV फाइल चुनें',
+      title: 'CSV Upload',
+      description: 'Select your menu CSV file',
     });
   };
 
@@ -146,24 +144,24 @@ const Registration = () => {
         return (
           <div className="space-y-6 animate-fade-in-up">
             <div>
-              <h2 className="text-3xl font-bold mb-2 text-foreground">खाता बनाएं</h2>
-              <p className="text-muted-foreground">अपना बिज़नेस सफर शुरू करें</p>
+              <h2 className="text-3xl font-bold mb-2 text-foreground">Create Account</h2>
+              <p className="text-muted-foreground">Start your business journey</p>
             </div>
 
             <div className="space-y-4">
               <div>
-                <Label htmlFor="name" className="text-muted-foreground">पूरा नाम *</Label>
+                <Label htmlFor="name" className="text-muted-foreground">Full Name *</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="अपना पूरा नाम लिखें"
+                  placeholder="Enter your full name"
                   className="bg-card border-border text-lg py-6"
                 />
               </div>
 
               <div>
-                <Label htmlFor="phone" className="text-muted-foreground">फ़ोन नंबर *</Label>
+                <Label htmlFor="phone" className="text-muted-foreground">Phone Number *</Label>
                 <Input
                   id="phone"
                   type="tel"
@@ -175,7 +173,7 @@ const Registration = () => {
               </div>
 
               <div>
-                <Label htmlFor="email" className="text-muted-foreground">ईमेल (वैकल्पिक)</Label>
+                <Label htmlFor="email" className="text-muted-foreground">Email (Optional)</Label>
                 <Input
                   id="email"
                   type="email"
@@ -193,19 +191,19 @@ const Registration = () => {
         return (
           <div className="space-y-6 animate-fade-in-up">
             <div>
-              <h2 className="text-3xl font-bold mb-2 text-foreground">बिज़नेस जानकारी</h2>
-              <p className="text-muted-foreground">अपने बिज़नेस के बारे में बताएं</p>
+              <h2 className="text-3xl font-bold mb-2 text-foreground">Business Information</h2>
+              <p className="text-muted-foreground">Tell us about your business</p>
             </div>
 
             <div className="space-y-4">
               <div>
-                <Label htmlFor="businessType" className="text-muted-foreground">बिज़नेस टाइप *</Label>
+                <Label htmlFor="businessType" className="text-muted-foreground">Business Type *</Label>
                 <Select
                   value={formData.businessType}
                   onValueChange={(value) => setFormData({ ...formData, businessType: value })}
                 >
                   <SelectTrigger className="bg-card border-border text-lg py-6">
-                    <SelectValue placeholder="अपना बिज़नेस टाइप चुनें" />
+                    <SelectValue placeholder="Select your business type" />
                   </SelectTrigger>
                   <SelectContent className="bg-card border-border">
                     {businessTypes.map((type) => (
@@ -218,24 +216,24 @@ const Registration = () => {
               </div>
 
               <div>
-                <Label htmlFor="businessName" className="text-muted-foreground">दुकान/स्टॉल का नाम *</Label>
+                <Label htmlFor="businessName" className="text-muted-foreground">Shop/Stall Name *</Label>
                 <Input
                   id="businessName"
                   value={formData.businessName}
                   onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-                  placeholder="जैसे: मुंबई चाट कॉर्नर"
+                  placeholder="e.g. Mumbai Chaat Corner"
                   className="bg-card border-border text-lg py-6"
                 />
               </div>
 
               <div>
-                <Label htmlFor="location" className="text-muted-foreground">जगह</Label>
+                <Label htmlFor="location" className="text-muted-foreground">Location</Label>
                 <div className="flex gap-2">
                   <Input
                     id="location"
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    placeholder="पता लिखें या GPS से"
+                    placeholder="Enter address or use GPS"
                     className="bg-card border-border"
                   />
                   <Button variant="outline" className="border-border text-foreground px-6">
@@ -245,12 +243,12 @@ const Registration = () => {
               </div>
 
               <div>
-                <Label htmlFor="operatingHours" className="text-muted-foreground">काम के घंटे</Label>
+                <Label htmlFor="operatingHours" className="text-muted-foreground">Operating Hours</Label>
                 <Input
                   id="operatingHours"
                   value={formData.operatingHours}
                   onChange={(e) => setFormData({ ...formData, operatingHours: e.target.value })}
-                  placeholder="जैसे: सुबह 10 - रात 10"
+                  placeholder="e.g. 10 AM - 10 PM"
                   className="bg-card border-border"
                 />
               </div>
@@ -262,8 +260,8 @@ const Registration = () => {
         return (
           <div className="space-y-6 animate-fade-in-up">
             <div>
-              <h2 className="text-3xl font-bold mb-2 text-foreground">मेनू / प्रोडक्ट</h2>
-              <p className="text-muted-foreground">अपने आइटम जोड़ें</p>
+              <h2 className="text-3xl font-bold mb-2 text-foreground">Menu / Products</h2>
+              <p className="text-muted-foreground">Add your items</p>
             </div>
 
             {/* Input Methods */}
@@ -274,7 +272,7 @@ const Registration = () => {
                 className="flex-1 border-border text-foreground py-6"
               >
                 <Mic className="h-5 w-5 mr-2" />
-                बोलकर जोड़ें
+                Add by Voice
               </Button>
               <Button
                 onClick={handleCSVUpload}
@@ -282,7 +280,7 @@ const Registration = () => {
                 className="flex-1 border-border text-foreground py-6"
               >
                 <Upload className="h-5 w-5 mr-2" />
-                फाइल अपलोड
+                Upload File
               </Button>
             </div>
 
@@ -290,18 +288,18 @@ const Registration = () => {
             <Card className="bg-card border-border p-4">
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="itemName" className="text-muted-foreground">आइटम का नाम *</Label>
+                  <Label htmlFor="itemName" className="text-muted-foreground">Item Name *</Label>
                   <Input
                     id="itemName"
                     value={currentMenuItem.name}
                     onChange={(e) => setCurrentMenuItem({ ...currentMenuItem, name: e.target.value })}
-                    placeholder="जैसे: पनीर रोल"
+                    placeholder="e.g. Paneer Roll"
                     className="bg-background border-border text-lg py-6"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="itemPrice" className="text-muted-foreground">कीमत (₹) *</Label>
+                  <Label htmlFor="itemPrice" className="text-muted-foreground">Price (₹) *</Label>
                   <Input
                     id="itemPrice"
                     type="number"
@@ -316,7 +314,7 @@ const Registration = () => {
                   onClick={handleAddMenuItem}
                   className="w-full bg-primary hover:bg-primary/90 py-6 text-lg"
                 >
-                  मेनू में जोड़ें
+                  Add to Menu
                 </Button>
               </div>
             </Card>
@@ -324,7 +322,7 @@ const Registration = () => {
             {/* Menu Items List */}
             {formData.menuItems.length > 0 && (
               <div>
-                <h3 className="text-xl font-bold mb-3 text-foreground">आपका मेनू ({formData.menuItems.length} आइटम)</h3>
+                <h3 className="text-xl font-bold mb-3 text-foreground">Your Menu ({formData.menuItems.length} items)</h3>
                 <div className="space-y-2">
                   {formData.menuItems.map((item, index) => (
                     <Card key={index} className="bg-card border-border p-3">
@@ -347,52 +345,52 @@ const Registration = () => {
         return (
           <div className="space-y-6 animate-fade-in-up">
             <div>
-              <h2 className="text-3xl font-bold mb-2 text-foreground">शुरुआती स्टॉक</h2>
-              <p className="text-muted-foreground">अपना शुरुआती स्टॉक सेट करें (वैकल्पिक)</p>
+              <h2 className="text-3xl font-bold mb-2 text-foreground">Initial Stock</h2>
+              <p className="text-muted-foreground">Set your initial stock (optional)</p>
             </div>
 
             <Card className="bg-card border-border p-4">
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="initialStock" className="text-muted-foreground">स्टॉक विवरण</Label>
+                  <Label htmlFor="initialStock" className="text-muted-foreground">Stock Details</Label>
                   <Textarea
                     id="initialStock"
                     value={formData.initialStock}
                     onChange={(e) => setFormData({ ...formData, initialStock: e.target.value })}
-                    placeholder="उदाहरण:&#10;पनीर - 10 kg&#10;टमाटर - 20 kg&#10;प्याज़ - 15 kg"
+                    placeholder="Example:&#10;Paneer - 10 kg&#10;Tomato - 20 kg&#10;Onion - 15 kg"
                     rows={6}
                     className="bg-background border-border"
                   />
                 </div>
 
                 <p className="text-sm text-muted-foreground">
-                  💡 टिप: आप इसे बाद में डैशबोर्ड से भी जोड़ सकते हैं।
+                  💡 Tip: You can also add this later from the dashboard.
                 </p>
 
                 <Button
                   onClick={() => {
                     setFormData({ ...formData, initialStock: '' });
                     toast({
-                      title: 'स्किप किया',
-                      description: 'बाद में डैशबोर्ड से जोड़ सकते हैं',
+                      title: 'Skipped',
+                      description: 'You can add later from dashboard',
                     });
                   }}
                   variant="outline"
                   className="w-full border-border text-foreground"
                 >
-                  बाद में करें
+                  Skip for Now
                 </Button>
               </div>
             </Card>
 
             {/* Summary */}
             <Card className="bg-accent/10 border-accent/30 p-4">
-              <h3 className="text-xl font-bold mb-3 text-foreground">🎉 आपकी जानकारी</h3>
+              <h3 className="text-xl font-bold mb-3 text-foreground">🎉 Your Information</h3>
               <div className="space-y-2 text-muted-foreground">
-                <p><strong>नाम:</strong> {formData.name}</p>
-                <p><strong>बिज़नेस:</strong> {formData.businessName}</p>
-                <p><strong>टाइप:</strong> {formData.businessType}</p>
-                <p><strong>मेनू आइटम:</strong> {formData.menuItems.length}</p>
+                <p><strong>Name:</strong> {formData.name}</p>
+                <p><strong>Business:</strong> {formData.businessName}</p>
+                <p><strong>Type:</strong> {formData.businessType}</p>
+                <p><strong>Menu Items:</strong> {formData.menuItems.length}</p>
               </div>
             </Card>
           </div>
@@ -415,8 +413,8 @@ const Registration = () => {
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="text-center">
-              <h1 className="text-xl font-bold text-primary">रजिस्ट्रेशन</h1>
-              <p className="text-sm text-muted-foreground">स्टेप {stepIndex + 1}/4 - {stepLabels[stepIndex]}</p>
+              <h1 className="text-xl font-bold text-primary">Registration</h1>
+              <p className="text-sm text-muted-foreground">Step {stepIndex + 1}/4 - {stepLabels[stepIndex]}</p>
             </div>
             <div className="w-10" />
           </div>
@@ -450,7 +448,7 @@ const Registration = () => {
                     : 'bg-muted text-muted-foreground'
                 }`}
               >
-                {index < stepIndex ? '✓' : index + 1}
+                {index < stepIndex ? <CheckCircle className="h-5 w-5" /> : index + 1}
               </div>
             </div>
           ))}
@@ -458,12 +456,12 @@ const Registration = () => {
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-6 pb-32">
+      <div className="container mx-auto px-4 py-8 pb-32">
         {renderStepContent()}
       </div>
 
-      {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border p-4">
+      {/* Navigation Buttons */}
+      <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background to-transparent p-4 border-t border-border">
         <div className="container mx-auto max-w-4xl flex gap-4">
           {stepIndex > 0 && (
             <Button
@@ -472,16 +470,26 @@ const Registration = () => {
               className="flex-1 border-border text-foreground py-6 text-lg"
             >
               <ArrowLeft className="h-5 w-5 mr-2" />
-              पीछे
+              Back
             </Button>
           )}
-          <Button
-            onClick={stepIndex === steps.length - 1 ? handleSubmit : handleNext}
-            className="flex-1 bg-primary hover:bg-primary/90 py-6 text-lg"
-          >
-            {stepIndex === steps.length - 1 ? 'पूरा करें' : 'आगे'}
-            {stepIndex < steps.length - 1 && <ArrowRight className="h-5 w-5 ml-2" />}
-          </Button>
+          
+          {stepIndex < steps.length - 1 ? (
+            <Button
+              onClick={handleNext}
+              className="flex-1 bg-primary hover:bg-primary/90 py-6 text-lg"
+            >
+              Next
+              <ArrowRight className="h-5 w-5 ml-2" />
+            </Button>
+          ) : (
+            <Button
+              onClick={handleSubmit}
+              className="flex-1 bg-accent hover:bg-accent/90 py-6 text-lg"
+            >
+              🎉 Complete Registration
+            </Button>
+          )}
         </div>
       </div>
     </div>
