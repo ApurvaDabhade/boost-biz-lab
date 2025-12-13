@@ -345,7 +345,7 @@ const SalesTracker = () => {
                     key={amt}
                     variant="outline"
                     onClick={() => handleQuickAmount(amt)}
-                    className={`h-12 rounded-xl border-border hover:bg-muted ${
+                    className={`h-12 rounded-xl border-border text-foreground hover:bg-muted ${
                       amount === amt.toString() ? 'bg-muted' : ''
                     }`}
                   >
@@ -356,7 +356,7 @@ const SalesTracker = () => {
 
               {/* Category Selection */}
               <div>
-                <p className="text-sm font-medium mb-2 text-muted-foreground">Select Category</p>
+                <p className="text-sm font-medium mb-2 text-foreground">Select Category</p>
                 <div className="grid grid-cols-3 gap-2">
                   {(addType === 'sale' ? saleCategories : expenseCategories).map((cat) => (
                     <Button
@@ -368,7 +368,7 @@ const SalesTracker = () => {
                           ? addType === 'sale' 
                             ? 'bg-accent text-accent-foreground' 
                             : 'bg-destructive text-destructive-foreground'
-                          : 'border-border hover:bg-muted'
+                          : 'border-border text-foreground hover:bg-muted'
                       }`}
                     >
                       <span className="text-xl">{cat.emoji}</span>
